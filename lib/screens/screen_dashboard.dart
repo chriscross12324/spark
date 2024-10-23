@@ -1,7 +1,8 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:smooth_list_view/smooth_list_view.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/widgets/universal/icon_button_widget.dart';
 
 class ScreenDashboard extends StatefulWidget {
   const ScreenDashboard({super.key});
@@ -27,12 +28,28 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
                 children: [
-                  Image.asset("images/SPARK_small.png", height: 50, width: 50,),
-                  const SizedBox(width: 5,),
-                  Text("S.P.A.R.K.", style: TextStyle(fontWeight: FontWeight.w900, color: themeDarkPrimaryText, fontSize: 20),),
+                  Image.asset(
+                    "images/SPARK_small.png",
+                    height: 50,
+                    width: 50,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    "S.P.A.R.K.",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      color: themeDarkPrimaryText,
+                      fontSize: 20,
+                    ),
+                  ),
                   Expanded(child: Container()),
-                  Icon(FluentIcons.settings_48_filled),
-                  Icon(FluentIcons.alert_48_filled),
+                  IconButtonWidget(
+                    icon: HugeIcons.strokeRoundedSettings01,
+                  ),
+                  const SizedBox(width: 5),
+                  IconButtonWidget(
+                    icon: HugeIcons.strokeRoundedNotification01,
+                  ),
                 ],
               ),
             ),
@@ -57,8 +74,8 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
                           itemCount: 100,
                           itemBuilder: (BuildContext context, int index) {
                             return Card(
-                              shape:
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
                               color: themeDarkForeground,
                               child: ListTile(
                                 title: Text("Device: $index", maxLines: 1),
@@ -72,7 +89,7 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) {
-                            return const SizedBox(height: 5);
+                            return const SizedBox(height: 0);
                           },
                           duration: const Duration(milliseconds: 250),
                           curve: Curves.fastOutSlowIn,
