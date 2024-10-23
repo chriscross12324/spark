@@ -70,12 +70,15 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
                             curve: Curves.fastOutSlowIn,
                           ),
                         ),
-                        Container(
-                          height: double.infinity,
-                          width: 4,
-                          decoration: BoxDecoration(
-                            color: themeDarkDivider,
-                            borderRadius: BorderRadius.circular(2),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Container(
+                            height: double.infinity,
+                            width: 4,
+                            decoration: BoxDecoration(
+                              color: themeDarkDivider,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
                           ),
                         ),
                         const Metrics(),
@@ -103,6 +106,23 @@ class Metrics extends StatelessWidget {
       child: Container(
         width: double.infinity,
         color: Colors.transparent,
+        child: GridView.builder(
+          itemCount: 8,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 400,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20,
+            childAspectRatio: 1
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              decoration: BoxDecoration(
+                color: themeDarkForeground,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
