@@ -144,6 +144,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smooth_list_view:
+    dependency: "direct main"
+    description:
+      name: smooth_list_view
+      sha256: bdc29cfb4000997f8a152f44c78dab91813d44d35c5c032a69cebc13dc81db5c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   source_span:
     dependency: transitive
     description:
