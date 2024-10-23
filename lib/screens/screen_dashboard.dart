@@ -23,13 +23,18 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
             height: 60,
             width: double.infinity,
             color: themeDarkForeground,
-            child: Row(
-              children: [
-                Text("S.P.A.R.K."),
-                Expanded(child: Container()),
-                Icon(FluentIcons.settings_20_regular),
-                Icon(FluentIcons.service_bell_20_regular),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: [
+                  Image.asset("images/SPARK_small.png", height: 50, width: 50,),
+                  const SizedBox(width: 5,),
+                  Text("S.P.A.R.K.", style: TextStyle(fontWeight: FontWeight.w900, color: themeDarkPrimaryText, fontSize: 20),),
+                  Expanded(child: Container()),
+                  Icon(FluentIcons.settings_48_filled),
+                  Icon(FluentIcons.alert_48_filled),
+                ],
+              ),
             ),
           ),
           Expanded(
