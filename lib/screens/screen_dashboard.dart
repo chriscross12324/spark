@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:smooth_list_view/smooth_list_view.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/widgets/universal/icon_button_widget.dart';
+import 'package:spark/app_constants.dart';
 
 class ScreenDashboard extends StatefulWidget {
   const ScreenDashboard({super.key});
@@ -55,74 +56,6 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
   }
 }
 
-class DeviceList extends StatelessWidget {
-  const DeviceList({
-    super.key,
-    required double deviceListWidth,
-  }) : _deviceListWidth = deviceListWidth;
-
-  final double _deviceListWidth;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
-        child: AnimatedContainer(
-          height: double.infinity,
-          width: _deviceListWidth,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.fastOutSlowIn,
-          child: SmoothListView.separated(
-            physics: const BouncingScrollPhysics(),
-            smoothScroll: false,
-            itemCount: 100,
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                margin: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25)),
-                color: themeDarkBackground,
-                child: Container(
-                  height: 75,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          height: 65,
-                          width: 65,
-                          decoration: BoxDecoration(
-                            color: themeDarkForeground,
-                            borderRadius: BorderRadius.circular(20)
-                          ),
-                          child: Center(
-                            child: Text("$index", style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              color: themeDarkDimText,
-                              fontSize: 28,
-                            ),),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 10);
-            },
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.fastOutSlowIn,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class AppBar extends StatelessWidget {
   const AppBar({
     super.key,
@@ -152,7 +85,9 @@ class AppBar extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
-            const SizedBox(width: 20,),
+            const SizedBox(
+              width: 20,
+            ),
             Expanded(
               child: Center(
                 child: Container(
@@ -166,11 +101,13 @@ class AppBar extends StatelessWidget {
                     child: Row(
                       children: [
                         HugeIcon(
-                            icon: HugeIcons.strokeRoundedSearch01,
-                            color: themeDarkSecondaryText,
+                          icon: HugeIcons.strokeRoundedSearch01,
+                          color: themeDarkSecondaryText,
                           size: 18,
                         ),
-                        const SizedBox(width: 5,),
+                        const SizedBox(
+                          width: 5,
+                        ),
                         Text(
                           "Search...",
                           style: TextStyle(
@@ -185,7 +122,15 @@ class AppBar extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 20,),
+            const SizedBox(
+              width: 20,
+            ),
+            IconButtonWidget(
+              icon: HugeIcons.strokeRoundedAdd01,
+            ),
+            const SizedBox(
+              width: 5,
+            ),
             IconButtonWidget(
               icon: HugeIcons.strokeRoundedSettings01,
             ),
@@ -194,6 +139,206 @@ class AppBar extends StatelessWidget {
               icon: HugeIcons.strokeRoundedNotification01,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class DeviceList extends StatefulWidget {
+  const DeviceList({
+    super.key,
+    required double deviceListWidth,
+  }) : _deviceListWidth = deviceListWidth;
+
+  final double _deviceListWidth;
+
+  @override
+  State<DeviceList> createState() => _DeviceListState();
+}
+
+class _DeviceListState extends State<DeviceList> {
+  List<Widget> widgets = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    for (var crew in crews.entries) {
+      widgets.add(SliverToBoxAdapter(
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            String firstChars =
+                crew.key.split(' ').map((word) => word[0]).join();
+
+            return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 150),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                child: constraints.maxWidth < 300
+                    ? SizedBox(
+                        height: 75,
+                        width: 75,
+                        child: Center(
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Color(0xffc5403a),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "${firstChars}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: themeDarkDimText,
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 75,
+                        color: Colors.transparent,
+                        child: Center(
+                          child: Text(
+                            "${crew.key}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: themeDarkPrimaryText,
+                              fontSize: 32,
+                            ),
+                          ),
+                        ),
+                      ));
+          },
+        ),
+      ));
+      widgets.add(SliverToBoxAdapter(
+        child: SizedBox(
+          height: 10,
+        ),
+      ));
+
+      for (var member in crew.value.entries) {
+        widgets.add(
+          SliverToBoxAdapter(
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Card(
+                  margin: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25)),
+                  color: themeDarkBackground,
+                  child: SizedBox(
+                    height: 75,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Container(
+                            height: 65,
+                            width: 65,
+                            decoration: BoxDecoration(
+                                color: themeDarkForeground,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Center(
+                              child: Text(
+                                "1",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  color: themeDarkDimText,
+                                  fontSize: 28,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const SizedBox(width: 5,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${member.key}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: themeDarkPrimaryText,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Text(
+                                  "${member.value['lastName']}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: themeDarkDimText,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+
+        widgets.add(SliverToBoxAdapter(
+          child: SizedBox(
+            height: 10,
+          ),
+        ));
+      }
+      widgets.add(SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Container(
+            height: 4,
+            decoration: BoxDecoration(
+              color: themeDarkDimText.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
+      ));
+      widgets.add(SliverToBoxAdapter(
+        child: SizedBox(
+          height: 10,
+        ),
+      ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: AnimatedContainer(
+          height: double.infinity,
+          width: widget._deviceListWidth,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+          child: CustomScrollView(
+            scrollDirection: Axis.vertical,
+            slivers: [...widgets],
+          ),
         ),
       ),
     );
