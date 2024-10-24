@@ -21,7 +21,6 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
       backgroundColor: themeDarkDeepBackground,
       body: Column(
         children: <Widget>[
-          AppBar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 0.0),
@@ -32,17 +31,6 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
                   return Row(
                     children: [
                       DeviceList(deviceListWidth: _deviceListWidth),
-                      /*Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Container(
-                          height: double.infinity,
-                          width: 4,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ),*/
                       const Metrics(),
                     ],
                   );
@@ -50,6 +38,7 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
               ),
             ),
           ),
+          AppBar(),
         ],
       ),
     );
@@ -69,76 +58,82 @@ class AppBar extends StatelessWidget {
       color: themeDarkBackground,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: Row(
-          children: [
-            Image.asset(
-              "images/SPARK_small.png",
-              height: 50,
-              width: 50,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              "S.P.A.R.K.",
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                color: themeDarkPrimaryText,
-                fontSize: 20,
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Expanded(
-              child: Center(
-                child: Container(
-                  width: 400,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Row(
+              children: [
+                Image.asset(
+                  "images/SPARK_small.png",
                   height: 50,
-                  decoration: BoxDecoration(
-                      color: themeDarkForeground,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Row(
-                      children: [
-                        HugeIcon(
-                          icon: HugeIcons.strokeRoundedSearch01,
-                          color: themeDarkSecondaryText,
-                          size: 18,
+                  width: 50,
+                ),
+                if (constraints.maxWidth >= 450) ... [
+                  const SizedBox(width: 5),
+                  Text(
+                    "S.P.A.R.K.",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      color: themeDarkPrimaryText,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 400,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: themeDarkForeground,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Row(
+                          children: [
+                            HugeIcon(
+                              icon: HugeIcons.strokeRoundedSearch01,
+                              color: themeDarkSecondaryText,
+                              size: 18,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Search...",
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: themeDarkSecondaryText,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "Search...",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: themeDarkSecondaryText,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            IconButtonWidget(
-              icon: HugeIcons.strokeRoundedAdd01,
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            IconButtonWidget(
-              icon: HugeIcons.strokeRoundedSettings01,
-            ),
-            const SizedBox(width: 5),
-            IconButtonWidget(
-              icon: HugeIcons.strokeRoundedNotification01,
-            ),
-          ],
+                const SizedBox(
+                  width: 20,
+                ),
+                IconButtonWidget(
+                  icon: HugeIcons.strokeRoundedAdd01,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                IconButtonWidget(
+                  icon: HugeIcons.strokeRoundedSettings01,
+                ),
+                const SizedBox(width: 5),
+                IconButtonWidget(
+                  icon: HugeIcons.strokeRoundedNotification01,
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -182,14 +177,14 @@ class _DeviceListState extends State<DeviceList> {
                 },
                 child: constraints.maxWidth < 300
                     ? SizedBox(
-                        height: 75,
-                        width: 75,
+                        height: 55,
+                        width: 55,
                         child: Center(
                           child: Container(
                             height: 50,
                             width: 50,
                             decoration: BoxDecoration(
-                              color: Color(0xffc5403a),
+                              color: Color(0xfff7744f),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
@@ -197,7 +192,7 @@ class _DeviceListState extends State<DeviceList> {
                                 "${firstChars}",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: themeDarkDimText,
+                                  color: themeDarkSecondaryText,
                                   fontSize: 24,
                                 ),
                               ),
@@ -206,19 +201,22 @@ class _DeviceListState extends State<DeviceList> {
                         ),
                       )
                     : Container(
-                        height: 75,
-                        color: Colors.transparent,
-                        child: Center(
-                          child: Text(
-                            "${crew.key}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: themeDarkPrimaryText,
-                              fontSize: 32,
-                            ),
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: Color(0xfff7744f),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "${crew.key}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: themeDarkPrimaryText,
+                            fontSize: 32,
                           ),
                         ),
-                      ));
+                      ),
+                    ));
           },
         ),
       ));
@@ -264,7 +262,9 @@ class _DeviceListState extends State<DeviceList> {
                         ),
                         Row(
                           children: [
-                            const SizedBox(width: 5,),
+                            const SizedBox(
+                              width: 5,
+                            ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,6 +336,7 @@ class _DeviceListState extends State<DeviceList> {
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
           child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             slivers: [...widgets],
           ),
