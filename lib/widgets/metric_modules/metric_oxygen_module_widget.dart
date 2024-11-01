@@ -22,7 +22,7 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget> wit
   @override
   void initState() {
     super.initState();
-    placeholderData = _generatePlaceholderData(count: 100);
+    placeholderData = _generatePlaceholderData(count: 1080);
     averageData = _calculateMovingAverage(placeholderData, windowSize: 5);
   }
 
@@ -226,7 +226,7 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget> wit
 
   String _formatTimeLabel(double value) {
     final baseTime = DateTime(2024, 1, 1);
-    final intervalSeconds = value.toInt() * 30;
+    final intervalSeconds = value.toInt() * 180;
     final displayTime = baseTime.add(Duration(seconds: intervalSeconds));
 
     return "${displayTime.hour.toString().padLeft(2, '0')}:${displayTime.minute.toString().padLeft(2, '0')}:${displayTime.second.toString().padLeft(2, '0')}";
