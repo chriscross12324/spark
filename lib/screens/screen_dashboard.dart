@@ -32,14 +32,14 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
                   return Row(
                     children: [
                       DeviceList(deviceListWidth: _deviceListWidth),
-                      const Metrics(),
+                      Metrics(),
                     ],
                   );
                 },
               ),
             ),
           ),
-          AppBar(),
+          const AppBar(),
         ],
       ),
     );
@@ -68,7 +68,7 @@ class AppBar extends StatelessWidget {
                   height: 50,
                   width: 50,
                 ),
-                if (constraints.maxWidth >= 450) ... [
+                if (constraints.maxWidth >= 450) ...[
                   const SizedBox(width: 5),
                   Text(
                     "S.P.A.R.K.",
@@ -178,7 +178,7 @@ class _DeviceListState extends State<DeviceList> {
                 },
                 child: constraints.maxWidth < 300
                     ? SizedBox(
-                        height: 55,
+                        height: 45,
                         width: 55,
                         child: Center(
                           child: Container(
@@ -202,22 +202,22 @@ class _DeviceListState extends State<DeviceList> {
                         ),
                       )
                     : Container(
-                      height: 55,
-                      decoration: BoxDecoration(
-                        color: Color(0xfff7744f),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "${crew.key}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: themeDarkPrimaryText,
-                            fontSize: 32,
+                        height: 45,
+                        decoration: BoxDecoration(
+                          color: Color(0xfff7744f),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "${crew.key}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: themeDarkPrimaryText,
+                              fontSize: 24,
+                            ),
                           ),
                         ),
-                      ),
-                    ));
+                      ));
           },
         ),
       ));
@@ -238,13 +238,13 @@ class _DeviceListState extends State<DeviceList> {
                       borderRadius: BorderRadius.circular(25)),
                   color: themeDarkBackground,
                   child: SizedBox(
-                    height: 75,
+                    height: 65,
                     child: Row(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Container(
-                            height: 65,
+                            height: 55,
                             width: 65,
                             decoration: BoxDecoration(
                                 color: themeDarkForeground,
@@ -348,9 +348,20 @@ class _DeviceListState extends State<DeviceList> {
 }
 
 class Metrics extends StatelessWidget {
-  const Metrics({
+  Metrics({
     super.key,
   });
+
+  final metricsList = [
+    "Temperature",
+    "Humidity",
+    "CO2",
+    "Particulate",
+    "Other 1",
+    "Other 2",
+    "Other 3",
+    "Other 4",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -365,7 +376,7 @@ class Metrics extends StatelessWidget {
           child: ListView.separated(
             padding: const EdgeInsets.all(20),
             physics: const BouncingScrollPhysics(),
-            itemCount: 8,
+            itemCount: metricsList.length,
             /*gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 400,
                 mainAxisSpacing: 10,
@@ -374,7 +385,26 @@ class Metrics extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return Column(
                 children: [
-                  Container(height: 50, color: themeDarkDivider, child: Text("Temperature", style: TextStyle(color: Colors.white),),),
+                  Container(
+                    height: 45,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: themeDarkDivider,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Center(
+                      child: Text(
+                        metricsList[index],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: themeDarkPrimaryText,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Container(
                     height: 400,
                     decoration: BoxDecoration(
@@ -384,19 +414,15 @@ class Metrics extends StatelessWidget {
                     child: const MetricOxygenModuleWidget(),
                   ),
                   SizedBox(
-                    height: 50,
-                    child: Row(
-                      children: [
-                        Expanded(child: Container(color: themeDarkDivider,)),
-                        Expanded(child: Container(color: themeDarkDivider,)),
-                      ],
-                    ),
-                  )
+                    height: 5,
+                  ),
                 ],
               );
             },
             separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 10,);
+              return const SizedBox(
+                height: 20,
+              );
             },
           ),
         ),

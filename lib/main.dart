@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'screens/screen_dashboard.dart';
 
@@ -14,6 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'S.P.A.R.K.',
       debugShowCheckedModeBanner: false,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown},
+      ),
       theme: ThemeData(
         // This is the theme of your application.
         //
