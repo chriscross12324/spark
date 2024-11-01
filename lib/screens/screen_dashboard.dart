@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:smooth_list_view/smooth_list_view.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/widgets/metric_modules/metric_oxygen_module_widget.dart';
 import 'package:spark/widgets/universal/icon_button_widget.dart';
 import 'package:spark/app_constants.dart';
 
@@ -361,22 +362,41 @@ class Metrics extends StatelessWidget {
           decoration: BoxDecoration(
               color: themeDarkBackground,
               borderRadius: BorderRadius.circular(25)),
-          child: GridView.builder(
+          child: ListView.separated(
             padding: const EdgeInsets.all(20),
             physics: const BouncingScrollPhysics(),
             itemCount: 8,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            /*gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 400,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-                childAspectRatio: 1),
+                childAspectRatio: 1),*/
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: themeDarkForeground,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+              return Column(
+                children: [
+                  Container(height: 50, color: themeDarkDivider, child: Text("Temperature", style: TextStyle(color: Colors.white),),),
+                  Container(
+                    height: 400,
+                    decoration: BoxDecoration(
+                      color: themeDarkForeground,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const MetricOxygenModuleWidget(),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                      children: [
+                        Expanded(child: Container(color: themeDarkDivider,)),
+                        Expanded(child: Container(color: themeDarkDivider,)),
+                      ],
+                    ),
+                  )
+                ],
               );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 10,);
             },
           ),
         ),
