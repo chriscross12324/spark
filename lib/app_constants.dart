@@ -13,6 +13,11 @@ const themeDarkPrimaryText = Color(0xFFFFFFFF);
 const themeDarkSecondaryText = Color(0xBFFFFFFF);
 const themeDarkDimText = Color(0x80FFFFFF);
 
+const themeDarkAccentColourMain = Color(0xFFF7744F);
+const themeDarkAccentColourFaded = Color(0xFFB98474);
+const themeDarkComplementaryColourMain = Color(0xFF4FD2F7);
+const themeDarkComplementaryColourFaded = Color(0xFF74A9B9);
+
 
 const Map<String, Map<String, Map<String, String>>> crews = {
   'Blaze Breakers': {
