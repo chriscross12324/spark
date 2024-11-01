@@ -120,17 +120,17 @@ class AppBar extends StatelessWidget {
                   width: 20,
                 ),
                 IconButtonWidget(
-                  icon: HugeIcons.strokeRoundedAdd01,
+                  icon: HugeIcons.strokeRoundedAdd01, buttonFunction: () {},
                 ),
                 const SizedBox(
                   width: 5,
                 ),
                 IconButtonWidget(
-                  icon: HugeIcons.strokeRoundedSettings01,
+                  icon: HugeIcons.strokeRoundedSettings01, buttonFunction: () {},
                 ),
                 const SizedBox(width: 5),
                 IconButtonWidget(
-                  icon: HugeIcons.strokeRoundedNotification01,
+                  icon: HugeIcons.strokeRoundedNotification01, buttonFunction: () {},
                 ),
               ],
             );
@@ -179,19 +179,19 @@ class _DeviceListState extends State<DeviceList> {
                 child: constraints.maxWidth < 300
                     ? SizedBox(
                         height: 45,
-                        width: 55,
+                        width: 45,
                         child: Center(
                           child: Container(
-                            height: 50,
-                            width: 50,
+                            height: 45,
+                            width: 45,
                             decoration: BoxDecoration(
-                              color: Color(0xfff7744f),
+                              color: themeDarkAccentColourMain,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
                               child: Text(
-                                "${firstChars}",
-                                style: TextStyle(
+                                firstChars,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: themeDarkSecondaryText,
                                   fontSize: 24,
@@ -204,13 +204,13 @@ class _DeviceListState extends State<DeviceList> {
                     : Container(
                         height: 45,
                         decoration: BoxDecoration(
-                          color: Color(0xfff7744f),
+                          color: themeDarkAccentColourMain,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
                           child: Text(
-                            "${crew.key}",
-                            style: TextStyle(
+                            crew.key,
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: themeDarkPrimaryText,
                               fontSize: 24,
@@ -407,6 +407,7 @@ class Metrics extends StatelessWidget {
                   ),
                   Container(
                     height: 400,
+                    width: double.infinity,
                     decoration: BoxDecoration(
                       color: themeDarkForeground,
                       borderRadius: BorderRadius.circular(10),

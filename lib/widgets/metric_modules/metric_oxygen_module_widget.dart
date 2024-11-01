@@ -2,7 +2,10 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/widgets/universal/icon_button_widget.dart';
+import 'package:spark/widgets/universal/zoomable_chart_widget.dart';
 
 class MetricOxygenModuleWidget extends StatefulWidget {
   const MetricOxygenModuleWidget({super.key});
@@ -11,7 +14,7 @@ class MetricOxygenModuleWidget extends StatefulWidget {
   State<MetricOxygenModuleWidget> createState() => _MetricOxygenModuleWidgetState();
 }
 
-class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget> {
+class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget> with AutomaticKeepAliveClientMixin {
   late final List<FlSpot> placeholderData;
   late final List<FlSpot> averageData;
   double zoomFactor = 1.0;
@@ -25,30 +28,81 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
+    final zoomableChartGlobalKey = GlobalKey<ZoomableChartWidgetState>();
     double minY = placeholderData.map((p) => p.y).reduce(min);
     double maxY = placeholderData.map((p) => p.y).reduce(max);
     double minX = placeholderData.map((p) => p.x).reduce(min);
     double maxX = placeholderData.map((p) => p.x).reduce(max);
 
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 24,
-        left: 12,
-        right: 18,
-        bottom: 12,
-      ),
-      child: LineChart(
-        LineChartData(
-          minX: minX,
-          maxX: maxX,
-          minY: minY - 1,
-          maxY: maxY + 1,
-          gridData: _buildGridData(),
-          titlesData: _buildTitlesData(minY: minY, maxY: maxY),
-          borderData: _buildBorderData(),
-          lineBarsData: _buildLineBarsData(),
-          lineTouchData: _buildLineTouchData(),
-        ),
+      padding: const EdgeInsets.all(5),
+      child: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+              child: ZoomableChartWidget(
+                key: zoomableChartGlobalKey,
+                maxX: maxX,
+                builder: (currentMinX, currentMaxX) {
+                  return ClipRRect(
+                    child: LineChart(
+                      LineChartData(
+                        minX: currentMinX,
+                        maxX: currentMaxX,
+                        minY: minY - 1,
+                        maxY: maxY + 1,
+                        gridData: _buildGridData(),
+                        titlesData: _buildTitlesData(minY: minY, maxY: maxY),
+                        borderData: _buildBorderData(),
+                        lineBarsData: _buildLineBarsData(),
+                        lineTouchData: _buildLineTouchData(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButtonWidget(
+                icon: HugeIcons.strokeRoundedArrowLeft01,
+                buttonFunction: () {
+                  zoomableChartGlobalKey.currentState?.scrollLeft();
+                },
+                canHold: true,
+              ),
+              const SizedBox(width: 5),
+              IconButtonWidget(
+                icon: HugeIcons.strokeRoundedArrowRight01,
+                buttonFunction: () {
+                  zoomableChartGlobalKey.currentState?.scrollRight();
+                },
+                canHold: true,
+              ),
+              const SizedBox(width: 5),
+              IconButtonWidget(
+                icon: HugeIcons.strokeRoundedSearchAdd,
+                buttonFunction: () {
+                  zoomableChartGlobalKey.currentState?.zoomIn();
+                },
+                canHold: true,
+              ),
+              const SizedBox(width: 5),
+              IconButtonWidget(
+                icon: HugeIcons.strokeRoundedSearchMinus,
+                buttonFunction: () {
+                  zoomableChartGlobalKey.currentState?.zoomOut();
+                },
+                canHold: true,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -157,7 +211,7 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget> {
       sideTitles: SideTitles(
         showTitles: true,
         interval: interval,
-        reservedSize: isLeftAxis ? 48 : 68,
+        reservedSize: isLeftAxis ? 48 : 20,
         getTitlesWidget: (value, _) {
           final labelText = isLeftAxis ? '${value.round()} -' : _formatTimeLabel(value);
           return Text(
@@ -190,6 +244,9 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget> {
       strokeWidth: 1,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 /// Extension for Colour Blending
