@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:smooth_list_view/smooth_list_view.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/widgets/device_module_widget.dart';
 import 'package:spark/widgets/metric_modules/metric_oxygen_module_widget.dart';
 import 'package:spark/widgets/universal/icon_button_widget.dart';
 import 'package:spark/app_constants.dart';
@@ -39,291 +40,160 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
               ),
             ),
           ),
-          const AppBar(),
+          const DashboardAppBar(),
         ],
       ),
     );
   }
 }
 
-class AppBar extends StatelessWidget {
-  const AppBar({
-    super.key,
-  });
+class DashboardBody extends StatelessWidget {
+  const DashboardBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      width: double.infinity,
-      color: themeDarkBackground,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return Row(
-              children: [
-                Image.asset(
-                  "images/SPARK_small.png",
-                  height: 50,
-                  width: 50,
-                ),
-                if (constraints.maxWidth >= 450) ...[
-                  const SizedBox(width: 5),
-                  Text(
-                    "S.P.A.R.K.",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      color: themeDarkPrimaryText,
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
-                const SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 400,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: themeDarkForeground,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          children: [
-                            HugeIcon(
-                              icon: HugeIcons.strokeRoundedSearch01,
-                              color: themeDarkSecondaryText,
-                              size: 18,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "Search...",
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: themeDarkSecondaryText,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                IconButtonWidget(
-                  icon: HugeIcons.strokeRoundedAdd01, buttonFunction: () {},
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                IconButtonWidget(
-                  icon: HugeIcons.strokeRoundedSettings01, buttonFunction: () {},
-                ),
-                const SizedBox(width: 5),
-                IconButtonWidget(
-                  icon: HugeIcons.strokeRoundedNotification01, buttonFunction: () {},
-                ),
-              ],
-            );
-          },
+    return LayoutBuilder(builder: (context, constraints) {
+      double deviceListWidth = constraints.maxWidth < 800 ? 75 : 350;
+      return Row(
+        children: [
+          DeviceList(deviceListWidth: deviceListWidth),
+          Metrics(),
+        ],
+      );
+    });
+  }
+}
+
+class DashboardAppBar extends StatelessWidget {
+  const DashboardAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        bool showLogoText = constraints.maxWidth >= 500;
+
+        return Container(
+          height: 70,
+          color: themeDarkBackground,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: [
+              LogoSection(showText: showLogoText),
+              const SizedBox(width: 20),
+              const Expanded(child: SearchBar()),
+              const SizedBox(width: 20),
+              const AppBarActions()
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class LogoSection extends StatelessWidget {
+  const LogoSection({super.key, required this.showText});
+
+  final bool showText;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.fastOutSlowIn,
+      width: showText ? 145 : 50,
+      decoration: const BoxDecoration(color: Colors.transparent),
+      clipBehavior: Clip.hardEdge,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        child: Row(
+          children: [
+            Image.asset("images/SPARK_small.png", height: 50, width: 50),
+            const SizedBox(width: 5),
+            const Text(
+              "S.P.A.R.K.",
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                color: themeDarkPrimaryText,
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class DeviceList extends StatefulWidget {
-  const DeviceList({
-    super.key,
-    required double deviceListWidth,
-  }) : _deviceListWidth = deviceListWidth;
-
-  final double _deviceListWidth;
+class SearchBar extends StatelessWidget {
+  const SearchBar({super.key});
 
   @override
-  State<DeviceList> createState() => _DeviceListState();
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 400,
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        decoration: BoxDecoration(
+          color: themeDarkForeground,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: const Row(
+          children: [
+            HugeIcon(
+              icon: HugeIcons.strokeRoundedSearch01,
+              color: themeDarkSecondaryText,
+              size: 18,
+            ),
+            SizedBox(width: 5),
+            Text(
+              "Search...",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: themeDarkSecondaryText,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-class _DeviceListState extends State<DeviceList> {
-  List<Widget> widgets = [];
+class AppBarActions extends StatelessWidget {
+  const AppBarActions({super.key});
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    for (var crew in crews.entries) {
-      widgets.add(SliverToBoxAdapter(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            String firstChars =
-                crew.key.split(' ').map((word) => word[0]).join();
-
-            return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 150),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-                child: constraints.maxWidth < 300
-                    ? SizedBox(
-                        height: 45,
-                        width: 45,
-                        child: Center(
-                          child: Container(
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              color: themeDarkAccentColourMain,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                firstChars,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: themeDarkSecondaryText,
-                                  fontSize: 24,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: themeDarkAccentColourMain,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            crew.key,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: themeDarkPrimaryText,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ),
-                      ));
-          },
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButtonWidget(
+          icon: HugeIcons.strokeRoundedAdd01,
+          buttonFunction: () {},
         ),
-      ));
-      widgets.add(SliverToBoxAdapter(
-        child: SizedBox(
-          height: 10,
+        const SizedBox(width: 5),
+        IconButtonWidget(
+          icon: HugeIcons.strokeRoundedSettings01,
+          buttonFunction: () {},
         ),
-      ));
-
-      for (var member in crew.value.entries) {
-        widgets.add(
-          SliverToBoxAdapter(
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return Card(
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
-                  color: themeDarkBackground,
-                  child: SizedBox(
-                    height: 65,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Container(
-                            height: 55,
-                            width: 65,
-                            decoration: BoxDecoration(
-                                color: themeDarkForeground,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Center(
-                              child: Text(
-                                "1",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  color: themeDarkDimText,
-                                  fontSize: 28,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${member.key}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: themeDarkPrimaryText,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  "${member.value['lastName']}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: themeDarkDimText,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-
-        widgets.add(SliverToBoxAdapter(
-          child: SizedBox(
-            height: 10,
-          ),
-        ));
-      }
-      widgets.add(SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Container(
-            height: 4,
-            decoration: BoxDecoration(
-              color: themeDarkDimText.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
+        const SizedBox(width: 5),
+        IconButtonWidget(
+          icon: HugeIcons.strokeRoundedNotification01,
+          buttonFunction: () {},
         ),
-      ));
-      widgets.add(SliverToBoxAdapter(
-        child: SizedBox(
-          height: 10,
-        ),
-      ));
-    }
+      ],
+    );
   }
+}
+
+class DeviceList extends StatelessWidget {
+  const DeviceList({super.key, required this.deviceListWidth});
+
+  final double deviceListWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -332,18 +202,47 @@ class _DeviceListState extends State<DeviceList> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: AnimatedContainer(
-          height: double.infinity,
-          width: widget._deviceListWidth,
+          width: deviceListWidth,
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            slivers: [...widgets],
-          ),
+          child: const CustomScrollView(
+              physics: BouncingScrollPhysics(), slivers: [DeviceListItems()]),
         ),
       ),
     );
+  }
+}
+
+class DeviceListItems extends StatelessWidget {
+  const DeviceListItems({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> widgets = [];
+
+    for (var crew in crews.entries) {
+      widgets.add(DeviceCrewHeader(crew: crew, expanded: true));
+      widgets.add(const SizedBox(height: 10));
+      for (var member in crew.value.entries) {
+        widgets.add(DeviceMemberModule(member: member, expanded: true));
+        widgets.add(const SizedBox(height: 10));
+      }
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Container(
+            height: 4,
+            decoration: BoxDecoration(
+              color: themeDarkDivider,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
+      );
+      widgets.add(const SizedBox(height: 10));
+    }
+
+    return SliverList(delegate: SliverChildListDelegate(widgets));
   }
 }
 
@@ -371,63 +270,61 @@ class Metrics extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color: themeDarkBackground,
-              borderRadius: BorderRadius.circular(25)),
+              color: themeDarkBackground, borderRadius: BorderRadius.circular(25)),
           child: ListView.separated(
             padding: const EdgeInsets.all(20),
             physics: const BouncingScrollPhysics(),
             itemCount: metricsList.length,
-            /*gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 400,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 1),*/
             itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  Container(
-                    height: 45,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: themeDarkDivider,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                      child: Text(
-                        metricsList[index],
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: themeDarkPrimaryText,
-                          fontSize: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    height: 400,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: themeDarkForeground,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const MetricOxygenModuleWidget(),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                ],
-              );
+              return MetricItem(title: metricsList[index]);
             },
             separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(
-                height: 20,
-              );
+              return const SizedBox(height: 40);
             },
           ),
         ),
       ),
+    );
+  }
+}
+
+class MetricItem extends StatelessWidget {
+  const MetricItem({super.key, required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 45,
+          decoration: BoxDecoration(
+            color: themeDarkDivider,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: themeDarkPrimaryText,
+                fontSize: 24,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Container(
+          height: 400,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: themeDarkForeground,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const MetricOxygenModuleWidget(),
+        ),
+      ],
     );
   }
 }
