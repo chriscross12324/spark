@@ -25,7 +25,7 @@ class _IconButtonWidgetState extends State<IconButtonWidget> {
   bool _isHolding = false;
 
   Timer? _holdTimer = null;
-  int _holdDuration = 250;
+  int _holdDuration = 150;
 
   @override
   void dispose() {
@@ -102,7 +102,7 @@ class _IconButtonWidgetState extends State<IconButtonWidget> {
     _isHolding = false;
     _holdTimer!.cancel();
     setState(() {
-      _holdDuration = 250;
+      _holdDuration = 150;
     });
   }
 }
