@@ -4,6 +4,7 @@ import 'package:smooth_list_view/smooth_list_view.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/widgets/device_module_widget.dart';
 import 'package:spark/widgets/metric_modules/metric_oxygen_module_widget.dart';
+import 'package:spark/widgets/metric_modules/metric_oxygen_module_widget_backup.dart';
 import 'package:spark/widgets/universal/icon_button_widget.dart';
 import 'package:spark/app_constants.dart';
 
@@ -15,32 +16,16 @@ class ScreenDashboard extends StatefulWidget {
 }
 
 class _ScreenDashboardState extends State<ScreenDashboard> {
-  double _deviceListWidth = 50;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: themeDarkDeepBackground,
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 0.0),
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  _deviceListWidth = constraints.maxWidth < 800 ? 75 : 350;
-
-                  return Row(
-                    children: [
-                      DeviceList(deviceListWidth: _deviceListWidth),
-                      Metrics(),
-                    ],
-                  );
-                },
-              ),
-            ),
+            child: DashboardBody()
           ),
-          const DashboardAppBar(),
+          DashboardAppBar(),
         ],
       ),
     );
@@ -303,15 +288,31 @@ class MetricItem extends StatelessWidget {
             color: themeDarkDivider,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Center(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: themeDarkPrimaryText,
-                fontSize: 24,
+          child: Row(
+            children: [
+              Expanded(
+                child: Center(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: themeDarkPrimaryText,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(3),
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: themeDarkDivider,
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 5),

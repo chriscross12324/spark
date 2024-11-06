@@ -24,7 +24,7 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
   @override
   void initState() {
     super.initState();
-    placeholderData = _generatePlaceholderData(count: 150);
+    placeholderData = _generatePlaceholderData(count: 1080);
 
     _zoomPanBehavior = ZoomPanBehavior(
         enablePanning: true,
@@ -46,13 +46,13 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
             child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 child: SfCartesianChart(
-                  primaryXAxis: const CategoryAxis(
+                  primaryXAxis: CategoryAxis(
                     labelPlacement: LabelPlacement.onTicks,
-                    labelStyle: TextStyle(
+                    labelStyle: const TextStyle(
                       color: themeDarkSecondaryText,
                     ),
                     majorGridLines: MajorGridLines(
-                      color: themeDarkAccentColourFaded,
+                      color: themeDarkAccentColourFaded.withOpacity(0.35),
                     ),
                   ),
                   primaryYAxis: NumericAxis(
@@ -62,15 +62,24 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
                     labelStyle: const TextStyle(
                       color: themeDarkSecondaryText,
                     ),
-                    majorGridLines: const MajorGridLines(
-                      color: themeDarkAccentColourFaded,
+                    majorGridLines: MajorGridLines(
+                      color: themeDarkAccentColourFaded.withOpacity(0.35),
                     ),
                   ),
-                  plotAreaBorderColor: themeDarkAccentColourFaded,
                   zoomPanBehavior: _zoomPanBehavior,
                   /*tooltipBehavior: TooltipBehavior(
                       enable: true, shouldAlwaysShow: true, animationDuration: 0),*/
-                  trackballBehavior: TrackballBehavior(enable: true, activationMode: ActivationMode.singleTap, lineColor: themeDarkPrimaryText, lineWidth: 2),
+                  trackballBehavior: TrackballBehavior(
+                    enable: true,
+                    activationMode: ActivationMode.singleTap,
+                    lineColor: themeDarkPrimaryText,
+                    lineWidth: 2,
+                    shouldAlwaysShow: true,
+                    tooltipSettings: InteractiveTooltip(
+                      enable: true,
+                      format: 'point.y'
+                    ),
+                  ),
                   legend: const Legend(
                     isVisible: true,
                     position: LegendPosition.top,
@@ -86,15 +95,19 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
                       yValueMapper: (_PointData data, _) => data.value,
                       color: themeDarkAccentColourMain.withOpacity(0.15),
                       borderColor: themeDarkAccentColourMain,
-                      markerSettings: const MarkerSettings(isVisible: true),
+                      markerSettings: const MarkerSettings(
+                          isVisible: true, color: themeDarkAccentColourMain),
+                      legendIconType: LegendIconType.circle,
                       animationDuration: 0,
                       trendlines: [
                         Trendline(
-                          type: TrendlineType.movingAverage,
-                          color: themeDarkComplementaryColourMain,
-                          animationDuration: 0,
-                          period: 5,
-                        )
+                            type: TrendlineType.movingAverage,
+                            color: themeDarkComplementaryColourMain,
+                            animationDuration: 0,
+                            period: 5,
+                            legendIconType: LegendIconType.horizontalLine,
+                            enableTooltip: true,
+                            backwardForecast: 5)
                       ],
                       name: "Raw Data",
                     )
@@ -167,7 +180,6 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
 
     return data;
   }
-
 
   ///Chart styling and configuration
   String _formatTimeLabel(double value) {
