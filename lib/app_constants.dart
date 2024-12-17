@@ -21,58 +21,58 @@ const themeDarkComplementaryColourFaded = Color(0xFF74A9B9);
 
 const Map<String, Map<String, Map<String, String>>> crews = {
   'Blaze Breakers': {
-    'Crew Member 1': {
+    'CI001': {
       'lastName': "Bennett"
     },
-    'Crew Member 2': {
+    'CI011': {
       'lastName': "Dalton"
     },
-    'Crew Member 3': {
+    'CI023': {
       'lastName': "Harper"
     },
   },
   'Smoke Jumpers': {
-    'Crew Member 1': {
+    'CI043': {
       'lastName': "Griffin"
     },
-    'Crew Member 2': {
+    'CI031': {
       'lastName': "Bishop"
     },
   },
   'Fire Guardians': {
-    'Crew Member 1': {
+    'CI012': {
       'lastName': "Donovan"
     },
-    'Crew Member 2': {
+    'CI016': {
       'lastName': "Foster"
     },
-    'Crew Member 3': {
+    'CI015': {
       'lastName': "Reynolds"
     },
-    'Crew Member 4': {
+    'CI021': {
       'lastName': "Dixon"
     },
-    'Crew Member 5': {
+    'CI022': {
       'lastName': "Anderson"
     },
   },
   'Flame Fighters': {
-    'Crew Member 1': {
+    'CI042': {
       'lastName': "Caldwell"
     },
-    'Crew Member 2': {
+    'CI038': {
       'lastName': "Carson"
     },
-    'Crew Member 3': {
+    'CI031': {
       'lastName': "Quinn"
     },
-    'Crew Member 4': {
+    'CI051': {
       'lastName': "Harrington"
     },
-    'Crew Member 5': {
+    'CI019': {
       'lastName': "Sullivan"
     },
-    'Crew Member 6': {
+    'CI045': {
       'lastName': "Mercer"
     },
   },
