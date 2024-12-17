@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:smooth_list_view/smooth_list_view.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/widgets/device_module_widget.dart';
 import 'package:spark/widgets/metric_modules/metric_oxygen_module_widget.dart';
-import 'package:spark/widgets/metric_modules/metric_oxygen_module_widget_backup.dart';
+import 'package:spark/widgets/universal/filter_node.dart';
 import 'package:spark/widgets/universal/icon_button_widget.dart';
-import 'package:spark/app_constants.dart';
 
 class ScreenDashboard extends StatefulWidget {
   const ScreenDashboard({super.key});
@@ -22,9 +21,7 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
       backgroundColor: themeDarkDeepBackground,
       body: Column(
         children: <Widget>[
-          Expanded(
-            child: DashboardBody()
-          ),
+          Expanded(child: DashboardBody()),
           DashboardAppBar(),
         ],
       ),
@@ -38,7 +35,7 @@ class DashboardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      double deviceListWidth = constraints.maxWidth < 800 ? 75 : 350;
+      double deviceListWidth = constraints.maxWidth < 800 ? 71 : 350;
       return Row(
         children: [
           DeviceList(deviceListWidth: deviceListWidth),
@@ -97,9 +94,9 @@ class LogoSection extends StatelessWidget {
           children: [
             Image.asset("images/SPARK_small.png", height: 50, width: 50),
             const SizedBox(width: 5),
-            const Text(
+            Text(
               "S.P.A.R.K.",
-              style: TextStyle(
+              style: GoogleFonts.varelaRound(
                 fontWeight: FontWeight.w900,
                 color: themeDarkPrimaryText,
                 fontSize: 20,
@@ -126,17 +123,17 @@ class SearchBar extends StatelessWidget {
           color: themeDarkForeground,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            HugeIcon(
+            const HugeIcon(
               icon: HugeIcons.strokeRoundedSearch01,
               color: themeDarkSecondaryText,
               size: 18,
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             Text(
               "Search...",
-              style: TextStyle(
+              style: GoogleFonts.varelaRound(
                 fontWeight: FontWeight.normal,
                 color: themeDarkSecondaryText,
                 fontSize: 12,
@@ -156,6 +153,43 @@ class AppBarActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        IconButtonWidget(
+          icon: HugeIcons.strokeRoundedFilter,
+          buttonFunction: () {
+            showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        width: double.maxFinite,
+                        height: 500,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Advanced Filter',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const Divider(),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: FilterNode(),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text('Close')),
+                            )
+                          ],
+                        ),
+                      ),
+                    ));
+          },
+        ),
+        const SizedBox(width: 5),
         IconButtonWidget(
           icon: HugeIcons.strokeRoundedAdd01,
           buttonFunction: () {},
@@ -185,7 +219,7 @@ class DeviceList extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(10),
         child: AnimatedContainer(
           width: deviceListWidth,
           duration: const Duration(milliseconds: 500),
@@ -203,31 +237,56 @@ class DeviceListItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets = [];
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        final crewEntries = crews.entries.toList();
+        if (index >= crewEntries.length) return null;
 
-    for (var crew in crews.entries) {
-      widgets.add(DeviceCrewHeader(crew: crew, expanded: true));
-      widgets.add(const SizedBox(height: 10));
-      for (var member in crew.value.entries) {
-        widgets.add(DeviceMemberModule(member: member, expanded: true));
-        widgets.add(const SizedBox(height: 10));
-      }
-      widgets.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        final crew = crewEntries[index];
+        return _buildCrewSection(crew);
+      }, childCount: crews.entries.length),
+    );
+  }
+
+  Widget _buildCrewSection(MapEntry<String, dynamic> crew) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DeviceCrewHeader(crew: crew),
+        const SizedBox(height: 5),
+        ..._buildMemberModules(crew),
+        _buildDivider(),
+      ],
+    );
+  }
+
+  List<Widget> _buildMemberModules(MapEntry<String, dynamic> crew) {
+    return [
+      for (var i = 0; i < crew.value.entries.length; i++) ...[
+        SizedBox(
+            width: double.infinity,
+            child: DeviceMemberModule(member: crew.value.entries.elementAt(i))),
+        if (i < crew.value.entries.length - 1) const SizedBox(height: 5),
+      ]
+    ];
+  }
+
+  Widget _buildDivider() {
+    return SizedBox(
+      height: 20,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Center(
           child: Container(
-            height: 4,
+            height: 2,
             decoration: BoxDecoration(
               color: themeDarkDivider,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
         ),
-      );
-      widgets.add(const SizedBox(height: 10));
-    }
-
-    return SliverList(delegate: SliverChildListDelegate(widgets));
+      ),
+    );
   }
 }
 
@@ -255,7 +314,8 @@ class Metrics extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color: themeDarkBackground, borderRadius: BorderRadius.circular(25)),
+              color: themeDarkBackground,
+              borderRadius: BorderRadius.circular(25)),
           child: ListView.separated(
             padding: const EdgeInsets.all(20),
             physics: const BouncingScrollPhysics(),
@@ -280,52 +340,55 @@ class MetricItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 45,
-          decoration: BoxDecoration(
-            color: themeDarkDivider,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Center(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: themeDarkPrimaryText,
-                      fontSize: 24,
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: themeDarkForeground,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+            child: Container(
+              height: 45,
+              decoration: BoxDecoration(
+                color: themeDarkDivider,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        title,
+                        style: GoogleFonts.varelaRound(
+                          fontWeight: FontWeight.bold,
+                          color: themeDarkPrimaryText,
+                          fontSize: 24,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(3),
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: themeDarkDivider,
-                    borderRadius: BorderRadius.circular(7),
+                  Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Container(
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: themeDarkDivider,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-        const SizedBox(height: 5),
-        Container(
-          height: 400,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: themeDarkForeground,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const MetricOxygenModuleWidget(),
-        ),
-      ],
+          const SizedBox(height: 5),
+          const SizedBox(height: 400, child: MetricOxygenModuleWidget()),
+        ],
+      ),
     );
   }
 }
