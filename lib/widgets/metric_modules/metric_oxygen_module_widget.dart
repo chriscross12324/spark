@@ -1,11 +1,10 @@
 import 'dart:math';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/widgets/universal/icon_button_widget.dart';
-import 'package:spark/widgets/universal/zoomable_chart_widget.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class MetricOxygenModuleWidget extends StatefulWidget {
@@ -24,7 +23,7 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
   @override
   void initState() {
     super.initState();
-    placeholderData = _generatePlaceholderData(count: 1080);
+    placeholderData = _generatePlaceholderData(count: 300);
 
     _zoomPanBehavior = ZoomPanBehavior(
         enablePanning: true,
@@ -48,7 +47,7 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
                 child: SfCartesianChart(
                   primaryXAxis: CategoryAxis(
                     labelPlacement: LabelPlacement.onTicks,
-                    labelStyle: const TextStyle(
+                    labelStyle: GoogleFonts.varelaRound(
                       color: themeDarkSecondaryText,
                     ),
                     majorGridLines: MajorGridLines(
@@ -59,7 +58,7 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
                     minimum: placeholderData.map((p) => p.value).reduce(min).floor() - 1,
                     maximum: placeholderData.map((p) => p.value).reduce(max).ceil() + 1,
                     interval: 2,
-                    labelStyle: const TextStyle(
+                    labelStyle: GoogleFonts.varelaRound(
                       color: themeDarkSecondaryText,
                     ),
                     majorGridLines: MajorGridLines(
@@ -75,15 +74,15 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
                     lineColor: themeDarkPrimaryText,
                     lineWidth: 2,
                     shouldAlwaysShow: true,
-                    tooltipSettings: InteractiveTooltip(
+                    tooltipSettings: const InteractiveTooltip(
                       enable: true,
                       format: 'point.y'
                     ),
                   ),
-                  legend: const Legend(
+                  legend: Legend(
                     isVisible: true,
                     position: LegendPosition.top,
-                    textStyle: TextStyle(
+                    textStyle: GoogleFonts.varelaRound(
                       color: themeDarkSecondaryText,
                     ),
                   ),
