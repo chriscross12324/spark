@@ -8,12 +8,27 @@ class IconButtonWidget extends StatefulWidget {
   const IconButtonWidget(
       {super.key,
       required this.icon,
+      this.iconSize = 24,
       required this.buttonFunction,
-      this.canHold = false});
+        this.canHold = false,
+      this.isClear = false,
+      this.height = 50,
+      this.width = 40,
+      this.borderRadius = 5,
+      this.iconColour = themeDarkSecondaryText,
+      this.backgroundTint = themeDarkPrimaryText});
 
   final IconData icon;
+  final double iconSize;
+  final Color iconColour;
   final Function buttonFunction;
   final bool canHold;
+  final bool isClear;
+
+  final double height;
+  final double width;
+  final double borderRadius;
+  final Color backgroundTint;
 
   @override
   State<IconButtonWidget> createState() => _IconButtonWidgetState();
@@ -67,19 +82,23 @@ class _IconButtonWidgetState extends State<IconButtonWidget> {
           });
         },
         child: AnimatedContainer(
-          height: 50,
-          width: 40,
+          height: widget.height,
+          width: widget.width,
           duration: const Duration(milliseconds: 100),
           decoration: BoxDecoration(
-            color: themeDarkPrimaryText.withOpacity((_isPressed
+            color: widget.backgroundTint.withOpacity((_isPressed
                 ? 0.05
                 : _isHovered
                     ? 0.25
-                    : 0.1)),
-            borderRadius: BorderRadius.circular(5),
+                    : widget.isClear ? 0 : 0.1)),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
           ),
           child: Center(
-            child: HugeIcon(icon: widget.icon, color: themeDarkSecondaryText),
+            child: HugeIcon(
+              icon: widget.icon,
+              color: widget.iconColour,
+              size: widget.iconSize,
+            ),
           ),
         ),
       ),
