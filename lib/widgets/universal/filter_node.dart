@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -6,186 +7,6 @@ import 'package:spark/widgets/universal/text_button_widget.dart';
 
 import '../../app_constants.dart';
 
-class FilterNode extends StatefulWidget {
-  const FilterNode(
-      {super.key, this.depth = 1, this.usedFilterTypes = const []});
-
-  final int depth;
-  final List<String> usedFilterTypes;
-
-  @override
-  State<FilterNode> createState() => _FilterNodeState();
-}
-
-class _FilterNodeState extends State<FilterNode> {
-  String? selectedFilterType;
-  String? selectedValue;
-  List<String> availableFilterTypes = [];
-  final List<FilterNode> children = [];
-
-  final List<String> filterTypes = ['Region', 'Type', 'Name'];
-
-  final Map<String, List<String>> filterOptions = {
-    'Region': ['North', 'South', 'West', 'East'],
-    'Type': ['Swim', 'Walk', 'Run'],
-    'Name': ['Dolphins', 'Sharks', 'Whales'],
-  };
-
-  @override
-  void initState() {
-    super.initState();
-    availableFilterTypes = filterTypes
-        .where((type) => !widget.usedFilterTypes.contains(type))
-        .toList();
-
-    if (availableFilterTypes.length == 1 && selectedFilterType == null) {
-      selectedFilterType = availableFilterTypes.firstOrNull;
-    }
-  }
-
-  void _addChild() {
-    if (widget.depth < 3 && selectedFilterType != null) {
-      setState(() {
-        children.add(FilterNode(
-          depth: widget.depth + 1,
-          usedFilterTypes: [...widget.usedFilterTypes, selectedFilterType!],
-        ));
-      });
-    }
-  }
-
-  void _selectFilterType(String filterType) {
-    setState(() {
-      selectedFilterType = filterType;
-      selectedValue = null;
-    });
-  }
-
-  void _removeChild(FilterNode child) {
-    setState(() {
-      children.remove(child);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color:
-            selectedFilterType == null ? null : Colors.white.withOpacity(0.15),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(5),
-        child: selectedFilterType == null
-            ? Row(
-                children: availableFilterTypes.asMap().entries.map((entry) {
-                  final int index = entry.key;
-                  final String type = entry.value;
-
-                  return Expanded(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextButtonWidget(
-                            text: type,
-                            buttonFunction: () {
-                              _selectFilterType(type);
-                            },
-                          ),
-                        ),
-                        if (index != availableFilterTypes.length - 1)
-                          const SizedBox(width: 5)
-                      ],
-                    ),
-                  );
-                }).toList(),
-                /*availableFilterTypes.map(
-                  (type) {
-                    return ;
-                  },
-                ).toList(),*/
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Text(
-                                "${selectedFilterType!} :",
-                                style: GoogleFonts.varelaRound(
-                                  fontWeight: FontWeight.w900,
-                                  color: themeDarkPrimaryText,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                                width: 16,
-                              ),
-                              if (selectedFilterType != null)
-                                DropdownButton<String>(
-                                  hint: const Text('Select Value'),
-                                  value: selectedValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedValue = value;
-                                    });
-                                  },
-                                  isDense: true,
-                                  items: filterOptions[selectedFilterType!]!
-                                      .map((option) => DropdownMenuItem(
-                                          value: option, child: Text(option)))
-                                      .toList(),
-                                ),
-                            ],
-                          ),
-                        ),
-                        if (widget.depth < 3)
-                          IconButtonWidget(
-                            icon: HugeIcons.strokeRoundedAdd01,
-                            buttonFunction: () {
-                              _addChild();
-                            },
-                            height: 30,
-                            width: 30,
-                          ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: children
-                        .map((child) => Padding(
-                              padding: const EdgeInsets.only(left: 16),
-                              child: Row(
-                                children: [
-                                  Expanded(child: child),
-                                  IconButtonWidget(
-                                    icon: HugeIcons.strokeRoundedDelete02,
-                                    iconSize: 20,
-                                    buttonFunction: () {
-                                      _removeChild(child);
-                                    },
-                                    height: 30,
-                                    width: 30,
-                                    borderRadius: 5,
-                                  ),
-                                ],
-                              ),
-                            ))
-                        .toList(),
-                  )
-                ],
-              ),
-      ),
-    );
-  }
-}
 
 class FilterManager extends StatefulWidget {
   const FilterManager({super.key});
@@ -326,9 +147,9 @@ class _FilterModuleState extends State<FilterModule> {
   final List<String> filterTypes = ['Region', 'Type', 'Name'];
 
   final Map<String, List<String>> filterValues = {
-    'Region': ['North', 'South', 'West', 'East'],
-    'Type': ['Swim', 'Walk', 'Run'],
-    'Name': ['Dolphins', 'Sharks', 'Whales'],
+    'Region': ['Coastal', 'Kamloops', 'South East', 'Carabao', 'Prince George', 'South West', 'Columbia', 'Aero', 'Cranbrook', 'Flathead'],
+    'Type': ['IA', 'UC'],
+    'Name': ['Alpha', 'Beta', 'Charlie', 'Delta', 'SE 410', 'SE 430', 'SE 450', 'SE 470', 'SE 490'],
   };
 
   void _addChild() {
@@ -437,7 +258,59 @@ class _FilterModuleState extends State<FilterModule> {
                                       fontSize: 14,
                                     ),
                                   ),
-                                  TextButtonWidget(text: 'Select', buttonFunction: () {})
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2<String>(
+                                        customButton: TextButtonWidget(
+                                          text: selectedFilterValue ?? 'Select',
+                                          buttonFunction: () {},
+                                        ),
+                                        buttonStyleData: ButtonStyleData(
+                                          overlayColor: MaterialStateProperty.all(Colors.transparent)
+                                        ),
+                                        items: filterValues[
+                                                selectedFilterType!]!
+                                            .map(
+                                              (option) => DropdownMenuItem(
+                                                value: option,
+                                                child: Text(
+                                                  option,
+                                                  style:
+                                                      GoogleFonts.varelaRound(
+                                                    fontWeight: FontWeight.w900,
+                                                    color: themeDarkPrimaryText,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                        value: selectedFilterValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedFilterValue = value;
+                                          });
+                                        },
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 250,
+                                          width: 120,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: themeDarkForeground,
+                                          ),
+                                          offset: const Offset(-20, 0),
+                                        ),
+                                        menuItemStyleData: const MenuItemStyleData(
+                                          height: 45,
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
