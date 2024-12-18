@@ -158,35 +158,8 @@ class AppBarActions extends StatelessWidget {
           buttonFunction: () {
             showDialog(
                 context: context,
-                builder: (context) => Dialog(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        width: double.maxFinite,
-                        height: 500,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Advanced Filter',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const Divider(),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: FilterNode(),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text('Close')),
-                            )
-                          ],
-                        ),
-                      ),
-                    ));
+                barrierColor: themeDarkDeepBackground.withOpacity(0.35),
+                builder: (context) => const FilterManager());
           },
         ),
         const SizedBox(width: 5),
