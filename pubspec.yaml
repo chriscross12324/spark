@@ -41,6 +41,7 @@ dependencies:
   syncfusion_flutter_charts: ^27.1.57
   flutter_riverpod: ^2.6.1
   google_fonts: ^6.2.1
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:
