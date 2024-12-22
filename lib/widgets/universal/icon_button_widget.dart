@@ -4,124 +4,165 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
 
+/// A custom IconButton widget that supports various interactions (press and hold)
 class IconButtonWidget extends StatefulWidget {
   const IconButtonWidget(
       {super.key,
-      required this.icon,
+      required this.iconData,
       this.iconSize = 24,
-      required this.buttonFunction,
-        this.canHold = false,
-      this.isClear = false,
+      this.iconColour = themeDarkSecondaryText,
+      required this.onPressed,
+      this.isHoldEnabled = false,
+      this.isButtonClear = false,
       this.height = 50,
       this.width = 40,
-      this.borderRadius = 5,
-      this.iconColour = themeDarkSecondaryText,
-      this.backgroundTint = themeDarkPrimaryText});
+      this.borderRadius = 10,
+      this.backgroundColour = themeDarkPrimaryText});
 
-  final IconData icon;
+  // Button Properties
+  final IconData iconData;
   final double iconSize;
   final Color iconColour;
-  final Function buttonFunction;
-  final bool canHold;
-  final bool isClear;
-
+  final Function onPressed;
+  final bool isHoldEnabled;
+  final bool isButtonClear;
   final double height;
   final double width;
   final double borderRadius;
-  final Color backgroundTint;
+  final Color backgroundColour;
 
   @override
   State<IconButtonWidget> createState() => _IconButtonWidgetState();
 }
 
 class _IconButtonWidgetState extends State<IconButtonWidget> {
-  bool _isHovered = false;
-  bool _isPressed = false;
-  bool _isHolding = false;
+  bool _isButtonHovered = false;
+  bool _isButtonPressed = false;
 
-  Timer? _holdTimer = null;
-  int _holdDuration = 150;
+  Timer? _holdTimer;
+  final int _holdInterval = 150;
 
+  // Clean up the hold timer when the widget is disposed
   @override
   void dispose() {
     _holdTimer?.cancel();
     super.dispose();
   }
 
+  // Start holding functionality
+  void _startHolding() {
+    if (!widget.isHoldEnabled) return;
+
+    _holdTimer = Timer.periodic(Duration(milliseconds: _holdInterval), (_) {
+      widget.onPressed();
+    });
+  }
+
+  // Stop holding functionality
+  void _stopHolding() {
+    _holdTimer?.cancel();
+    _holdTimer = null;
+  }
+
+  // Main widget building logic
   @override
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (_) {
         setState(() {
-          _isPressed = true;
+          _isButtonPressed = true;
         });
         _startHolding();
       },
       onPointerUp: (_) {
         setState(() {
-          _isPressed = false;
-          widget.buttonFunction();
+          _isButtonPressed = false;
+          widget.onPressed();
         });
         _stopHolding();
       },
       onPointerCancel: (_) {
         setState(() {
-          _isPressed = false;
+          _isButtonPressed = false;
         });
         _stopHolding();
       },
       child: MouseRegion(
-        onEnter: (_) {
-          setState(() {
-            _isHovered = true;
-          });
-        },
-        onExit: (_) {
-          setState(() {
-            _isHovered = false;
-          });
-        },
-        child: AnimatedContainer(
+        onEnter: (_) => _setButtonHovered(true),
+        onExit: (_) => _setButtonHovered(false),
+        child: _IconButtonBackground(
+          isPressed: _isButtonPressed,
+          isHovered: _isButtonHovered,
+          isButtonClear: widget.isButtonClear,
           height: widget.height,
           width: widget.width,
-          duration: const Duration(milliseconds: 100),
-          decoration: BoxDecoration(
-            color: widget.backgroundTint.withOpacity((_isPressed
-                ? 0.05
-                : _isHovered
-                    ? 0.25
-                    : widget.isClear ? 0 : 0.1)),
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-          ),
-          child: Center(
-            child: HugeIcon(
-              icon: widget.icon,
-              color: widget.iconColour,
-              size: widget.iconSize,
-            ),
-          ),
+          borderRadius: widget.borderRadius,
+          backgroundColor: widget.backgroundColour,
+          icon: widget.iconData,
+          iconColour: widget.iconColour,
+          iconSize: widget.iconSize,
         ),
       ),
     );
   }
 
-  void _startHolding() {
-    if (!widget.canHold) return;
-
-    _isHolding = true;
-    //widget.buttonFunction();
-    _holdTimer = Timer.periodic(Duration(milliseconds: _holdDuration), (timer) {
-      widget.buttonFunction();
+  void _setButtonHovered(bool isHovered) {
+    setState(() {
+      _isButtonHovered = isHovered;
     });
   }
+}
 
-  void _stopHolding() {
-    if (!widget.canHold) return;
+/// A separate widget for managing the background and icon display
+class _IconButtonBackground extends StatelessWidget {
+  const _IconButtonBackground(
+      {required this.isPressed,
+      required this.isHovered,
+      required this.isButtonClear,
+      required this.height,
+      required this.width,
+      required this.borderRadius,
+      required this.backgroundColor,
+      required this.icon,
+      required this.iconColour,
+      required this.iconSize});
 
-    _isHolding = false;
-    _holdTimer!.cancel();
-    setState(() {
-      _holdDuration = 150;
-    });
+  final bool isPressed;
+  final bool isHovered;
+  final bool isButtonClear;
+  final double height;
+  final double width;
+  final double borderRadius;
+  final Color backgroundColor;
+  final IconData icon;
+  final Color iconColour;
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      height: height,
+      width: width,
+      duration: const Duration(milliseconds: 100),
+      decoration: BoxDecoration(
+        color: backgroundColor.withOpacity(
+          isPressed
+              ? 0.05
+              : isHovered
+                  ? 0.25
+                  : isButtonClear
+                      ? 0
+                      : 0.1,
+        ),
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      child: Center(
+        child: HugeIcon(
+          icon: icon,
+          color: iconColour,
+          size: iconSize,
+        ),
+      ),
+    );
   }
 }

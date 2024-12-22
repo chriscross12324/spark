@@ -7,7 +7,6 @@ import 'package:spark/widgets/universal/text_button_widget.dart';
 
 import '../../app_constants.dart';
 
-
 class FilterManager extends StatefulWidget {
   const FilterManager({super.key});
 
@@ -57,7 +56,7 @@ class _FilterManagerState extends State<FilterManager> {
           children: [
             Text(
               'Advanced Filter',
-              style: GoogleFonts.varelaRound(
+              style: GoogleFonts.asap(
                 fontWeight: FontWeight.w900,
                 color: themeDarkPrimaryText,
                 fontSize: 28,
@@ -92,18 +91,18 @@ class _FilterManagerState extends State<FilterManager> {
                     const SizedBox(height: 5),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () {
-                          _addTopLevelFilter();
-                        },
-                        child: Text(
-                          "+ Filter Group",
-                          style: GoogleFonts.varelaRound(
-                            fontWeight: FontWeight.w900,
-                            color: const Color(0xFF0095FF),
-                            fontSize: 14,
+                      child: Row(
+                        children: [
+                          TextButtonWidget(
+                            onPressed: () {
+                              _addTopLevelFilter();
+                            },
+                            text: "+ Filter Group",
+                            isPrimary: true,
+                            isButtonClear: true,
+                            containsPadding: false,
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ],
@@ -113,12 +112,21 @@ class _FilterManagerState extends State<FilterManager> {
             Row(
               children: [
                 const Expanded(child: SizedBox()),
-                TextButtonWidget(text: 'Cancel', buttonFunction: () {}),
+                TextButtonWidget(
+                    text: 'Cancel',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
                 const SizedBox(
                   width: 10,
                 ),
                 TextButtonWidget(
-                    text: 'Apply', buttonFunction: () {}, isPrimary: true)
+                  text: 'Apply',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  isPrimary: true,
+                )
               ],
             )
           ],
@@ -147,9 +155,30 @@ class _FilterModuleState extends State<FilterModule> {
   final List<String> filterTypes = ['Region', 'Type', 'Name'];
 
   final Map<String, List<String>> filterValues = {
-    'Region': ['Coastal', 'Kamloops', 'South East', 'Carabao', 'Prince George', 'South West', 'Columbia', 'Aero', 'Cranbrook', 'Flathead'],
+    'Region': [
+      'Coastal',
+      'Kamloops',
+      'South East',
+      'Carabao',
+      'Prince George',
+      'South West',
+      'Columbia',
+      'Aero',
+      'Cranbrook',
+      'Flathead'
+    ],
     'Type': ['IA', 'UC'],
-    'Name': ['Alpha', 'Beta', 'Charlie', 'Delta', 'SE 410', 'SE 430', 'SE 450', 'SE 470', 'SE 490'],
+    'Name': [
+      'Alpha',
+      'Beta',
+      'Charlie',
+      'Delta',
+      'SE 410',
+      'SE 430',
+      'SE 450',
+      'SE 470',
+      'SE 490'
+    ],
   };
 
   void _addChild() {
@@ -217,12 +246,13 @@ class _FilterModuleState extends State<FilterModule> {
                             Expanded(
                               child: TextButtonWidget(
                                 text: type,
-                                buttonFunction: () {
+                                onPressed: () {
                                   setState(() {
                                     selectedFilterType = type;
                                     selectedFilterValue = null;
                                   });
                                 },
+                                containsPadding: false,
                               ),
                             ),
                             if (index != widget.availableFilterTypes.length - 1)
@@ -252,7 +282,7 @@ class _FilterModuleState extends State<FilterModule> {
                                 children: [
                                   Text(
                                     "${selectedFilterType!}: ",
-                                    style: GoogleFonts.varelaRound(
+                                    style: GoogleFonts.asap(
                                       fontWeight: FontWeight.w900,
                                       color: themeDarkPrimaryText,
                                       fontSize: 14,
@@ -264,11 +294,12 @@ class _FilterModuleState extends State<FilterModule> {
                                       child: DropdownButton2<String>(
                                         customButton: TextButtonWidget(
                                           text: selectedFilterValue ?? 'Select',
-                                          buttonFunction: () {},
+                                          onPressed: () {},
                                         ),
                                         buttonStyleData: ButtonStyleData(
-                                          overlayColor: MaterialStateProperty.all(Colors.transparent)
-                                        ),
+                                            overlayColor:
+                                                WidgetStateProperty.all(
+                                                    Colors.transparent)),
                                         items: filterValues[
                                                 selectedFilterType!]!
                                             .map(
@@ -277,7 +308,7 @@ class _FilterModuleState extends State<FilterModule> {
                                                 child: Text(
                                                   option,
                                                   style:
-                                                      GoogleFonts.varelaRound(
+                                                      GoogleFonts.asap(
                                                     fontWeight: FontWeight.w900,
                                                     color: themeDarkPrimaryText,
                                                     fontSize: 14,
@@ -302,7 +333,8 @@ class _FilterModuleState extends State<FilterModule> {
                                           ),
                                           offset: const Offset(-20, 0),
                                         ),
-                                        menuItemStyleData: const MenuItemStyleData(
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
                                           height: 45,
                                           padding: EdgeInsets.symmetric(
                                             horizontal: 14,
@@ -336,10 +368,10 @@ class _FilterModuleState extends State<FilterModule> {
                                   IconButtonWidget(
                                     height: 35,
                                     width: 35,
-                                    icon: HugeIcons.strokeRoundedAdd01,
+                                    iconData: HugeIcons.strokeRoundedAdd01,
                                     iconSize: 18,
-                                    isClear: true,
-                                    buttonFunction: () {
+                                    isButtonClear: true,
+                                    onPressed: () {
                                       _addChild();
                                     },
                                   ),
@@ -359,12 +391,12 @@ class _FilterModuleState extends State<FilterModule> {
                                 IconButtonWidget(
                                   height: 35,
                                   width: 35,
-                                  icon: HugeIcons.strokeRoundedDelete02,
+                                  iconData: HugeIcons.strokeRoundedDelete02,
                                   iconSize: 18,
                                   iconColour: Colors.red,
-                                  backgroundTint: Colors.red,
-                                  isClear: true,
-                                  buttonFunction: () {
+                                  backgroundColour: Colors.red,
+                                  isButtonClear: true,
+                                  onPressed: () {
                                     debugPrint("Going to delete");
                                     widget.onDelete!();
                                   },

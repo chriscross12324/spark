@@ -68,35 +68,35 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidgetBacku
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButtonWidget(
-                icon: HugeIcons.strokeRoundedArrowLeft01,
-                buttonFunction: () {
+                iconData: HugeIcons.strokeRoundedArrowLeft01,
+                onPressed: () {
                   zoomableChartGlobalKey.currentState?.scrollLeft();
                 },
-                canHold: true,
+                isHoldEnabled: true,
               ),
               const SizedBox(width: 5),
               IconButtonWidget(
-                icon: HugeIcons.strokeRoundedArrowRight01,
-                buttonFunction: () {
+                iconData: HugeIcons.strokeRoundedArrowRight01,
+                onPressed: () {
                   zoomableChartGlobalKey.currentState?.scrollRight();
                 },
-                canHold: true,
+                isHoldEnabled: true,
               ),
               const SizedBox(width: 5),
               IconButtonWidget(
-                icon: HugeIcons.strokeRoundedSearchAdd,
-                buttonFunction: () {
+                iconData: HugeIcons.strokeRoundedSearchAdd,
+                onPressed: () {
                   zoomableChartGlobalKey.currentState?.zoomIn();
                 },
-                canHold: true,
+                isHoldEnabled: true,
               ),
               const SizedBox(width: 5),
               IconButtonWidget(
-                icon: HugeIcons.strokeRoundedSearchMinus,
-                buttonFunction: () {
+                iconData: HugeIcons.strokeRoundedSearchMinus,
+                onPressed: () {
                   zoomableChartGlobalKey.currentState?.zoomOut();
                 },
-                canHold: true,
+                isHoldEnabled: true,
               ),
             ],
           ),

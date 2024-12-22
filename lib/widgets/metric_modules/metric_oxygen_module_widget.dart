@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/widgets/universal/segmented_control.dart';
 import 'package:spark/widgets/universal/icon_button_widget.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -11,26 +12,18 @@ class MetricOxygenModuleWidget extends StatefulWidget {
   const MetricOxygenModuleWidget({super.key});
 
   @override
-  State<MetricOxygenModuleWidget> createState() => _MetricOxygenModuleWidgetState();
+  State<MetricOxygenModuleWidget> createState() =>
+      _MetricOxygenModuleWidgetState();
 }
 
 class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
     with AutomaticKeepAliveClientMixin {
   late final List<_PointData> placeholderData;
-  double zoomFactor = 1.0;
-  late ZoomPanBehavior _zoomPanBehavior;
 
   @override
   void initState() {
     super.initState();
-    placeholderData = _generatePlaceholderData(count: 300);
-
-    _zoomPanBehavior = ZoomPanBehavior(
-        enablePanning: true,
-        enableSelectionZooming: true,
-        selectionRectColor: themeDarkComplementaryColourFaded,
-        selectionRectBorderColor: themeDarkComplementaryColourMain,
-        zoomMode: ZoomMode.x);
+    placeholderData = _generatePlaceholderData(count: 100);
   }
 
   @override
@@ -41,140 +34,130 @@ class _MetricOxygenModuleWidgetState extends State<MetricOxygenModuleWidget>
       padding: const EdgeInsets.all(5),
       child: Column(
         children: [
-          Expanded(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                child: SfCartesianChart(
-                  primaryXAxis: CategoryAxis(
-                    labelPlacement: LabelPlacement.onTicks,
-                    labelStyle: GoogleFonts.varelaRound(
-                      color: themeDarkSecondaryText,
-                    ),
-                    majorGridLines: MajorGridLines(
-                      color: themeDarkAccentColourFaded.withOpacity(0.35),
-                    ),
-                  ),
-                  primaryYAxis: NumericAxis(
-                    minimum: placeholderData.map((p) => p.value).reduce(min).floor() - 1,
-                    maximum: placeholderData.map((p) => p.value).reduce(max).ceil() + 1,
-                    interval: 2,
-                    labelStyle: GoogleFonts.varelaRound(
-                      color: themeDarkSecondaryText,
-                    ),
-                    majorGridLines: MajorGridLines(
-                      color: themeDarkAccentColourFaded.withOpacity(0.35),
-                    ),
-                  ),
-                  zoomPanBehavior: _zoomPanBehavior,
-                  /*tooltipBehavior: TooltipBehavior(
-                      enable: true, shouldAlwaysShow: true, animationDuration: 0),*/
-                  trackballBehavior: TrackballBehavior(
-                    enable: true,
-                    activationMode: ActivationMode.singleTap,
-                    lineColor: themeDarkPrimaryText,
-                    lineWidth: 2,
-                    shouldAlwaysShow: true,
-                    tooltipSettings: const InteractiveTooltip(
-                      enable: true,
-                      format: 'point.y'
-                    ),
-                  ),
-                  legend: Legend(
-                    isVisible: true,
-                    position: LegendPosition.top,
-                    textStyle: GoogleFonts.varelaRound(
-                      color: themeDarkSecondaryText,
-                    ),
-                  ),
-                  enableAxisAnimation: true,
-                  series: <CartesianSeries<_PointData, String>>[
-                    AreaSeries<_PointData, String>(
-                      dataSource: placeholderData,
-                      xValueMapper: (_PointData data, _) => data.timestamp,
-                      yValueMapper: (_PointData data, _) => data.value,
-                      color: themeDarkAccentColourMain.withOpacity(0.15),
-                      borderColor: themeDarkAccentColourMain,
-                      markerSettings: const MarkerSettings(
-                          isVisible: true, color: themeDarkAccentColourMain),
-                      legendIconType: LegendIconType.circle,
-                      animationDuration: 0,
-                      trendlines: [
-                        Trendline(
-                            type: TrendlineType.movingAverage,
-                            color: themeDarkComplementaryColourMain,
-                            animationDuration: 0,
-                            period: 5,
-                            legendIconType: LegendIconType.horizontalLine,
-                            enableTooltip: true,
-                            backwardForecast: 5)
-                      ],
-                      name: "Raw Data",
-                    )
-                  ],
-                )),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          const SizedBox(height: 5),
+          const Row(
             children: [
-              IconButtonWidget(
-                icon: HugeIcons.strokeRoundedArrowLeft01,
-                buttonFunction: () {
-                  _zoomPanBehavior.panToDirection("left");
-                },
-                canHold: true,
-              ),
-              const SizedBox(width: 5),
-              IconButtonWidget(
-                icon: HugeIcons.strokeRoundedArrowRight01,
-                buttonFunction: () {
-                  _zoomPanBehavior.panToDirection("right");
-                },
-                canHold: true,
-              ),
-              const SizedBox(width: 5),
-              IconButtonWidget(
-                icon: HugeIcons.strokeRoundedSearchAdd,
-                buttonFunction: () {
-                  _zoomPanBehavior.zoomIn();
-                },
-                canHold: true,
-              ),
-              const SizedBox(width: 5),
-              IconButtonWidget(
-                icon: HugeIcons.strokeRoundedSearchMinus,
-                buttonFunction: () {
-                  _zoomPanBehavior.zoomOut();
-                },
-                canHold: true,
-              ),
-              const SizedBox(width: 5),
-              IconButtonWidget(
-                icon: HugeIcons.strokeRoundedArrowTurnBackward,
-                buttonFunction: () {
-                  _zoomPanBehavior.reset();
-                },
-              ),
+              SegmentedControl(options: [
+                "Max",
+                "7 days",
+                "3 days",
+                "24 hours",
+                "12 hours",
+                "3 hours"
+              ]),
             ],
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: SfCartesianChart(
+              primaryXAxis: CategoryAxis(
+                labelPlacement: LabelPlacement.onTicks,
+                labelStyle: GoogleFonts.asap(
+                  color: themeDarkSecondaryText,
+                ),
+                majorGridLines: MajorGridLines(
+                  color: themeDarkAccentColourFaded.withOpacity(0.35),
+                ),
+              ),
+              primaryYAxis: NumericAxis(
+                minimum:
+                    placeholderData.map((p) => p.value).reduce(min).floor() -
+                        1,
+                maximum:
+                    placeholderData.map((p) => p.value).reduce(max).ceil() +
+                        1,
+                interval: 2,
+                labelStyle: GoogleFonts.asap(
+                  color: themeDarkSecondaryText,
+                ),
+                majorGridLines: MajorGridLines(
+                  color: themeDarkAccentColourFaded.withOpacity(0.35),
+                ),
+              ),
+              /*tooltipBehavior: TooltipBehavior(
+                    enable: true, shouldAlwaysShow: true, animationDuration: 0),*/
+              trackballBehavior: TrackballBehavior(
+                enable: true,
+                activationMode: ActivationMode.singleTap,
+                lineColor: themeDarkPrimaryText,
+                lineWidth: 2,
+                shouldAlwaysShow: true,
+                tooltipSettings:
+                    const InteractiveTooltip(enable: true, format: 'point.y'),
+              ),
+              legend: Legend(
+                isVisible: false,
+                position: LegendPosition.bottom,
+                textStyle: GoogleFonts.asap(
+                  color: themeDarkSecondaryText,
+                ),
+              ),
+              enableAxisAnimation: true,
+              series: <CartesianSeries<_PointData, String>>[
+                AreaSeries<_PointData, String>(
+                  dataSource: placeholderData,
+                  xValueMapper: (_PointData data, _) => data.timestamp,
+                  yValueMapper: (_PointData data, _) => data.value,
+                  color: themeDarkAccentColourMain.withOpacity(0.15),
+                  borderColor: Colors.transparent,
+                  markerSettings: const MarkerSettings(
+                    height: 5,
+                    width: 5,
+                    isVisible: true,
+                    color: Colors.white,
+                  ),
+                  legendIconType: LegendIconType.circle,
+                  animationDuration: 0,
+                  trendlines: [
+                    Trendline(
+                      type: TrendlineType.movingAverage,
+                      color: themeDarkComplementaryColourMain,
+                      animationDuration: 0,
+                      period: 5,
+                      legendIconType: LegendIconType.horizontalLine,
+                      enableTooltip: true,
+                      backwardForecast: 5,
+                    ),
+                  ],
+                  name: "Raw Data",
+                )
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  List<_PointData> _generatePlaceholderData({required int count}) {
-    final random = Random();
+  List<_PointData> _generatePlaceholderData({
+    required int count,
+    double startingValue = 20.0,
+    double minChange = -0.5,
+    double maxChange = 0.5,
+    double outlierProbability = 0.01,
+    double outlierMultiplier = 2.0,
+    double minValue = 20.0,
+    double maxValue = 30.0,
+  }) {
+    /*final random = Random();
     List<_PointData> data = [];
-    double baseValue = 20;
+    double currentValue = startingValue;*/
 
+    List<_PointData> data = [];
     for (int i = 0; i < count; i++) {
-      double change = random.nextBool() ? 1.0 : -1.0;
-      if (random.nextDouble() < 0.1) {
-        change = (random.nextDouble() * 10 - 5);
+      double rand = Random().nextDouble().clamp(0, 2);
+      /*double change = random.nextDouble() * (maxChange - minChange) + minChange;
+
+      if (random.nextDouble() < outlierProbability) {
+        change *= (random.nextBool() ? outlierMultiplier : -outlierMultiplier);
       }
 
-      baseValue += change;
-      double roundedValue = double.parse(baseValue.toDouble().toStringAsFixed(2));
-      data.add(_PointData(_formatTimeLabel(i.toDouble()), roundedValue));
+      currentValue = (currentValue + change).clamp(minValue, maxValue);
+
+      currentValue = currentValue.clamp(0.0, 100.0);
+
+      double roundedValue = double.parse(currentValue.toStringAsFixed(5));*/
+      data.add(_PointData(_formatTimeLabel(i.toDouble()), sin(i/8)));
     }
 
     return data;
@@ -205,9 +188,12 @@ extension ColorBlending on Color {
   Color blendColours(Color secondaryColour, double blendAmount) {
     blendAmount = blendAmount.clamp(0.0, 1.0);
 
-    int r = ((1 - blendAmount) * red + blendAmount * secondaryColour.red).round();
-    int g = ((1 - blendAmount) * green + blendAmount * secondaryColour.green).round();
-    int b = ((1 - blendAmount) * blue + blendAmount * secondaryColour.blue).round();
+    int r =
+        ((1 - blendAmount) * red + blendAmount * secondaryColour.red).round();
+    int g = ((1 - blendAmount) * green + blendAmount * secondaryColour.green)
+        .round();
+    int b =
+        ((1 - blendAmount) * blue + blendAmount * secondaryColour.blue).round();
 
     return Color.fromARGB(255, r, g, b);
   }
