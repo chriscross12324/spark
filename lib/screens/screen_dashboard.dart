@@ -4,11 +4,9 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/widgets/device_module_widget.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
-import 'package:spark/widgets/metric_modules/metric_oxygen_module_widget.dart';
 import 'package:spark/widgets/universal/filter_node.dart';
 import 'package:spark/widgets/universal/icon_button_widget.dart';
 
-import '../widgets/metric_modules/metric_oxygen_module_widget_backup.dart';
 
 class ScreenDashboard extends StatefulWidget {
   const ScreenDashboard({super.key});
@@ -210,7 +208,14 @@ class DeviceList extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
       child: Container(
-        color: themeDarkBackground,
+        decoration: BoxDecoration(
+          color: themeDarkBackground,
+          borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
+          border: Border.all(
+            width: 2,
+            color: Colors.white.withOpacity(isFullscreen ? 0 : 0.15),
+          ),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: const CustomScrollView(
           physics: BouncingScrollPhysics(),
