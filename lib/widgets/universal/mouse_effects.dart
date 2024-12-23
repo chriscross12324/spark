@@ -36,34 +36,32 @@ class _MouseEffectsContainerState extends State<MouseEffectsContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: (_) {
+    return MouseRegion(
+      onEnter: (_) {
         setState(() {
-          _isPressed = true;
+          _isHovered = true;
         });
       },
-      onPointerUp: (_) {
+      onExit: (_) {
         setState(() {
-          _isPressed = false;
-          if (_isHovered) {
-            widget.onPressed();
-          }
+          _isHovered = false;
         });
       },
-      onPointerCancel: (_) {
-        setState(() {
-          _isPressed = false;
-        });
-      },
-      child: MouseRegion(
-        onEnter: (_) {
+      child: GestureDetector(
+        onTapDown: (_) {
           setState(() {
-            _isHovered = true;
+            _isPressed = true;
           });
         },
-        onExit: (_) {
+        onTapUp: (_) {
           setState(() {
-            _isHovered = false;
+            _isPressed = false;
+            widget.onPressed();
+          });
+        },
+        onTapCancel: () {
+          setState(() {
+            _isPressed = false;
           });
         },
         child: AnimatedContainer(
