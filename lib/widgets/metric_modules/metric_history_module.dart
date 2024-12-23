@@ -92,75 +92,73 @@ class _MetricHistoryModuleState extends State<MetricHistoryModule>
           SizedBox(
             height: 250,
             width: double.infinity,
-            child: Expanded(
-              child: SfCartesianChart(
-                // X-Axis Configuration
-                primaryXAxis: CategoryAxis(
-                  labelPlacement: LabelPlacement.betweenTicks,
-                  labelStyle: labelStyle,
-                  majorGridLines: gridLineStyle,
-                ),
-
-                // Y-Axis Configuration
-                primaryYAxis: NumericAxis(
-                  minimum: yMin,
-                  maximum: yMax,
-                  interval: 2,
-                  labelStyle: labelStyle,
-                  majorGridLines: gridLineStyle,
-                ),
-
-                // Trackball Behaviour
-                trackballBehavior: TrackballBehavior(
-                  enable: true,
-                  activationMode: ActivationMode.singleTap,
-                  lineColor: themeDarkPrimaryText,
-                  lineWidth: 2,
-                  shouldAlwaysShow: true,
-                  tooltipSettings: const InteractiveTooltip(
-                    enable: true,
-                    format: 'point.y',
-                  ),
-                ),
-
-                // Data Series
-                series: <CartesianSeries<_PointData, String>>[
-                  AreaSeries(
-                    dataSource: placeholderData,
-                    xValueMapper: (_PointData data, _) => data.timestamp,
-                    yValueMapper: (_PointData data, _) => data.value,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        themeDarkAccentColourMain.withOpacity(0.15),
-                        themeDarkAccentColourMain.withOpacity(0.0),
-                      ],
-                    ),
-                    color: Colors.white,
-                    borderColor: Colors.transparent,
-                    markerSettings: const MarkerSettings(
-                      height: 4,
-                      width: 4,
-                      isVisible: true,
-                      color: Colors.white,
-                    ),
-                    animationDuration: 0,
-
-                    // Average Trend-line
-                    /*trendlines: [
-                      Trendline(
-                        type: TrendlineType.movingAverage,
-                        color: themeDarkComplementaryColourMain,
-                        animationDuration: 0,
-                        period: 2,
-                        enableTooltip: true,
-                        backwardForecast: 5,
-                      ),
-                    ],*/
-                  ),
-                ],
+            child: SfCartesianChart(
+              // X-Axis Configuration
+              primaryXAxis: CategoryAxis(
+                labelPlacement: LabelPlacement.betweenTicks,
+                labelStyle: labelStyle,
+                majorGridLines: gridLineStyle,
               ),
+
+              // Y-Axis Configuration
+              primaryYAxis: NumericAxis(
+                minimum: yMin,
+                maximum: yMax,
+                interval: 2,
+                labelStyle: labelStyle,
+                majorGridLines: gridLineStyle,
+              ),
+
+              // Trackball Behaviour
+              trackballBehavior: TrackballBehavior(
+                enable: true,
+                activationMode: ActivationMode.singleTap,
+                lineColor: themeDarkPrimaryText,
+                lineWidth: 2,
+                shouldAlwaysShow: true,
+                tooltipSettings: const InteractiveTooltip(
+                  enable: true,
+                  format: 'point.y',
+                ),
+              ),
+
+              // Data Series
+              series: <CartesianSeries<_PointData, String>>[
+                AreaSeries(
+                  dataSource: placeholderData,
+                  xValueMapper: (_PointData data, _) => data.timestamp,
+                  yValueMapper: (_PointData data, _) => data.value,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      themeDarkAccentColourMain.withOpacity(0.15),
+                      themeDarkAccentColourMain.withOpacity(0.0),
+                    ],
+                  ),
+                  color: Colors.white,
+                  borderColor: Colors.transparent,
+                  markerSettings: const MarkerSettings(
+                    height: 4,
+                    width: 4,
+                    isVisible: true,
+                    color: Colors.white,
+                  ),
+                  animationDuration: 0,
+
+                  // Average Trend-line
+                  /*trendlines: [
+                    Trendline(
+                      type: TrendlineType.movingAverage,
+                      color: themeDarkComplementaryColourMain,
+                      animationDuration: 0,
+                      period: 2,
+                      enableTooltip: true,
+                      backwardForecast: 5,
+                    ),
+                  ],*/
+                ),
+              ],
             ),
           ),
         ],
