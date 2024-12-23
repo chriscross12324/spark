@@ -368,9 +368,9 @@ class _FilterModuleState extends State<FilterModule> {
                                   IconButtonWidget(
                                     height: 35,
                                     width: 35,
-                                    iconData: HugeIcons.strokeRoundedAdd01,
+                                    icon: HugeIcons.strokeRoundedAdd01,
                                     iconSize: 18,
-                                    isButtonClear: true,
+                                    isIdleClear: true,
                                     onPressed: () {
                                       _addChild();
                                     },
@@ -391,11 +391,11 @@ class _FilterModuleState extends State<FilterModule> {
                                 IconButtonWidget(
                                   height: 35,
                                   width: 35,
-                                  iconData: HugeIcons.strokeRoundedDelete02,
+                                  icon: HugeIcons.strokeRoundedDelete02,
                                   iconSize: 18,
                                   iconColour: Colors.red,
-                                  backgroundColour: Colors.red,
-                                  isButtonClear: true,
+                                  colour: Colors.red,
+                                  isIdleClear: true,
                                   onPressed: () {
                                     debugPrint("Going to delete");
                                     widget.onDelete!();

@@ -158,8 +158,8 @@ class SearchBar extends StatelessWidget {
             IconButtonWidget(
               height: 40,
               width: 40,
-              borderRadius: 5,
-              iconData: HugeIcons.strokeRoundedFilter,
+              borderRadius: BorderRadius.circular(5),
+              icon: HugeIcons.strokeRoundedFilter,
               onPressed: () {
                 showDialog(
                     context: context,
@@ -182,17 +182,17 @@ class AppBarActions extends StatelessWidget {
     return Row(
       children: [
         IconButtonWidget(
-          iconData: HugeIcons.strokeRoundedAdd01,
+          icon: HugeIcons.strokeRoundedAdd01,
           onPressed: () {},
         ),
         const SizedBox(width: 5),
         IconButtonWidget(
-          iconData: HugeIcons.strokeRoundedSettings01,
+          icon: HugeIcons.strokeRoundedSettings01,
           onPressed: () {},
         ),
         const SizedBox(width: 5),
         IconButtonWidget(
-          iconData: HugeIcons.strokeRoundedNotification01,
+          icon: HugeIcons.strokeRoundedNotification01,
           onPressed: () {},
         ),
       ],
