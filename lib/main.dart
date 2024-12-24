@@ -1,10 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:spark/pages/screen_dashboard.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spark/pages/dashboard/page_dashboard.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

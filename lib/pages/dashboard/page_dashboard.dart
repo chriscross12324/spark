@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
 import 'package:spark/widgets/device_module_widget.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
-import '../widgets/common/filter_node.dart';
-import '../widgets/common/icon_button_widget.dart';
+import '../../widgets/common/filter_node.dart';
+import '../../widgets/common/icon_button_widget.dart';
 
 
 class ScreenDashboard extends StatefulWidget {
@@ -218,10 +219,7 @@ class DeviceList extends StatelessWidget {
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: const CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: [DeviceListItems()],
-        ),
+        child: const DeviceListWidget(),
       ),
     );
   }
