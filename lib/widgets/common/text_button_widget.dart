@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spark/app_constants.dart';
-import 'package:spark/widgets/universal/mouse_effects.dart';
+
+import 'mouse_effects.dart';
 
 /// A custom TextButton widget
 class TextButtonWidget extends StatelessWidget {

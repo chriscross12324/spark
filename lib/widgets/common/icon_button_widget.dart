@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:spark/widgets/universal/mouse_effects.dart';
+
+import 'mouse_effects.dart';
 
 /// A custom IconButton widget that supports various interactions (press and hold)
 class IconButtonWidget extends StatelessWidget {

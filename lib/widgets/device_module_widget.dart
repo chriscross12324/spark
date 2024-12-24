@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spark/widgets/universal/mouse_effects.dart';
 
 import '../app_constants.dart';
+import 'common/mouse_effects.dart';
 
 class DeviceCrewHeader extends StatelessWidget {
   const DeviceCrewHeader({super.key, required this.crew});

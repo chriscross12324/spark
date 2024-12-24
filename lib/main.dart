@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'screens/screen_dashboard.dart';
+import 'package:spark/pages/screen_dashboard.dart';
 
 void main() {
   runApp(const MyApp());

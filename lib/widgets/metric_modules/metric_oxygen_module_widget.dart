@@ -2,11 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
-import 'package:spark/widgets/universal/segmented_control.dart';
-import 'package:spark/widgets/universal/icon_button_widget.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../common/segmented_control.dart';
 
 class MetricOxygenModuleWidget extends StatefulWidget {
   const MetricOxygenModuleWidget({super.key});
