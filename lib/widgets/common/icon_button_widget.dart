@@ -31,17 +31,20 @@ class IconButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MouseEffectsContainer(
-      height: height,
-      width: width,
-      color: colour,
-      opacity: isIdleClear ? 0.0 : 0.1,
-      opacityAdd: isIdleClear ? 0.25 : 0.15,
-      opacitySubtract: isIdleClear ? -0.05 : 0.05,
+    return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.circular(10),
-      onPressed: onPressed,
-      child: Center(
-        child: HugeIcon(icon: icon, color: iconColour, size: iconSize,),
+      child: MouseEffectsContainer(
+        height: height,
+        width: width,
+        color: colour,
+        opacity: isIdleClear ? 0.0 : 0.1,
+        opacityAdd: isIdleClear ? 0.25 : 0.15,
+        opacitySubtract: isIdleClear ? -0.05 : 0.05,
+        borderRadius: borderRadius ?? BorderRadius.circular(10),
+        onPressed: onPressed,
+        child: Center(
+          child: HugeIcon(icon: icon, color: iconColour, size: iconSize,),
+        ),
       ),
     );
   }

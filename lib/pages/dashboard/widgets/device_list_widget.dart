@@ -40,18 +40,10 @@ class DeviceListWidget extends ConsumerWidget {
 
         return const SizedBox.shrink();
       },
-      physics:
-          const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
     );
-  }
-}
-
-class DeviceListItem extends StatelessWidget {
-  const DeviceListItem({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
 
@@ -102,75 +94,83 @@ class MemberItem extends ConsumerWidget {
 
     return Column(
       children: [
-        MouseEffectsContainer(
-          height: 60,
-          onPressed: () {
-            if (member == listState.selectedMember) {
-              stateNotifier.selectItem(null);
-            } else {
-              stateNotifier.selectItem(member);
-            }
-          },
-          border: listState.selectedMember == member
-              ? Border.all(color: Colors.white, width: 2)
-              : null,
-          opacity: listState.selectedMember == member ? 0.2 : 0.1,
-          child: Padding(
-            padding: const EdgeInsets.all(3),
-            child: Row(
-              children: [
-                Container(
-                  height: 55,
-                  width: 75,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(
-                      listState.selectedMember == member ? 5 : 7,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      member.id,
-                      style: GoogleFonts.asap(
-                        fontWeight: FontWeight.w900,
-                        color: themeDarkDimText,
-                        fontSize: 20,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: MouseEffectsContainer(
+            height: 60,
+            onPressed: () {
+              if (member == listState.selectedMember) {
+                stateNotifier.selectItem(null);
+              } else {
+                stateNotifier.selectItem(member);
+              }
+            },
+            border: listState.selectedMember == member
+                ? Border.all(color: Colors.white, width: 2)
+                : null,
+            opacity: listState.selectedMember == member ? 0.15 : 0.1,
+            spotlightRadius: 200,
+            child: Padding(
+              padding: const EdgeInsets.all(3),
+              child: Row(
+                children: [
+                  Container(
+                    height: 55,
+                    width: 75,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(
+                        listState.selectedMember == member ? 5 : 7,
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 5),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        member.lastName,
+                    child: Center(
+                      child: Text(
+                        member.id,
                         style: GoogleFonts.asap(
-                          fontWeight: listState.selectedMember == member ? FontWeight.w900 : FontWeight.bold,
-                          color: listState.selectedMember == member ? themeDarkSecondaryText : themeDarkDimText,
-                          fontSize: 14,
+                          fontWeight: FontWeight.w900,
+                          color: themeDarkDimText,
+                          fontSize: 20,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Container(
-                    width: 4,
-                    decoration: BoxDecoration(
-                      color: member.status == 'Online'
-                          ? Colors.green
-                          : member.status == 'Offline'
-                              ? Colors.white.withOpacity(0.35)
-                              : Colors.red,
-                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                )
-              ],
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          member.lastName,
+                          style: GoogleFonts.asap(
+                            fontWeight: listState.selectedMember == member
+                                ? FontWeight.w900
+                                : FontWeight.bold,
+                            color: listState.selectedMember == member
+                                ? themeDarkSecondaryText
+                                : themeDarkDimText,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Container(
+                      width: 4,
+                      decoration: BoxDecoration(
+                        color: member.status == 'Online'
+                            ? Colors.green
+                            : member.status == 'Offline'
+                                ? Colors.white.withOpacity(0.35)
+                                : Colors.red,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
