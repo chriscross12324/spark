@@ -75,7 +75,7 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
     state = state.copyWith(crewGroups: updatedCrewGroups);
   }
 
-  void selectItem(CrewMember member) {
+  void selectItem(CrewMember? member) {
     state = state.copyWith(selectedMember: member);
   }
 
