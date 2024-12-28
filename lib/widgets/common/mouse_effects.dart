@@ -11,6 +11,7 @@ class MouseEffectsContainer extends StatefulWidget {
     this.opacityAdd = 0.05,
     this.opacitySubtract = 0.02,
     this.borderRadius,
+    this.border,
     this.color = Colors.white,
     required this.onPressed,
   });
@@ -23,6 +24,7 @@ class MouseEffectsContainer extends StatefulWidget {
   final double opacityAdd;
   final double opacitySubtract;
   final BorderRadiusGeometry? borderRadius;
+  final Border? border;
   final Color color;
   final VoidCallback onPressed;
 
@@ -77,6 +79,7 @@ class _MouseEffectsContainerState extends State<MouseEffectsContainer> {
                       : widget.opacity,
             ),
             borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
+            border: widget.border,
           ),
           child: widget.child,
         ),
