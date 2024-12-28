@@ -295,6 +295,7 @@ class _FilterModuleState extends State<FilterModule> {
                                         customButton: TextButtonWidget(
                                           text: selectedFilterValue ?? 'Select',
                                           onPressed: () {},
+                                          ignoreInput: true,
                                         ),
                                         buttonStyleData: ButtonStyleData(
                                             overlayColor:
