@@ -12,7 +12,6 @@ class DeviceListWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final listState = ref.watch(dashboardProvider);
-    final stateNotifier = ref.read(dashboardProvider.notifier);
 
     return ListView.builder(
       itemCount: listState.crewGroups
@@ -85,7 +84,7 @@ class CrewHeaderItem extends StatelessWidget {
   }
 }
 
-class MemberItem extends StatelessWidget {
+class MemberItem extends ConsumerWidget {
   const MemberItem({
     super.key,
     required this.crew,
@@ -96,14 +95,26 @@ class MemberItem extends StatelessWidget {
   final CrewMember member;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final listState = ref.watch(dashboardProvider);
+    final stateNotifier = ref.read(dashboardProvider.notifier);
     final isLastMember = crew.members.last == member;
 
     return Column(
       children: [
         MouseEffectsContainer(
           height: 60,
-          onPressed: () {},
+          onPressed: () {
+            if (member == listState.selectedMember) {
+              stateNotifier.selectItem(null);
+            } else {
+              stateNotifier.selectItem(member);
+            }
+          },
+          border: listState.selectedMember == member
+              ? Border.all(color: Colors.white, width: 2)
+              : null,
+          opacity: listState.selectedMember == member ? 0.2 : 0.1,
           child: Padding(
             padding: const EdgeInsets.all(3),
             child: Row(
@@ -113,7 +124,9 @@ class MemberItem extends StatelessWidget {
                   width: 75,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(7),
+                    borderRadius: BorderRadius.circular(
+                      listState.selectedMember == member ? 5 : 7,
+                    ),
                   ),
                   child: Center(
                     child: Text(
@@ -135,9 +148,9 @@ class MemberItem extends StatelessWidget {
                       Text(
                         member.lastName,
                         style: GoogleFonts.asap(
-                          fontWeight: FontWeight.bold,
-                          color: themeDarkDimText,
-                          fontSize: 12,
+                          fontWeight: listState.selectedMember == member ? FontWeight.w900 : FontWeight.bold,
+                          color: listState.selectedMember == member ? themeDarkSecondaryText : themeDarkDimText,
+                          fontSize: 14,
                         ),
                       ),
                     ],
