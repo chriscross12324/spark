@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/pages/dashboard/widgets/device_details_widget.dart';
 import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
-import 'package:spark/widgets/device_module_widget.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
 import '../../widgets/common/filter_node.dart';
@@ -57,7 +57,7 @@ class DashboardBody extends StatelessWidget {
                     child: DeviceList(),
                   ),
                 ),
-                Expanded(child: Metrics()),
+                Expanded(child: DeviceDetailsWidget()),
               ],
             );
           }
@@ -207,77 +207,22 @@ class DeviceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
-      child: Container(
-        decoration: BoxDecoration(
-          color: themeDarkBackground,
-          borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
-          border: Border.all(
-            width: 2,
-            color: Colors.white.withOpacity(isFullscreen ? 0 : 0.15),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: themeDarkBackground,
+        borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
+        border: Border.all(
+          width: 2,
+          color: Colors.white.withOpacity(isFullscreen ? 0 : 0.15),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: const DeviceListWidget(),
+        boxShadow: [
+          BoxShadow(spreadRadius: 0, blurRadius: 20, color: Colors.black.withOpacity(0.35))
+        ]
       ),
-    );
-  }
-}
-
-class DeviceListItems extends StatelessWidget {
-  const DeviceListItems({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        final crewEntries = crews.entries.toList();
-        if (index >= crewEntries.length) return null;
-
-        final crew = crewEntries[index];
-        return _buildCrewSection(crew);
-      }, childCount: crews.entries.length),
-    );
-  }
-
-  Widget _buildCrewSection(MapEntry<String, dynamic> crew) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        DeviceCrewHeader(crew: crew),
-        const SizedBox(height: 5),
-        ..._buildMemberModules(crew),
-        _buildDivider(),
-      ],
-    );
-  }
-
-  List<Widget> _buildMemberModules(MapEntry<String, dynamic> crew) {
-    return [
-      for (var i = 0; i < crew.value.entries.length; i++) ...[
-        SizedBox(
-            width: double.infinity,
-            child: DeviceMemberModule(member: crew.value.entries.elementAt(i))),
-        if (i < crew.value.entries.length - 1) const SizedBox(height: 5),
-      ]
-    ];
-  }
-
-  Widget _buildDivider() {
-    return SizedBox(
-      height: 20,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Center(
-          child: Container(
-            height: 2,
-            decoration: BoxDecoration(
-              color: themeDarkDivider,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-        ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
+        child: const DeviceListWidget(),
       ),
     );
   }
