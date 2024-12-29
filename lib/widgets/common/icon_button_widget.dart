@@ -38,8 +38,9 @@ class IconButtonWidget extends StatelessWidget {
         width: width,
         color: colour,
         opacity: isIdleClear ? 0.0 : 0.1,
-        opacityAdd: isIdleClear ? 0.25 : 0.15,
+        opacityAdd: isIdleClear ? 0.2 : 0.1,
         opacitySubtract: isIdleClear ? -0.05 : 0.05,
+        spotlightRadius: 35,
         borderRadius: borderRadius ?? BorderRadius.circular(10),
         onPressed: onPressed,
         child: Center(
