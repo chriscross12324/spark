@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/pages/dashboard/widgets/device_details_widget.dart';
 import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
+import 'package:spark/providers/dashboard_provider.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
 import '../../widgets/common/filter_node.dart';
@@ -31,11 +33,13 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
   }
 }
 
-class DashboardBody extends StatelessWidget {
+class DashboardBody extends ConsumerWidget {
   const DashboardBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final listState = ref.watch(dashboardProvider);
+
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         bottomLeft: Radius.circular(30),
@@ -45,13 +49,16 @@ class DashboardBody extends StatelessWidget {
         color: themeDarkDeepBackground,
         child: LayoutBuilder(builder: (context, constraints) {
           if (constraints.maxWidth < 700) {
+            if (listState.selectedMember != null) {
+              return const DeviceDetailsWidget();
+            }
             return const DeviceList(
               isFullscreen: true,
             );
           } else {
-            return Row(
+            return const Row(
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.fromLTRB(15, 15, 0, 15),
                   child: SizedBox(
                     width: 350,
@@ -68,21 +75,32 @@ class DashboardBody extends StatelessWidget {
   }
 }
 
-class DashboardAppBar extends StatelessWidget {
+class DashboardAppBar extends ConsumerWidget {
   const DashboardAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final listState = ref.watch(dashboardProvider);
+    final stateNotifier = ref.read(dashboardProvider.notifier);
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        bool showLogoText = constraints.maxWidth >= 500;
+        bool isSmallWidth = constraints.maxWidth < 700;
 
         return Container(
           height: 70,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
-              LogoSection(showText: showLogoText),
+              (isSmallWidth && listState.selectedMember != null)
+                  ? IconButtonWidget(
+                      width: 50,
+                      icon: HugeIcons.strokeRoundedArrowLeft01,
+                      onPressed: () {
+                        stateNotifier.selectItem(null);
+                      },
+                    )
+                  : LogoSection(showText: !isSmallWidth),
               const SizedBox(width: 20),
               const Expanded(child: SearchBar()),
               const SizedBox(width: 20),
