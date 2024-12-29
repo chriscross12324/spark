@@ -48,6 +48,7 @@ class _MouseEffectsContainerState extends State<MouseEffectsContainer> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (event) {
         setState(() {
           _isHovered = true;
