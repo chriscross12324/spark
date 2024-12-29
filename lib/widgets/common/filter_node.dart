@@ -46,7 +46,9 @@ class _FilterManagerState extends State<FilterManager> {
       elevation: 0,
       surfaceTintColor: Colors.white,
       backgroundColor: themeDarkDeepBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
       child: Container(
         padding: const EdgeInsets.all(20),
         width: double.maxFinite,
@@ -301,23 +303,24 @@ class _FilterModuleState extends State<FilterModule> {
                                             overlayColor:
                                                 WidgetStateProperty.all(
                                                     Colors.transparent)),
-                                        items: filterValues[
-                                                selectedFilterType!]!
-                                            .map(
-                                              (option) => DropdownMenuItem(
-                                                value: option,
-                                                child: Text(
-                                                  option,
-                                                  style:
-                                                      GoogleFonts.asap(
-                                                    fontWeight: FontWeight.w900,
-                                                    color: themeDarkPrimaryText,
-                                                    fontSize: 14,
+                                        items:
+                                            filterValues[selectedFilterType!]!
+                                                .map(
+                                                  (option) => DropdownMenuItem(
+                                                    value: option,
+                                                    child: Text(
+                                                      option,
+                                                      style: GoogleFonts.asap(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color:
+                                                            themeDarkPrimaryText,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                            )
-                                            .toList(),
+                                                )
+                                                .toList(),
                                         value: selectedFilterValue,
                                         onChanged: (value) {
                                           setState(() {

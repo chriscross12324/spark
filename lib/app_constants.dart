@@ -3,10 +3,10 @@
 // Dark Theme Colours
 import 'dart:ui';
 
-const themeDarkDeepBackground = Color(0xFF271f1b);
-const themeDarkBackground = Color(0xff3e2a21); //0xff352923
-const themeDarkForeground = Color(0xff684b38); //0xff45342c
-const themeDarkDivider = Color(0x26684b38);
+const themeDarkDeepBackground = Color(0xFF271f1b); //0xFF271f1b
+const themeDarkBackground = Color(0xff3e2a21); //0xff3e2a21
+const themeDarkForeground = Color(0xff684b38); //0xff684b38
+const themeDarkDivider = Color(0x26684b38); //0x26684b38
 
 const themeDarkPrimaryText = Color(0xFFFFFFFF);
 const themeDarkSecondaryText = Color(0xBFFFFFFF);
