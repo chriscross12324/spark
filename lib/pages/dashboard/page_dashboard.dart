@@ -9,7 +9,6 @@ import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 import '../../widgets/common/filter_node.dart';
 import '../../widgets/common/icon_button_widget.dart';
 
-
 class ScreenDashboard extends StatefulWidget {
   const ScreenDashboard({super.key});
 
@@ -39,7 +38,9 @@ class DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
+        bottomLeft: Radius.circular(30),
+        bottomRight: Radius.circular(30),
+      ),
       child: Container(
         color: themeDarkDeepBackground,
         child: LayoutBuilder(builder: (context, constraints) {
@@ -104,7 +105,7 @@ class LogoSection extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       curve: Curves.fastOutSlowIn,
-      width: showText ? 175 : 50,
+      width: showText ? 180 : 50,
       decoration: const BoxDecoration(color: Colors.transparent),
       clipBehavior: Clip.hardEdge,
       child: SingleChildScrollView(
@@ -146,12 +147,15 @@ class SearchBar extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text(
-                "Search...",
-                style: GoogleFonts.asap(
-                  fontWeight: FontWeight.normal,
-                  color: themeDarkSecondaryText,
-                  fontSize: 12,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.text,
+                child: Text(
+                  "Search...",
+                  style: GoogleFonts.asap(
+                    fontWeight: FontWeight.normal,
+                    color: themeDarkSecondaryText,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ),
@@ -209,21 +213,21 @@ class DeviceList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: themeDarkBackground,
-        borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
-        border: Border.all(
-          width: 2,
-          color: Colors.white.withOpacity(isFullscreen ? 0 : 0.15),
-        ),
-        boxShadow: [
-          BoxShadow(spreadRadius: 0, blurRadius: 20, color: Colors.black.withOpacity(0.35))
-        ]
-      ),
+          color: themeDarkBackground,
+          borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
+          border: Border.all(
+            width: 2,
+            color: Colors.white.withOpacity(isFullscreen ? 0 : 0.15),
+          ),
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 0,
+              blurRadius: 20,
+              color: Colors.black.withOpacity(0.35),
+            ),
+          ]),
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
-        child: const DeviceListWidget(),
-      ),
+      child: const DeviceListWidget(),
     );
   }
 }
