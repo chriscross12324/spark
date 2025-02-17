@@ -41,7 +41,7 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         state = state.copyWith(
           isConnected: false,
           isConnecting: false,
-          errorMessage: error.message,
+          errorMessage: "WebSocket error: ${error.message}",
         );
         if (kDebugMode) print("WebSocket error: ${error.message.toString()}");
       }, onDone: () {
@@ -58,7 +58,7 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
       state.copyWith(
         isConnected: false,
         isConnecting: false,
-        errorMessage: error.toString(),
+        errorMessage: "General error: ${error.toString()}",
       );
     }
   }
