@@ -37,13 +37,13 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         final decodedData = jsonDecode(message) as Map<String, dynamic>;
         receiveData(decodedData);
         if (kDebugMode) print("Received: $message");
-      }, onError: (error) {
+      }, onError: (error, stacktrace) {
         state = state.copyWith(
           isConnected: false,
           isConnecting: false,
-          errorMessage: "WebSocket error: ${error.message}",
+          errorMessage: "WebSocket error: ${error.inner.message}",
         );
-        if (kDebugMode) print("WebSocket error: ${error.message.toString()}");
+        if (kDebugMode) print("WebSocket error: ${error.inner.message}");
       }, onDone: () {
         state = state.copyWith(
           isConnected: false,
