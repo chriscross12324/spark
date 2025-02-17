@@ -24,7 +24,7 @@ const Map<String, Map<String, Map<String, String>>> crews = {
     'CI023': {'lastName': "Harper", 'status': 'Online'},
   },
   'Smoke Jumpers': {
-    'CI043': {'lastName': "Griffin", 'status': 'Online'},
+    'sensor_123': {'lastName': "Griffin", 'status': 'Online'},
     'CI031': {'lastName': "Bishop", 'status': 'Online'},
   },
   'Fire Guardians': {
