@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/models/crew.dart';
 import 'package:spark/providers/dashboard_provider.dart';
+import 'package:spark/utils/web_socket_manager.dart';
 import 'package:spark/widgets/common/mouse_effects.dart';
 
 class DeviceListWidget extends ConsumerWidget {
@@ -90,6 +91,8 @@ class MemberItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final listState = ref.watch(dashboardProvider);
     final stateNotifier = ref.read(dashboardProvider.notifier);
+    final wsManager = ref.read(webSocketManagerProvider.notifier);
+
     final isLastMember = crew.members.last == member;
 
     return Column(
@@ -100,8 +103,10 @@ class MemberItem extends ConsumerWidget {
             height: 60,
             onPressed: () {
               if (member == listState.selectedMember) {
+                wsManager.disconnect();
                 stateNotifier.selectItem(null);
               } else {
+                wsManager.connect(member.id);
                 stateNotifier.selectItem(member);
               }
             },

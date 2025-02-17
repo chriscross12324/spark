@@ -6,6 +6,7 @@ import 'package:spark/app_constants.dart';
 import 'package:spark/pages/dashboard/widgets/device_details_widget.dart';
 import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
 import 'package:spark/providers/dashboard_provider.dart';
+import 'package:spark/utils/web_socket_manager.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
 import '../../widgets/common/filter_node.dart';
@@ -50,22 +51,22 @@ class DashboardBody extends ConsumerWidget {
         child: LayoutBuilder(builder: (context, constraints) {
           if (constraints.maxWidth < 700) {
             if (listState.selectedMember != null) {
-              return const DeviceDetailsWidget();
+              return Metrics();
             }
             return const DeviceList(
               isFullscreen: true,
             );
           } else {
-            return const Row(
+            return Row(
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.fromLTRB(15, 15, 0, 15),
                   child: SizedBox(
                     width: 350,
                     child: DeviceList(),
                   ),
                 ),
-                Expanded(child: DeviceDetailsWidget()),
+                Expanded(child: Metrics()),
               ],
             );
           }
@@ -250,7 +251,7 @@ class DeviceList extends StatelessWidget {
   }
 }
 
-class Metrics extends StatelessWidget {
+class Metrics extends ConsumerWidget {
   Metrics({
     super.key,
   });
@@ -267,31 +268,97 @@ class Metrics extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(15),
-      physics: const BouncingScrollPhysics(),
-      itemCount: metricsList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return MetricItem(title: metricsList[index]);
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(
-          height: 40,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Center(
-              child: Container(
-                height: 2,
-                decoration: BoxDecoration(
-                  color: themeDarkDivider,
-                  borderRadius: BorderRadius.circular(2),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final wsState = ref.watch(webSocketManagerProvider);
+
+    if (wsState.errorMessage != null) {
+      return Center(
+        child: Text(
+          wsState.errorMessage!,
+          style: GoogleFonts.asap(
+            fontWeight: FontWeight.w900,
+            color: themeDarkPrimaryText,
+            fontSize: 20,
+          ),
+        ),
+      );
+    }
+
+    if (wsState.isConnecting) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              strokeCap: StrokeCap.round,
+              color: themeDarkPrimaryText,
+            ),
+            const SizedBox(height: 10,),
+            Text(
+              "Connecting to device",
+              style: GoogleFonts.asap(
+                fontWeight: FontWeight.w900,
+                color: themeDarkPrimaryText,
+                fontSize: 20,
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    if (!wsState.isConnected) {
+      return Center(
+        child: Text(
+          "Select a device",
+          style: GoogleFonts.asap(
+            fontWeight: FontWeight.w900,
+            color: themeDarkPrimaryText,
+            fontSize: 20,
+          ),
+        ),
+      );
+    }
+
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(15),
+          child: Container(
+            padding: const EdgeInsets.all(5),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: themeDarkAccentColourFaded,
+              borderRadius: BorderRadius.circular(10)
+            ),
+              child: Text(wsState.receivedData.toString())),
+        ),
+        ListView.separated(
+          padding: const EdgeInsets.all(15),
+          physics: const BouncingScrollPhysics(),
+          itemCount: metricsList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return MetricItem(title: metricsList[index]);
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(
+              height: 40,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Center(
+                  child: Container(
+                    height: 2,
+                    decoration: BoxDecoration(
+                      color: themeDarkDivider,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
   }
 }
