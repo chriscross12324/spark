@@ -67090,7 +67090,7 @@ m=m.b
 m===$&&A.a()
 new A.cO(m,A.l(m).h("cO<1>")).Rn(new A.a9J(p),new A.a9K(p),new A.a9L(p))
 p.siq(p.f.OX(!0,!1))}catch(k){n=A.a1(k)
-p.f.OY(J.cE(n),!1,!1)}case 1:return A.P(q,r)}})
+p.f.OY("General error: "+J.cE(n),!1,!1)}case 1:return A.P(q,r)}})
 return A.Q($async$vi,r)},
 Cv(){var s,r,q=this,p=q.r
 if(p!=null){s=p.w
@@ -67112,7 +67112,7 @@ q.siq(p.ac9(s))},
 $S:33}
 A.a9L.prototype={
 $1(a){var s=this.a
-s.siq(s.f.OY(a.gcN(),!1,!1))},
+s.siq(s.f.OY("WebSocket error: "+A.o(a.gcN()),!1,!1))},
 $S:14}
 A.a9K.prototype={
 $0(){var s=this.a
