@@ -19,7 +19,7 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
     disconnect();
     _currentDeviceId = deviceId;
 
-    final url = 'ws://findthefrontier.ca:8000/ws/$_currentDeviceId';
+    final url = 'wss://findthefrontier.ca/ws/$_currentDeviceId';
 
     state = state.copyWith(
         isConnected: false,
@@ -41,7 +41,7 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         state = state.copyWith(
           isConnected: false,
           isConnecting: false,
-          errorMessage: "WebSocket error: ${error.inner.message}",
+          errorMessage: "WebSocket error: ${error.inner.message} | URL: $url",
         );
         if (kDebugMode) print("WebSocket error: ${error.inner.message}");
       }, onDone: () {
