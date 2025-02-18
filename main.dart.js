@@ -20888,7 +20888,8 @@ _.w=_.r=null
 _.a=a
 _.f=b},
 a9J:function a9J(a){this.a=a},
-a9L:function a9L(a){this.a=a},
+a9L:function a9L(a,b){this.a=a
+this.b=b},
 a9K:function a9K(a){this.a=a},
 iC:function iC(a,b,c,d){var _=this
 _.a=a
@@ -67081,7 +67082,7 @@ var $async$vi=A.N(function(b,c){if(b===1)return A.O(c,r)
 while(true)switch(s){case 0:if(p.w===a){s=1
 break}p.Cw()
 p.w=a
-o="ws://findthefrontier.ca:8000/ws/"+a
+o="wss://findthefrontier.ca/ws/"+a
 p.siq(p.f.qr(null,!1,!0,A.b([],t.gG)))
 s=3
 return A.T(A.kN(A.cm(0,0,0,B.zO.agi(2500)+500,0,0),null,t.z),$async$vi)
@@ -67091,7 +67092,7 @@ m=m.r.b
 m===$&&A.a()
 m=m.b
 m===$&&A.a()
-new A.cO(m,A.l(m).h("cO<1>")).Ro(new A.a9J(p),new A.a9K(p),new A.a9L(p))
+new A.cO(m,A.l(m).h("cO<1>")).Ro(new A.a9J(p),new A.a9K(p),new A.a9L(p,o))
 p.siq(p.f.OY(!0,!1))}catch(k){n=A.a1(k)
 p.f.OZ("General error: "+J.cE(n),!1,!1)}case 1:return A.P(q,r)}})
 return A.Q($async$vi,r)},
@@ -67115,7 +67116,7 @@ q.siq(p.aca(s))},
 $S:32}
 A.a9L.prototype={
 $2(a,b){var s=this.a
-s.siq(s.f.OZ("WebSocket error: "+A.o(a.gw9().gcN()),!1,!1))},
+s.siq(s.f.OZ("WebSocket error: "+A.o(a.gw9().gcN())+" | URL: "+this.b,!1,!1))},
 $S:412}
 A.a9K.prototype={
 $0(){var s=this.a
