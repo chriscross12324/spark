@@ -23,7 +23,7 @@ class _MetricHistoryModuleState extends State<MetricHistoryModule>
   @override
   void initState() {
     super.initState();
-    placeholderData = _generatePlaceholderData(count: 100);
+    placeholderData = _generatePlaceholderData(count: 400);
   }
 
   List<_PointData> _generatePlaceholderData({required int count}) {
