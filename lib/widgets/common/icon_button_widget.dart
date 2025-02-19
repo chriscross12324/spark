@@ -32,7 +32,7 @@ class IconButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: borderRadius ?? BorderRadius.circular(10),
+      borderRadius: borderRadius ?? BorderRadius.circular(8),
       child: MouseEffectsContainer(
         height: height,
         width: width,
@@ -41,10 +41,14 @@ class IconButtonWidget extends StatelessWidget {
         opacityAdd: isIdleClear ? 0.2 : 0.1,
         opacitySubtract: isIdleClear ? -0.05 : 0.05,
         spotlightRadius: 35,
-        borderRadius: borderRadius ?? BorderRadius.circular(10),
+        borderRadius: borderRadius ?? BorderRadius.circular(8),
         onPressed: onPressed,
         child: Center(
-          child: HugeIcon(icon: icon, color: iconColour, size: iconSize,),
+          child: HugeIcon(
+            icon: icon,
+            color: iconColour,
+            size: iconSize,
+          ),
         ),
       ),
     );
