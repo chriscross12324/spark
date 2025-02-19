@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
-import 'package:spark/pages/dashboard/widgets/device_details_widget.dart';
 import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
 import 'package:spark/providers/dashboard_provider.dart';
 import 'package:spark/utils/web_socket_manager.dart';
+import 'package:spark/widgets/common/base_dialog.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
+import '../../widgets/common/custom_list_tile.dart';
 import '../../widgets/common/filter_node.dart';
 import '../../widgets/common/icon_button_widget.dart';
 
@@ -103,8 +104,7 @@ class DashboardAppBar extends ConsumerWidget {
                     )
                   : LogoSection(showText: !isSmallWidth),
               const SizedBox(width: 20),
-              const Expanded(child: SearchBar()),
-              const SizedBox(width: 20),
+              const Spacer(),
               const AppBarActions()
             ],
           ),
@@ -124,7 +124,7 @@ class LogoSection extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       curve: Curves.fastOutSlowIn,
-      width: showText ? 180 : 50,
+      width: 180,
       decoration: const BoxDecoration(color: Colors.transparent),
       clipBehavior: Clip.hardEdge,
       child: SingleChildScrollView(
@@ -154,44 +154,70 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 400,
-        height: 50,
-        padding: const EdgeInsets.only(left: 15, right: 5),
-        decoration: BoxDecoration(
-          color: themeDarkForeground,
-          borderRadius: BorderRadius.circular(10),
+    return Container(
+      width: double.infinity,
+      height: 45,
+      padding: const EdgeInsets.only(left: 15, right: 3.5),
+      decoration: BoxDecoration(
+        color: themeDarkForeground,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.15),
+          width: 1.5,
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: MouseRegion(
-                cursor: SystemMouseCursors.text,
-                child: Text(
-                  "Search...",
-                  style: GoogleFonts.asap(
-                    fontWeight: FontWeight.normal,
-                    color: themeDarkSecondaryText,
-                    fontSize: 12,
-                  ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.text,
+              child: Text(
+                "Search...",
+                style: GoogleFonts.asap(
+                  fontWeight: FontWeight.normal,
+                  color: themeDarkSecondaryText,
+                  fontSize: 14,
                 ),
               ),
             ),
-            IconButtonWidget(
-              height: 40,
-              width: 40,
-              borderRadius: BorderRadius.circular(5),
-              icon: HugeIcons.strokeRoundedFilter,
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    barrierColor: themeDarkDeepBackground.withOpacity(0.35),
-                    builder: (context) => const FilterManager());
-              },
-            ),
-          ],
-        ),
+          ),
+          IconButtonWidget(
+            height: 35,
+            width: 35,
+            borderRadius: BorderRadius.circular(5),
+            icon: HugeIcons.strokeRoundedFilter,
+            iconSize: 20,
+            isIdleClear: true,
+            onPressed: () {
+              showGeneralDialog(
+                context: context,
+                barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
+                barrierDismissible: false,
+                transitionDuration: const Duration(milliseconds: 150),
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return const FilterManager();
+                },
+                transitionBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  final curvedAnimation = CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.fastOutSlowIn,
+                  );
+
+                  return FadeTransition(
+                    opacity: curvedAnimation,
+                    child: ScaleTransition(
+                      scale: Tween<double>(begin: 0.95, end: 1.0)
+                          .animate(curvedAnimation),
+                      child: child,
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -232,21 +258,29 @@ class DeviceList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: themeDarkBackground,
-          borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
-          border: Border.all(
-            width: 2,
-            color: Colors.white.withOpacity(isFullscreen ? 0 : 0.15),
+        color: themeDarkBackground,
+        borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
+        border: Border.all(
+          width: 1.5,
+          color: Colors.white.withValues(alpha: isFullscreen ? 0 : 0.15),
+        ),
+        boxShadow: [
+          BoxShadow(
+            spreadRadius: 0,
+            blurRadius: 20,
+            color: Colors.black.withValues(alpha: 0.35),
           ),
-          boxShadow: [
-            BoxShadow(
-              spreadRadius: 0,
-              blurRadius: 20,
-              color: Colors.black.withOpacity(0.35),
-            ),
-          ]),
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: const DeviceListWidget(),
+        ],
+      ),
+      child: const Column(
+        children: [
+          Expanded(child: DeviceListWidget()),
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: SearchBar(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -289,11 +323,13 @@ class Metrics extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(
+            const CircularProgressIndicator(
               strokeCap: StrokeCap.round,
               color: themeDarkPrimaryText,
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Text(
               "Connecting to device",
               style: GoogleFonts.asap(
@@ -329,9 +365,12 @@ class Metrics extends ConsumerWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               color: themeDarkAccentColourFaded,
-              borderRadius: BorderRadius.circular(10)
+              borderRadius: BorderRadius.circular(10),
             ),
-              child: Text(wsState.receivedData.toString())),
+            child: Text(
+              wsState.receivedData.toString(),
+            ),
+          ),
         ),
         ListView.separated(
           padding: const EdgeInsets.all(15),
