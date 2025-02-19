@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -19,7 +18,7 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
     disconnect();
     _currentDeviceId = deviceId;
 
-    final url = 'wss://findthefrontier.ca/ws/$_currentDeviceId';
+    final url = 'wss://findthefrontier.ca/spark/ws/$_currentDeviceId';
 
     state = state.copyWith(
         isConnected: false,
