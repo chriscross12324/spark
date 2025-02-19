@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:spark/widgets/common/base_dialog.dart';
 import 'package:spark/widgets/common/text_button_widget.dart';
 
 import '../../app_constants.dart';
@@ -42,97 +43,39 @@ class _FilterManagerState extends State<FilterManager> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      elevation: 0,
-      surfaceTintColor: Colors.white,
-      backgroundColor: themeDarkDeepBackground,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        width: double.maxFinite,
-        height: 500,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Advanced Filter',
-              style: GoogleFonts.asap(
-                fontWeight: FontWeight.w900,
-                color: themeDarkPrimaryText,
-                fontSize: 28,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Container(
-                height: 2,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    color: themeDarkForeground),
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: topLevelFilters.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return topLevelFilters[index];
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                            height: index == topLevelFilters.length ? 0 : 5);
-                      },
-                    ),
-                    const SizedBox(height: 5),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          TextButtonWidget(
-                            onPressed: () {
-                              _addTopLevelFilter();
-                            },
-                            text: "+ Filter Group",
-                            isPrimary: true,
-                            isButtonClear: true,
-                            containsPadding: false,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Row(
+    return BaseDialog(
+      dialogTitle: 'Filter',
+      dialogContent: Column(
+        children: [
+          ListView.separated(
+            shrinkWrap: true,
+            itemCount: topLevelFilters.length,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return topLevelFilters[index];
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(height: index == topLevelFilters.length ? 0 : 5);
+            },
+          ),
+          const SizedBox(height: 5),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
               children: [
-                const Expanded(child: SizedBox()),
                 TextButtonWidget(
-                    text: 'Cancel',
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                const SizedBox(
-                  width: 10,
-                ),
-                TextButtonWidget(
-                  text: 'Apply',
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    _addTopLevelFilter();
                   },
+                  text: "+ Filter Group",
                   isPrimary: true,
-                )
+                  isButtonClear: true,
+                  containsPadding: false,
+                ),
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
