@@ -13,6 +13,7 @@ class TextButtonWidget extends StatelessWidget {
     this.isPrimary = false,
     this.isButtonClear = false,
     this.containsPadding = true,
+    this.smallBorderRadius = false,
     this.ignoreInput = false,
   });
 
@@ -22,12 +23,13 @@ class TextButtonWidget extends StatelessWidget {
   final bool isPrimary;
   final bool isButtonClear;
   final bool containsPadding;
+  final bool smallBorderRadius;
   final bool ignoreInput;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(smallBorderRadius ? 8 : 10),
       child: MouseEffectsContainer(
         height: 40,
         opacity: isButtonClear
@@ -42,6 +44,7 @@ class TextButtonWidget extends StatelessWidget {
                 ? 0.15
                 : 0.05,
         color: isPrimary ? const Color(0xFF0080FF) : Colors.white,
+        borderRadius: BorderRadius.circular(smallBorderRadius ? 8 : 10),
         onPressed: onPressed,
         spotlightColor: isPrimary ? const Color(0xFF0080FF) : Colors.white,
         ignoreInput: ignoreInput,
