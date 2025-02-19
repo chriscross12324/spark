@@ -41,6 +41,7 @@ dependencies:
 
   # State Management
   flutter_riverpod: ^2.6.1
+  shared_preferences: ^2.5.2
 
   # Networking & Communication
   web_socket_channel: ^3.0.2
