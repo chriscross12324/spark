@@ -21,18 +21,24 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
     final url = 'wss://findthefrontier.ca/spark/ws/$_currentDeviceId';
 
     state = state.copyWith(
-        isConnected: false,
-        isConnecting: true,
-        errorMessage: null,
-        receivedData: []);
+      isConnected: false,
+      isConnecting: true,
+      errorMessage: null,
+      receivedData: [],
+    );
+    state = state.resetError();
 
     final randomDelay = Random().nextInt(2500) + 500;
-    await Future.delayed( Duration(milliseconds: randomDelay));
+    //await Future.delayed( Duration(milliseconds: randomDelay));
 
     try {
       _channel = WebSocketChannel.connect(Uri.parse(url));
 
       _channel!.stream.listen((message) {
+        if (!state.isConnected) {
+          state = state.copyWith(isConnected: true, isConnecting: false);
+        }
+
         final decodedData = jsonDecode(message) as Map<String, dynamic>;
         receiveData(decodedData);
         if (kDebugMode) print("Received: $message");
@@ -47,14 +53,13 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         state = state.copyWith(
           isConnected: false,
           isConnecting: false,
+          errorMessage: null,
         );
         if (kDebugMode) print("WebSocket closed.");
         _currentDeviceId = null;
       });
-
-      state = state.copyWith(isConnected: true, isConnecting: false);
     } catch (error) {
-      state.copyWith(
+      state = state.copyWith(
         isConnected: false,
         isConnecting: false,
         errorMessage: "General error: ${error.toString()}",
@@ -79,6 +84,8 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         errorMessage: null,
         receivedData: [],
       );
+
+      state = state.resetError();
     }
   }
 
@@ -113,6 +120,15 @@ class WebSocketState {
       isConnecting: isConnecting ?? this.isConnecting,
       errorMessage: errorMessage ?? this.errorMessage,
       receivedData: receivedData ?? this.receivedData,
+    );
+  }
+
+  WebSocketState resetError() {
+    return WebSocketState(
+      isConnecting: isConnecting,
+      isConnected: isConnected,
+      errorMessage: null,
+      receivedData: receivedData,
     );
   }
 }
