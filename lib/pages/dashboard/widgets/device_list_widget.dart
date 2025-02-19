@@ -15,6 +15,7 @@ class DeviceListWidget extends ConsumerWidget {
     final listState = ref.watch(dashboardProvider);
 
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       itemCount: listState.crewGroups
           .fold<int>(0, (count, group) => count + group.members.length + 2),
       itemBuilder: (context, index) {
