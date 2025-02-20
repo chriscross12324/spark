@@ -11,8 +11,6 @@ import 'package:spark/widgets/common/base_dialog.dart';
 import 'package:spark/widgets/common/setting_textfield_list_tile.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
-import '../../app_provider_classes.dart';
-import '../../widgets/common/custom_list_tile.dart';
 import '../../widgets/common/filter_node.dart';
 import '../../widgets/common/icon_button_widget.dart';
 
