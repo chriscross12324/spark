@@ -77,7 +77,7 @@ class _MetricHistoryModuleState extends State<MetricHistoryModule>
           const SizedBox(height: 10),
           const Row(
             children: [
-              SegmentedControl(
+              /*SegmentedControl(
                 options: [
                   "Max",
                   "7 days",
@@ -86,7 +86,7 @@ class _MetricHistoryModuleState extends State<MetricHistoryModule>
                   "12 hours",
                   "3 hours",
                 ],
-              ),
+              ),*/
             ],
           ),
           const SizedBox(height: 10),

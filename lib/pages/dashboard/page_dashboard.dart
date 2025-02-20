@@ -3,13 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/pages/dashboard/widgets/device_details_widget.dart';
 import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
 import 'package:spark/providers/dashboard_provider.dart';
 import 'package:spark/utils/web_socket_manager.dart';
 import 'package:spark/widgets/common/base_dialog.dart';
+import 'package:spark/widgets/common/setting_textfield_list_tile.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
-//import '../../widgets/common/custom_list_tile.dart';
+import '../../app_provider_classes.dart';
+import '../../widgets/common/custom_list_tile.dart';
 import '../../widgets/common/filter_node.dart';
 import '../../widgets/common/icon_button_widget.dart';
 
@@ -52,22 +55,22 @@ class DashboardBody extends ConsumerWidget {
         child: LayoutBuilder(builder: (context, constraints) {
           if (constraints.maxWidth < 700) {
             if (listState.selectedMember != null) {
-              return Metrics();
+              return const DeviceDetailsPanel();
             }
             return const DeviceList(
               isFullscreen: true,
             );
           } else {
-            return Row(
+            return const Row(
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.fromLTRB(15, 15, 0, 15),
                   child: SizedBox(
                     width: 350,
                     child: DeviceList(),
                   ),
                 ),
-                Expanded(child: Metrics()),
+                Expanded(child: DeviceDetailsPanel()),
               ],
             );
           }
@@ -237,7 +240,46 @@ class AppBarActions extends StatelessWidget {
         const SizedBox(width: 5),
         IconButtonWidget(
           icon: HugeIcons.strokeRoundedSettings01,
-          onPressed: () {},
+          onPressed: () {
+            showGeneralDialog(
+              context: context,
+              barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
+              barrierDismissible: false,
+              transitionDuration: const Duration(milliseconds: 150),
+              pageBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
+                return const BaseDialog(
+                  dialogTitle: 'Preferences',
+                  dialogContent: Column(
+                    children: [
+                      SettingTextFieldListTile(
+                        title: 'API Endpoint',
+                        description: 'The URL where the SPARK API can be accessed.',
+                        stringProvider: null,
+                        sharedPreferencesKey: 'sharedPreferencesKey',
+                      ),
+                    ],
+                  ),
+                );
+              },
+              transitionBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                final curvedAnimation = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.fastOutSlowIn,
+                );
+
+                return FadeTransition(
+                  opacity: curvedAnimation,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.95, end: 1.0)
+                        .animate(curvedAnimation),
+                    child: child,
+                  ),
+                );
+              },
+            );
+          },
         ),
         const SizedBox(width: 5),
         IconButtonWidget(
@@ -291,14 +333,12 @@ class Metrics extends ConsumerWidget {
   });
 
   final metricsList = [
-    "Temperature",
-    "Humidity",
-    "CO2",
-    "Particulate",
-    "Other 1",
-    "Other 2",
-    "Other 3",
-    "Other 4",
+    "Temperature (°C)",
+    "Carbon Monoxide PPM",
+    "PM1 (µg/m³)",
+    "PM2.5 (µg/m³)",
+    "PM4 (µg/m³)",
+    "PM10 (µg/m³)",
   ];
 
   @override
@@ -306,15 +346,20 @@ class Metrics extends ConsumerWidget {
     final wsState = ref.watch(webSocketManagerProvider);
 
     if (wsState.errorMessage != null) {
-      return Center(
-        child: Text(
-          wsState.errorMessage!,
-          style: GoogleFonts.asap(
-            fontWeight: FontWeight.w900,
-            color: themeDarkPrimaryText,
-            fontSize: 20,
+      return Column(
+        children: [
+          Center(
+            child: Text(
+              wsState.errorMessage!,
+              style: GoogleFonts.asap(
+                fontWeight: FontWeight.w900,
+                color: themeDarkPrimaryText,
+                fontSize: 20,
+              ),
+            ),
           ),
-        ),
+          wsState.isReconnecting ? Text('Attempting to reconnect in 3 seconds.') : SizedBox()
+        ],
       );
     }
 
@@ -368,7 +413,7 @@ class Metrics extends ConsumerWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
-              wsState.receivedData.toString(),
+              'wsState.receivedData.toString(),'
             ),
           ),
         ),

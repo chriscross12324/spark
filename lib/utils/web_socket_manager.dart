@@ -3,33 +3,34 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spark/providers/sensor_data_provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart';
 
 class WebSocketManager extends StateNotifier<WebSocketState> {
-  WebSocketManager() : super(WebSocketState());
+  WebSocketManager(this.ref) : super(WebSocketState());
 
+  final Ref ref;
   WebSocketChannel? _channel;
   String? _currentDeviceId;
+  bool _shouldReconnect = true;
 
   void connect(String deviceId) async {
     if (_currentDeviceId == deviceId) return;
 
     disconnect();
     _currentDeviceId = deviceId;
+    _shouldReconnect = true;
 
     final url = 'wss://findthefrontier.ca/spark/ws/$_currentDeviceId';
 
     state = state.copyWith(
       isConnected: false,
       isConnecting: true,
+      isReconnecting: false,
       errorMessage: null,
-      receivedData: [],
     );
     state = state.resetError();
-
-    final randomDelay = Random().nextInt(2500) + 500;
-    //await Future.delayed( Duration(milliseconds: randomDelay));
 
     try {
       _channel = WebSocketChannel.connect(Uri.parse(url));
@@ -40,8 +41,11 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         }
 
         final decodedData = jsonDecode(message) as Map<String, dynamic>;
-        receiveData(decodedData);
-        if (kDebugMode) print("Received: $message");
+        //print(decodedData);
+
+        ref.read(sensorDataProvider.notifier).updateData(decodedData);
+
+        //if (kDebugMode) print("Received: $message");
       }, onError: (error, stacktrace) {
         state = state.copyWith(
           isConnected: false,
@@ -49,6 +53,10 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
           errorMessage: "WebSocket error: ${error.inner.message} | URL: $url",
         );
         if (kDebugMode) print("WebSocket error: ${error.inner.message}");
+
+        if (_shouldReconnect) {
+          reconnect();
+        }
       }, onDone: () {
         state = state.copyWith(
           isConnected: false,
@@ -57,6 +65,10 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         );
         if (kDebugMode) print("WebSocket closed.");
         _currentDeviceId = null;
+
+        if (_shouldReconnect) {
+          reconnect();
+        }
       });
     } catch (error) {
       state = state.copyWith(
@@ -67,26 +79,33 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
     }
   }
 
-  void receiveData(Map<String, dynamic> data) {
-    state = state.copyWith(
-      receivedData: [...state.receivedData, data],
-    );
-  }
-
   void disconnect() {
     if (_channel != null) {
-      _channel!.sink.close(goingAway);
+      _shouldReconnect = false;
+      _channel!.sink.close(normalClosure);
       _channel = null;
       _currentDeviceId = null;
       state = state.copyWith(
         isConnected: false,
         isConnecting: false,
         errorMessage: null,
-        receivedData: [],
       );
 
       state = state.resetError();
     }
+  }
+
+  void reconnect() {
+    print("Reconnecting");
+    state = state.copyWith(isReconnecting: true);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (_currentDeviceId != null) {
+        connect(_currentDeviceId!);
+      } else {
+        print('Device ID is currently null');
+      }
+    });
   }
 
   @override
@@ -99,41 +118,41 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
 class WebSocketState {
   final bool isConnected;
   final bool isConnecting;
+  final bool isReconnecting;
   final String? errorMessage;
-  final List<Map<String, dynamic>> receivedData;
 
   WebSocketState({
     this.isConnected = false,
     this.isConnecting = false,
+    this.isReconnecting = false,
     this.errorMessage,
-    this.receivedData = const [],
   });
 
   WebSocketState copyWith({
     bool? isConnected,
     bool? isConnecting,
+    bool? isReconnecting,
     String? errorMessage,
-    List<Map<String, dynamic>>? receivedData,
   }) {
     return WebSocketState(
       isConnected: isConnected ?? this.isConnected,
       isConnecting: isConnecting ?? this.isConnecting,
+      isReconnecting: isReconnecting ?? this.isReconnecting,
       errorMessage: errorMessage ?? this.errorMessage,
-      receivedData: receivedData ?? this.receivedData,
     );
   }
 
   WebSocketState resetError() {
     return WebSocketState(
-      isConnecting: isConnecting,
       isConnected: isConnected,
+      isConnecting: isConnecting,
+      isReconnecting: isReconnecting,
       errorMessage: null,
-      receivedData: receivedData,
     );
   }
 }
 
 final webSocketManagerProvider =
     StateNotifierProvider<WebSocketManager, WebSocketState>((ref) {
-  return WebSocketManager();
+  return WebSocketManager(ref);
 });

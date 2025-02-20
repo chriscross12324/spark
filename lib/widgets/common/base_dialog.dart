@@ -28,7 +28,7 @@ class BaseDialog extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(15),
         width: double.infinity,
-        constraints: const BoxConstraints(maxHeight: 500),
+        constraints: const BoxConstraints(maxHeight: 500, maxWidth: 700),
         decoration: BoxDecoration(
           color: themeDarkDeepBackground,
           borderRadius: BorderRadius.circular(15),
@@ -62,6 +62,10 @@ class BaseDialog extends StatelessWidget {
             ),
             Expanded(
               child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics()
+                ),
                 child: dialogContent,
               ),
             ),
