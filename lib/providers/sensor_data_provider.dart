@@ -31,6 +31,17 @@ class SensorDataNotifier extends StateNotifier<Map<String, List<SensorData>>> {
     };*/
   }
 
+  void purgeData() {
+    state = {
+      'carbon_monoxide_ppm': [],
+      'temperature_celcius': [],
+      'pm1_ug_m3': [],
+      'pm2_5_ug_m3': [],
+      'pm4_ug_m3': [],
+      'pm10_ug_m3': [],
+    };
+  }
+
   List<SensorData> parseSensorData(Map<String, dynamic> data) {
     List<SensorData> result = [];
 

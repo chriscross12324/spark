@@ -19,6 +19,8 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
     if (_currentDeviceId == deviceId) return;
 
     disconnect();
+    ref.watch(sensorDataProvider.notifier).purgeData();
+
     _currentDeviceId = deviceId;
     _shouldReconnect = true;
 
