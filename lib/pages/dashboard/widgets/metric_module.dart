@@ -20,7 +20,7 @@ class MetricModule extends ConsumerStatefulWidget {
 
 class _MetricModuleState extends ConsumerState<MetricModule>
     with AutomaticKeepAliveClientMixin {
-  late List<SensorData> filteredData;
+  //late List<SensorData> filteredData;
   CutoffRange selectedRange = CutoffRange.max;
 
   final Map<CutoffRange, String> cutoffRangeMap = {
@@ -35,10 +35,10 @@ class _MetricModuleState extends ConsumerState<MetricModule>
   @override
   void initState() {
     super.initState();
-    filteredData = widget.data;
+    //filteredData = widget.data;
   }
 
-  void _updateFilter(CutoffRange range) {
+  /*void _updateFilter(CutoffRange range) {
     setState(() {
       selectedRange = range;
       final now = DateTime.now();
@@ -64,10 +64,10 @@ class _MetricModuleState extends ConsumerState<MetricModule>
           cutoff = now.subtract(const Duration(hours: 3));
           break;
         case CutoffRange.fiveMinutes:
-          cutoff = now.subtract(const Duration(hours: 3));
+          cutoff = now.subtract(const Duration(minutes: 5));
           break;
         case CutoffRange.oneMinute:
-          cutoff = now.subtract(const Duration(hours: 3));
+          cutoff = now.subtract(const Duration(minutes: 1));
           break;
       }
 
@@ -76,11 +76,47 @@ class _MetricModuleState extends ConsumerState<MetricModule>
           .where((point) => point.timestamp.isAfter(cutoff))
           .toList();
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    final now = widget.data.elementAt(widget.data.length - 1).timestamp;
+    DateTime cutoff;
+
+    switch (selectedRange) {
+      case CutoffRange.max:
+        cutoff = DateTime.fromMillisecondsSinceEpoch(0);
+        break;
+      case CutoffRange.sevenDays:
+        cutoff = now.subtract(const Duration(days: 7));
+        break;
+      case CutoffRange.threeDays:
+        cutoff = now.subtract(const Duration(days: 3));
+        break;
+      case CutoffRange.twentyFourHours:
+        cutoff = now.subtract(const Duration(days: 1));
+        break;
+      case CutoffRange.twelveHours:
+        cutoff = now.subtract(const Duration(hours: 12));
+        break;
+      case CutoffRange.threeHours:
+        cutoff = now.subtract(const Duration(hours: 3));
+        break;
+      case CutoffRange.fiveMinutes:
+        cutoff = now.subtract(const Duration(minutes: 5));
+        break;
+      case CutoffRange.oneMinute:
+        cutoff = now.subtract(const Duration(minutes: 1));
+        break;
+    }
+
+    //print("Updated: ${widget.data.}");
+    final filteredData = widget.data
+        .where((point) => point.timestamp.isAfter(cutoff))
+        .toList();
+
 
     final labelStyle = GoogleFonts.asap(color: themeDarkSecondaryText);
     final gridLineStyle = MajorGridLines(
@@ -114,7 +150,9 @@ class _MetricModuleState extends ConsumerState<MetricModule>
                 options: cutoffRangeMap,
                 selectedValue: selectedRange,
                 onChanged: (CutoffRange value) {
-                  _updateFilter(value);
+                  setState(() {
+                    selectedRange = value;
+                  });
                 },
               ),
             ],
@@ -156,8 +194,8 @@ class _MetricModuleState extends ConsumerState<MetricModule>
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            themeDarkAccentColourMain.withValues(alpha: 0.15),
-                            themeDarkAccentColourMain.withValues(alpha: 0.0),
+                            themeDarkAccentColourMain.withValues(alpha: 0.25),
+                            themeDarkAccentColourMain.withValues(alpha: 0.05),
                           ],
                         ),
                         color: Colors.white,
