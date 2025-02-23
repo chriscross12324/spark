@@ -12,7 +12,7 @@ class DeviceDetailsPanel extends ConsumerWidget {
 
   static const Map<String, String> metricsMap = {
     'Temperature (°C)': 'temperature_celcius',
-    'Carbon Monoxide PPM': 'carbon_monoxide_ppm',
+    'Carbon Monoxide (ppm)': 'carbon_monoxide_ppm',
     'PM1 (µg/m³)': 'pm1_ug_m3',
     'PM2.5 (µg/m³)': 'pm2_5_ug_m3',
     'PM4 (µg/m³)': 'pm4_ug_m3',

@@ -332,7 +332,7 @@ class Metrics extends ConsumerWidget {
 
   final metricsList = [
     "Temperature (°C)",
-    "Carbon Monoxide PPM",
+    "Carbon Monoxide (ppm)",
     "PM1 (µg/m³)",
     "PM2.5 (µg/m³)",
     "PM4 (µg/m³)",
