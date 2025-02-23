@@ -19,16 +19,16 @@ const themeDarkComplementaryColourFaded = Color(0xFF74A9B9);
 
 const Map<String, Map<String, Map<String, String>>> crews = {
   'Blaze Breakers': {
-    'CI001': {'lastName': "Bennett", 'status': 'Online'},
-    'CI011': {'lastName': "Dalton", 'status': 'Offline'},
-    'CI023': {'lastName': "Harper", 'status': 'Online'},
+    'device_1': {'lastName': "Bennett", 'status': 'Online'},
+    'device_2': {'lastName': "Dalton", 'status': 'Offline'},
+    'device_3': {'lastName': "Harper", 'status': 'Online'},
   },
   'Smoke Jumpers': {
     'sensor_123': {'lastName': "Griffin", 'status': 'Online'},
-    'CI031': {'lastName': "Bishop", 'status': 'Online'},
+    'device_4': {'lastName': "Bishop", 'status': 'Online'},
   },
   'Fire Guardians': {
-    'CI012': {'lastName': "Donovan", 'status': 'Offline'},
+    'device_5': {'lastName': "Donovan", 'status': 'Offline'},
     'CI016': {'lastName': "Foster", 'status': 'Notification'},
     'CI015': {'lastName': "Reynolds", 'status': 'Online'},
     'CI021': {'lastName': "Dixon", 'status': 'Notification'},
