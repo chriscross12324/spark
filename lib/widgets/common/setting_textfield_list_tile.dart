@@ -65,16 +65,35 @@ class SettingTextFieldListTile extends ConsumerWidget {
           ),
           child: Row(
             children: [
+              Text(
+                'wss://',
+                style: GoogleFonts.asap(
+                  fontWeight: FontWeight.bold,
+                  color: themeDarkDimText,
+                  fontSize: 14,
+                ),
+              ),
               Expanded(
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.text,
-                  child: Text(
-                    "URL...",
-                    style: GoogleFonts.asap(
-                      fontWeight: FontWeight.normal,
-                      color: themeDarkSecondaryText,
-                      fontSize: 14,
+                child: TextField(
+
+                  textAlignVertical: TextAlignVertical.center,
+                  keyboardType: TextInputType.url,
+                  autocorrect: false,
+                  keyboardAppearance: Brightness.dark,
+                  cursorColor: themeDarkPrimaryText,
+                  cursorRadius: const Radius.circular(1),
+                  cursorWidth: 2,
+                  style: GoogleFonts.asap(
+                    fontWeight: FontWeight.bold,
+                    color: themeDarkSecondaryText,
+                    fontSize: 14,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'wss://...',
+                    hintStyle: GoogleFonts.asap(
+                      color: themeDarkDimText,
                     ),
+                    //border: InputBorder.none,
                   ),
                 ),
               ),
