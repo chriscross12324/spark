@@ -18,28 +18,30 @@ const themeDarkComplementaryColourMain = Color(0xFF4FD2F7);
 const themeDarkComplementaryColourFaded = Color(0xFF74A9B9);
 
 const Map<String, Map<String, Map<String, String>>> crews = {
-  'Blaze Breakers': {
-    'device_1': {'lastName': "Bennett", 'status': 'Online'},
-    'device_2': {'lastName': "Dalton", 'status': 'Offline'},
-    'device_3': {'lastName': "Harper", 'status': 'Online'},
+  'SE 410': {
+    'SE410A': {'lastName': "Bennett", 'status': 'Online'},
+    'SE410B': {'lastName': "Dalton", 'status': 'Offline'},
+    'SE410C': {'lastName': "Harper", 'status': 'Online'},
+    'SE410D': {'lastName': "McNab", 'status': 'Online'},
   },
-  'Smoke Jumpers': {
-    'sensor_123': {'lastName': "Griffin", 'status': 'Online'},
-    'device_4': {'lastName': "Bishop", 'status': 'Online'},
+  'SE 430': {
+    'SE430A': {'lastName': "Griffin", 'status': 'Online'},
+    'SE430B': {'lastName': "Bishop", 'status': 'Online'},
+    'SE430C': {'lastName': "Stevens", 'status': 'Online'},
+    'SE430D': {'lastName': "Martens", 'status': 'Online'},
   },
-  'Fire Guardians': {
-    'device_5': {'lastName': "Donovan", 'status': 'Offline'},
-    'CI016': {'lastName': "Foster", 'status': 'Notification'},
-    'CI015': {'lastName': "Reynolds", 'status': 'Online'},
-    'CI021': {'lastName': "Dixon", 'status': 'Notification'},
-    'CI022': {'lastName': "Anderson", 'status': 'Online'},
+  'Monashee A': {
+    'A1': {'lastName': "Donovan", 'status': 'Offline'},
+    'A2': {'lastName': "Foster", 'status': 'Notification'},
+    'A3': {'lastName': "Reynolds", 'status': 'Online'},
+    'A4': {'lastName': "Dixon", 'status': 'Notification'},
+    'A5': {'lastName': "Anderson", 'status': 'Online'},
   },
-  'Flame Fighters': {
-    'CI042': {'lastName': "Caldwell", 'status': 'Online'},
-    'CI038': {'lastName': "Carson", 'status': 'Offline'},
-    'CI031': {'lastName': "Quinn", 'status': 'Offline'},
-    'CI051': {'lastName': "Harrington", 'status': 'Online'},
-    'CI019': {'lastName': "Sullivan", 'status': 'Offline'},
-    'CI045': {'lastName': "Mercer", 'status': 'Notification'},
+  'Val B': {
+    'B1': {'lastName': "Caldwell", 'status': 'Online'},
+    'B2': {'lastName': "Carson", 'status': 'Offline'},
+    'B3': {'lastName': "Quinn", 'status': 'Offline'},
+    'B4': {'lastName': "Harrington", 'status': 'Online'},
+    'B5': {'lastName': "Sullivan", 'status': 'Offline'},
   },
 };
