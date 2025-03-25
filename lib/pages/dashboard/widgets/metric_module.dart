@@ -81,39 +81,46 @@ class _MetricModuleState extends ConsumerState<MetricModule>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    print("Rebuilding...");
+    DateTime cutoff = DateTime.fromMillisecondsSinceEpoch(0);
 
-    final now = widget.data.elementAt(widget.data.length - 1).timestamp;
-    DateTime cutoff;
+    if (widget.data.isNotEmpty) {
+      final now = widget.data.elementAt(widget.data.length - 1).timestamp;
 
-    switch (selectedRange) {
-      case CutoffRange.max:
-        cutoff = DateTime.fromMillisecondsSinceEpoch(0);
-        break;
-      case CutoffRange.sevenDays:
-        cutoff = now.subtract(const Duration(days: 7));
-        break;
-      case CutoffRange.threeDays:
-        cutoff = now.subtract(const Duration(days: 3));
-        break;
-      case CutoffRange.twentyFourHours:
-        cutoff = now.subtract(const Duration(days: 1));
-        break;
-      case CutoffRange.twelveHours:
-        cutoff = now.subtract(const Duration(hours: 12));
-        break;
-      case CutoffRange.threeHours:
-        cutoff = now.subtract(const Duration(hours: 3));
-        break;
-      case CutoffRange.fiveMinutes:
-        cutoff = now.subtract(const Duration(minutes: 5));
-        break;
-      case CutoffRange.oneMinute:
-        cutoff = now.subtract(const Duration(minutes: 1));
-        break;
+      switch (selectedRange) {
+        case CutoffRange.max:
+          cutoff = DateTime.fromMillisecondsSinceEpoch(0);
+          break;
+        case CutoffRange.sevenDays:
+          cutoff = now.subtract(const Duration(days: 7));
+          break;
+        case CutoffRange.threeDays:
+          cutoff = now.subtract(const Duration(days: 3));
+          break;
+        case CutoffRange.twentyFourHours:
+          cutoff = now.subtract(const Duration(days: 1));
+          break;
+        case CutoffRange.twelveHours:
+          cutoff = now.subtract(const Duration(hours: 12));
+          break;
+        case CutoffRange.threeHours:
+          cutoff = now.subtract(const Duration(hours: 3));
+          break;
+        case CutoffRange.fiveMinutes:
+          cutoff = now.subtract(const Duration(minutes: 5));
+          break;
+        case CutoffRange.oneMinute:
+          cutoff = now.subtract(const Duration(minutes: 1));
+          break;
+      }
+
+      print(cutoff);
     }
 
+
+
     //print("Updated: ${widget.data.}");
-    final filteredData = widget.data
+    var filteredData = widget.data
         .where((point) => point.timestamp.isAfter(cutoff))
         .toList();
 

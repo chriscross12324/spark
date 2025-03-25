@@ -5,9 +5,8 @@ import 'package:spark/pages/dashboard/widgets/metric_module.dart';
 
 import 'mouse_effects.dart';
 
-class SegmentedControl extends StatefulWidget {
-  const SegmentedControl({
-    super.key,
+class SegmentedControl extends StatelessWidget {
+  const SegmentedControl({super.key,
     required this.options,
     required this.selectedValue,
     required this.onChanged,
@@ -16,13 +15,6 @@ class SegmentedControl extends StatefulWidget {
   final Map<CutoffRange, String> options;
   final CutoffRange selectedValue;
   final ValueChanged<CutoffRange> onChanged;
-
-  @override
-  State<SegmentedControl> createState() => _SegmentedControlState();
-}
-
-class _SegmentedControlState extends State<SegmentedControl> {
-  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +33,8 @@ class _SegmentedControlState extends State<SegmentedControl> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          children: List.generate(widget.options.length, (index) {
-            final isSelected = widget.options.keys.elementAt(index) == widget.selectedValue;
+          children: List.generate(options.length, (index) {
+            final isSelected = options.keys.elementAt(index) == selectedValue;
 
             return ClipRRect(
               borderRadius: BorderRadius.circular(6),
@@ -53,16 +45,14 @@ class _SegmentedControlState extends State<SegmentedControl> {
                 opacitySubtract: -0.05,
                 borderRadius: BorderRadius.circular(6),
                 onPressed: () {
-                  setState(() {
-                    widget.onChanged(widget.options.keys.elementAt(index));
-                  });
+                  onChanged(options.keys.elementAt(index));
                 },
                 child: AnimatedContainer(
                   height: 36,
                   duration: const Duration(milliseconds: 200),
                   decoration: BoxDecoration(
                     color:
-                        isSelected ? themeDarkForeground : Colors.transparent,
+                    isSelected ? themeDarkForeground : Colors.transparent,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       width: 2,
@@ -74,14 +64,14 @@ class _SegmentedControlState extends State<SegmentedControl> {
                     child: AnimatedDefaultTextStyle(
                       style: GoogleFonts.asap(
                         fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                         color: isSelected
                             ? themeDarkPrimaryText
                             : themeDarkDimText,
                         fontSize: 14,
                       ),
                       duration: const Duration(milliseconds: 200),
-                      child: Text(widget.options.values.elementAt(index)),
+                      child: Text(options.values.elementAt(index)),
                     ),
                   ),
                 ),
