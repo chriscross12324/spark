@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/models/sensor_data_model.dart';
 import 'package:spark/widgets/common/segmented_control.dart';
@@ -33,97 +34,45 @@ class _MetricModuleState extends ConsumerState<MetricModule>
   };
 
   @override
-  void initState() {
-    super.initState();
-    //filteredData = widget.data;
-  }
-
-  /*void _updateFilter(CutoffRange range) {
-    setState(() {
-      selectedRange = range;
-      final now = DateTime.now();
-      DateTime cutoff;
-
-      switch (range) {
-        case CutoffRange.max:
-          filteredData = widget.data;
-          return;
-        case CutoffRange.sevenDays:
-          cutoff = now.subtract(const Duration(days: 7));
-          break;
-        case CutoffRange.threeDays:
-          cutoff = now.subtract(const Duration(days: 3));
-          break;
-        case CutoffRange.twentyFourHours:
-          cutoff = now.subtract(const Duration(days: 1));
-          break;
-        case CutoffRange.twelveHours:
-          cutoff = now.subtract(const Duration(hours: 12));
-          break;
-        case CutoffRange.threeHours:
-          cutoff = now.subtract(const Duration(hours: 3));
-          break;
-        case CutoffRange.fiveMinutes:
-          cutoff = now.subtract(const Duration(minutes: 5));
-          break;
-        case CutoffRange.oneMinute:
-          cutoff = now.subtract(const Duration(minutes: 1));
-          break;
-      }
-
-      //print("Updated: ${widget.data.}");
-      filteredData = widget.data
-          .where((point) => point.timestamp.isAfter(cutoff))
-          .toList();
-    });
-  }*/
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
-    print("Rebuilding...");
-    DateTime cutoff = DateTime.fromMillisecondsSinceEpoch(0);
+    DateTime firstTimestamp = DateTime.now();
+    DateTime lastTimestamp = DateTime.now();
 
     if (widget.data.isNotEmpty) {
-      final now = widget.data.elementAt(widget.data.length - 1).timestamp;
+      lastTimestamp = widget.data.last.timestamp;
 
       switch (selectedRange) {
         case CutoffRange.max:
-          cutoff = DateTime.fromMillisecondsSinceEpoch(0);
+          firstTimestamp = widget.data.first.timestamp;
           break;
         case CutoffRange.sevenDays:
-          cutoff = now.subtract(const Duration(days: 7));
+          firstTimestamp = lastTimestamp.subtract(const Duration(days: 7));
           break;
         case CutoffRange.threeDays:
-          cutoff = now.subtract(const Duration(days: 3));
+          firstTimestamp = lastTimestamp.subtract(const Duration(days: 3));
           break;
         case CutoffRange.twentyFourHours:
-          cutoff = now.subtract(const Duration(days: 1));
+          firstTimestamp = lastTimestamp.subtract(const Duration(days: 1));
           break;
         case CutoffRange.twelveHours:
-          cutoff = now.subtract(const Duration(hours: 12));
+          firstTimestamp = lastTimestamp.subtract(const Duration(hours: 12));
           break;
         case CutoffRange.threeHours:
-          cutoff = now.subtract(const Duration(hours: 3));
+          firstTimestamp = lastTimestamp.subtract(const Duration(hours: 3));
           break;
         case CutoffRange.fiveMinutes:
-          cutoff = now.subtract(const Duration(minutes: 5));
+          firstTimestamp = lastTimestamp.subtract(const Duration(minutes: 5));
           break;
         case CutoffRange.oneMinute:
-          cutoff = now.subtract(const Duration(minutes: 1));
+          firstTimestamp = lastTimestamp.subtract(const Duration(minutes: 1));
           break;
       }
 
-      print(cutoff);
+      if (firstTimestamp.isBefore(widget.data.first.timestamp)) {
+        firstTimestamp = widget.data.first.timestamp;
+      }
     }
-
-
-
-    //print("Updated: ${widget.data.}");
-    var filteredData = widget.data
-        .where((point) => point.timestamp.isAfter(cutoff))
-        .toList();
-
 
     final labelStyle = GoogleFonts.asap(color: themeDarkSecondaryText);
     final gridLineStyle = MajorGridLines(
@@ -132,9 +81,9 @@ class _MetricModuleState extends ConsumerState<MetricModule>
     // Calculate Y-axis range
     double yMin = 0;
     double yMax = 0;
-    if (filteredData.isNotEmpty) {
-      yMin = filteredData.map((p) => p.value).reduce(min).floor() - 1;
-      yMax = filteredData.map((p) => p.value).reduce(max).ceil() + 1;
+    if (widget.data.isNotEmpty) {
+      yMin = widget.data.map((p) => p.value).reduce(min).floor() - 1;
+      yMax = widget.data.map((p) => p.value).reduce(max).ceil() + 1;
     }
 
     return Padding(
@@ -167,12 +116,15 @@ class _MetricModuleState extends ConsumerState<MetricModule>
           SizedBox(
             height: 250,
             width: double.infinity,
-            child: filteredData.isEmpty
-                ? Center(child: Text("No data available", style: TextStyle(color: Colors.white,),))
+            child: widget.data.isEmpty
+                ? const Center(child: Text("No data available", style: TextStyle(color: Colors.white,),))
                 : SfCartesianChart(
                     primaryXAxis: DateTimeAxis(
                       labelStyle: labelStyle,
                       majorGridLines: gridLineStyle,
+                      minimum: firstTimestamp,
+                      maximum: lastTimestamp,
+                      dateFormat: DateFormat('dd/MM HH:mm'),
                     ),
                     primaryYAxis: NumericAxis(
                       minimum: yMin,
@@ -194,7 +146,7 @@ class _MetricModuleState extends ConsumerState<MetricModule>
                     ),
                     series: <CartesianSeries<SensorData, DateTime>>[
                       AreaSeries(
-                        dataSource: filteredData,
+                        dataSource: widget.data,
                         xValueMapper: (SensorData data, _) => data.timestamp,
                         yValueMapper: (SensorData data, _) => data.value,
                         gradient: LinearGradient(
@@ -214,6 +166,9 @@ class _MetricModuleState extends ConsumerState<MetricModule>
                           color: Colors.white,
                         ),
                         animationDuration: 0,
+                        /*trendlines: [
+                          Trendline(type: TrendlineType.movingAverage, period: 5)
+                        ],*/
                       ),
                     ],
                   ),
