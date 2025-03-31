@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:spark/app_providers.dart';
-import 'package:spark/widgets/common/base_dialog.dart';
+import 'package:spark/dialogs/base_dialog.dart';
 import 'package:spark/widgets/common/list_separator.dart';
 import 'package:spark/widgets/common/segmented_control.dart';
 import 'package:spark/widgets/common/setting_switch_list_tile.dart';
 
+import '../app_constants.dart';
 import '../widgets/common/setting_textfield_list_tile.dart';
 
 class DialogPreferences extends ConsumerStatefulWidget {
@@ -35,6 +37,66 @@ class _DialogPreferencesState extends ConsumerState<DialogPreferences> {
           });
         },
       ),
+      actionButtonText: 'Test API',
+      onActionPressed: () {
+        testApiAccessibility(ref.read(settingAPIEndpoint)).then((isAccessible) {
+          if (isAccessible) {
+            showGeneralDialog(
+              context: context,
+              barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
+              barrierDismissible: false,
+              transitionDuration: const Duration(milliseconds: 150),
+              pageBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
+                return const BaseDialog(dialogTitle: 'Connection Successful', dialogContent: SizedBox());
+              },
+              transitionBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                final curvedAnimation = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.fastOutSlowIn,
+                );
+
+                return FadeTransition(
+                  opacity: curvedAnimation,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.95, end: 1.0)
+                        .animate(curvedAnimation),
+                    child: child,
+                  ),
+                );
+              },
+            );
+          } else {
+            showGeneralDialog(
+              context: context,
+              barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
+              barrierDismissible: false,
+              transitionDuration: const Duration(milliseconds: 150),
+              pageBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
+                return const BaseDialog(dialogTitle: 'Connection Failed', dialogContent: SizedBox());
+              },
+              transitionBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                final curvedAnimation = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.fastOutSlowIn,
+                );
+
+                return FadeTransition(
+                  opacity: curvedAnimation,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.95, end: 1.0)
+                        .animate(curvedAnimation),
+                    child: child,
+                  ),
+                );
+              },
+            );
+          }
+        });
+      },
       dialogContent: Column(
         children: [
           if (selectedTab == Tabs.general) ...sectionGeneral(),
@@ -47,11 +109,11 @@ class _DialogPreferencesState extends ConsumerState<DialogPreferences> {
 
 List<Widget> sectionGeneral() {
   return [
-    const SettingTextFieldListTile(
-      title: 'API Endpoint',
-      description: 'The URL where the SPARK API can be accessed.',
-      stringProvider: null,
-      sharedPreferencesKey: 'sharedPreferencesKey',
+    SettingTextFieldListTile(
+      title: 'API Base',
+      description: 'Enter the base URL of the SPARK API (e.g., findthefrontier.ca). Don\'t include http:// or https://; just the domain. We’ll take care of the rest.',
+      stringProvider: settingAPIEndpoint,
+      sharedPreferencesKey: 'settingAPIEndpoint',
     ),
     const ListSeparator(),
     CustomSwitchListTile(
@@ -60,7 +122,6 @@ List<Widget> sectionGeneral() {
           'Displays another line on the Metric graphs to show the average values over time.',
       boolProvider: settingDisplayAverage,
       sharedPreferencesKey: 'settingDisplayAverage',
-      disabled: true,
     ),
     const ListSeparator(),
     CustomSwitchListTile(
@@ -81,6 +142,25 @@ class SectionDevices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
+  }
+}
+
+Future<bool> testApiAccessibility(String baseUrl) async {
+  try {
+    print('Pinging: $baseUrl/status');
+    final response = await http.get(Uri.parse("https://$baseUrl/status"));
+
+    if (response.statusCode == 200) {
+      //final data = jsonDecode(response.body);
+      print(response.body);
+      return true;
+    } else {
+      print(response.statusCode);
+      return false;
+    }
+  } catch (e) {
+    print(e.toString());
+    return false;
   }
 }
 
