@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/app_providers.dart';
 import 'package:spark/models/sensor_data_model.dart';
 import 'package:spark/widgets/common/segmented_control.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -36,6 +37,7 @@ class _MetricModuleState extends ConsumerState<MetricModule>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final displayMovingAverage = ref.watch(settingDisplayAverage);
     DateTime firstTimestamp = DateTime.now();
     DateTime lastTimestamp = DateTime.now();
 
@@ -102,7 +104,7 @@ class _MetricModuleState extends ConsumerState<MetricModule>
           ),
           Row(
             children: [
-              SegmentedControl(
+              SegmentedControl<CutoffRange>(
                 options: cutoffRangeMap,
                 selectedValue: selectedRange,
                 onChanged: (CutoffRange value) {
@@ -166,9 +168,10 @@ class _MetricModuleState extends ConsumerState<MetricModule>
                           color: Colors.white,
                         ),
                         animationDuration: 0,
-                        /*trendlines: [
-                          Trendline(type: TrendlineType.movingAverage, period: 5)
-                        ],*/
+                        trendlines: [
+                          if (displayMovingAverage)
+                            Trendline(type: TrendlineType.movingAverage, period: 5)
+                        ],
                       ),
                     ],
                   ),
