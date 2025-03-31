@@ -45,6 +45,13 @@ class _FilterManagerState extends State<FilterManager> {
   Widget build(BuildContext context) {
     return BaseDialog(
       dialogTitle: 'Filter',
+      dialogHeaderWidget: TextButtonWidget(
+        onPressed: () {
+          _addTopLevelFilter();
+        },
+        text: "+ Filter Group",
+        containsPadding: false,
+      ),
       dialogContent: Column(
         children: [
           ListView.separated(
@@ -57,23 +64,6 @@ class _FilterManagerState extends State<FilterManager> {
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(height: index == topLevelFilters.length ? 0 : 5);
             },
-          ),
-          const SizedBox(height: 5),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                TextButtonWidget(
-                  onPressed: () {
-                    _addTopLevelFilter();
-                  },
-                  text: "+ Filter Group",
-                  isPrimary: true,
-                  isButtonClear: true,
-                  containsPadding: false,
-                ),
-              ],
-            ),
           ),
         ],
       ),
