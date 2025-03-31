@@ -11,6 +11,8 @@ class BaseDialog extends StatelessWidget {
     required this.dialogTitle,
     this.dialogHeaderWidget,
     required this.dialogContent,
+    this.actionButtonText,
+    this.onActionPressed,
     this.closeButtonText = 'Close',
     this.onClosePressed,
   });
@@ -18,6 +20,8 @@ class BaseDialog extends StatelessWidget {
   final String dialogTitle;
   final Widget? dialogHeaderWidget;
   final Widget dialogContent;
+  final String? actionButtonText;
+  final VoidCallback? onActionPressed;
   final String closeButtonText;
   final VoidCallback? onClosePressed;
 
@@ -71,15 +75,22 @@ class BaseDialog extends StatelessWidget {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.all(10),
                 physics: const AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics()
-                ),
+                    parent: BouncingScrollPhysics()),
                 child: dialogContent,
               ),
             ),
             Row(
               children: [
+                if (actionButtonText != null)
+                  TextButtonWidget(
+                    text: actionButtonText!,
+                    smallBorderRadius: true,
+                    onPressed: () {
+                      if (onActionPressed != null) onActionPressed!();
+                    },
+                  ),
                 const Spacer(),
                 TextButtonWidget(
                   text: closeButtonText,
