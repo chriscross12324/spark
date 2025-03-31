@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/app_providers.dart';
 import 'package:spark/models/crew.dart';
 import 'package:spark/providers/dashboard_provider.dart';
 import 'package:spark/utils/web_socket_manager.dart';
@@ -93,6 +94,7 @@ class MemberItem extends ConsumerWidget {
     final listState = ref.watch(dashboardProvider);
     final stateNotifier = ref.read(dashboardProvider.notifier);
     final wsManager = ref.read(webSocketManagerProvider.notifier);
+    final displayDeviceStatus = ref.watch(settingDisplayDeviceStatus);
 
     final isLastMember = crew.members.last == member;
 
@@ -161,20 +163,21 @@ class MemberItem extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Container(
-                      width: 4,
-                      decoration: BoxDecoration(
-                        color: member.status == 'Online'
-                            ? Colors.green
-                            : member.status == 'Offline'
-                                ? Colors.white.withOpacity(0.35)
-                                : Colors.red,
-                        borderRadius: BorderRadius.circular(2),
+                  if (displayDeviceStatus)
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Container(
+                        width: 4,
+                        decoration: BoxDecoration(
+                          color: member.status == 'Online'
+                              ? Colors.green
+                              : member.status == 'Offline'
+                                  ? Colors.white.withOpacity(0.35)
+                                  : Colors.red,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
-                  )
                 ],
               ),
             ),
