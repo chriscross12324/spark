@@ -47,6 +47,7 @@ dependencies:
 
   # Networking & Communication
   web_socket_channel: ^3.0.2
+  http: ^1.3.0
 
   # Icons
   hugeicons: ^0.0.7
