@@ -5,4 +5,9 @@ class SensorData {
   final String type;
   final double value;
   final DateTime timestamp;
+
+  @override
+  String toString() {
+    return 'SensorData(type: $type, value: $value, timestamp: ${timestamp.toIso8601String()})';
+  }
 }
