@@ -2,12 +2,22 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark/pages/dashboard/page_dashboard.dart';
+import 'app_providers.dart' as app_providers;
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  ///Initialize SharedPreferences
+  final sharedPrefs = await SharedPreferences.getInstance();
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      overrides: [
+        app_providers.sharedPreferencesProvider.overrideWithValue(sharedPrefs)
+      ],
+      child: const MyApp(),
     ),
   );
 }
