@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spark/app_providers.dart';
 import 'package:spark/providers/sensor_data_provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart';
@@ -24,7 +25,8 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
     _currentDeviceId = deviceId;
     _shouldReconnect = true;
 
-    final url = 'wss://findthefrontier.ca/spark/ws/$_currentDeviceId';
+    final apiBase = ref.read(settingAPIEndpoint);
+    final apiEndpoint = 'wss://$apiBase/$_currentDeviceId';
 
     state = state.copyWith(
       isConnected: false,
@@ -35,7 +37,7 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
     state = state.resetError();
 
     try {
-      _channel = WebSocketChannel.connect(Uri.parse(url));
+      _channel = WebSocketChannel.connect(Uri.parse(apiEndpoint));
 
       _channel!.stream.listen((message) {
         if (!state.isConnected) {
@@ -52,7 +54,7 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         state = state.copyWith(
           isConnected: false,
           isConnecting: false,
-          errorMessage: "WebSocket error: ${error.inner.message} | URL: $url",
+          errorMessage: "WebSocket error: ${error.inner.message} | URL: $apiEndpoint",
         );
         if (kDebugMode) print("WebSocket error: ${error.inner.message}");
 
