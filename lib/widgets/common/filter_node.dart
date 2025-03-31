@@ -2,7 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:spark/widgets/common/base_dialog.dart';
+import 'package:spark/dialogs/base_dialog.dart';
 import 'package:spark/widgets/common/text_button_widget.dart';
 
 import '../../app_constants.dart';
