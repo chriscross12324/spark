@@ -6,13 +6,22 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
 
-final settingDisplayAverage = StateNotifierProvider<TypedProvider<bool>, bool>((ref) {
+final settingAPIEndpoint =
+    StateNotifierProvider<TypedProvider<String>, String>((ref) {
+  return TypedProvider<String>(ref
+      .read(sharedPreferencesProvider)
+      .tryGetValue("settingAPIEndpoint", ""));
+});
+
+final settingDisplayAverage =
+    StateNotifierProvider<TypedProvider<bool>, bool>((ref) {
   return TypedProvider<bool>(ref
       .read(sharedPreferencesProvider)
       .tryGetValue("settingDisplayAverage", false));
 });
 
-final settingDisplayDeviceStatus = StateNotifierProvider<TypedProvider<bool>, bool>((ref) {
+final settingDisplayDeviceStatus =
+    StateNotifierProvider<TypedProvider<bool>, bool>((ref) {
   return TypedProvider<bool>(ref
       .read(sharedPreferencesProvider)
       .tryGetValue("settingDisplayDeviceStatus", false));
