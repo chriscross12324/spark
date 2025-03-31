@@ -26,7 +26,7 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
     _shouldReconnect = true;
 
     final apiBase = ref.read(settingAPIEndpoint);
-    final apiEndpoint = 'wss://$apiBase/$_currentDeviceId';
+    final apiEndpoint = 'wss://$apiBase/ws/$_currentDeviceId';
 
     state = state.copyWith(
       isConnected: false,
