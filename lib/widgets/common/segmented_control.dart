@@ -5,16 +5,16 @@ import 'package:spark/pages/dashboard/widgets/metric_module.dart';
 
 import 'mouse_effects.dart';
 
-class SegmentedControl extends StatelessWidget {
+class SegmentedControl<T> extends StatelessWidget {
   const SegmentedControl({super.key,
     required this.options,
     required this.selectedValue,
     required this.onChanged,
   });
 
-  final Map<CutoffRange, String> options;
-  final CutoffRange selectedValue;
-  final ValueChanged<CutoffRange> onChanged;
+  final Map<T, String> options;
+  final T selectedValue;
+  final ValueChanged<T> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class SegmentedControl extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           width: 2,
-          color: Colors.white.withOpacity(0.15),
+          color: Colors.white.withValues(alpha: 0.15),
         ),
       ),
       child: ClipRRect(
@@ -45,6 +45,10 @@ class SegmentedControl extends StatelessWidget {
                 opacitySubtract: -0.05,
                 borderRadius: BorderRadius.circular(6),
                 onPressed: () {
+                  // Return early to avoid unnecessary rebuilds
+                  if (selectedValue == options.keys.elementAt(index)) return;
+
+                  // Update with new value
                   onChanged(options.keys.elementAt(index));
                 },
                 child: AnimatedContainer(
