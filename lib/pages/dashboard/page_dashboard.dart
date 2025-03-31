@@ -3,12 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/dialogs/dialog_preferences.dart';
 import 'package:spark/pages/dashboard/widgets/device_details_widget.dart';
 import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
 import 'package:spark/providers/dashboard_provider.dart';
 import 'package:spark/utils/web_socket_manager.dart';
-import 'package:spark/widgets/common/base_dialog.dart';
-import 'package:spark/widgets/common/setting_textfield_list_tile.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
 import '../../widgets/common/filter_node.dart';
@@ -232,11 +231,6 @@ class AppBarActions extends StatelessWidget {
     return Row(
       children: [
         IconButtonWidget(
-          icon: HugeIcons.strokeRoundedAdd01,
-          onPressed: () {},
-        ),
-        const SizedBox(width: 5),
-        IconButtonWidget(
           icon: HugeIcons.strokeRoundedSettings01,
           onPressed: () {
             showGeneralDialog(
@@ -246,19 +240,7 @@ class AppBarActions extends StatelessWidget {
               transitionDuration: const Duration(milliseconds: 150),
               pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) {
-                return const BaseDialog(
-                  dialogTitle: 'Preferences',
-                  dialogContent: Column(
-                    children: [
-                      SettingTextFieldListTile(
-                        title: 'API Endpoint',
-                        description: 'The URL where the SPARK API can be accessed.',
-                        stringProvider: null,
-                        sharedPreferencesKey: 'sharedPreferencesKey',
-                      ),
-                    ],
-                  ),
-                );
+                return const DialogPreferences();
               },
               transitionBuilder:
                   (context, animation, secondaryAnimation, child) {
