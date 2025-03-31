@@ -83740,7 +83740,7 @@ k=t.N
 m.jO($.avR().gp8(),t.SB).she(A.ak(["carbon_monoxide_ppm",A.b([],l),"temperature_celcius",A.b([],l),"pm1_ug_m3",A.b([],l),"pm2_5_ug_m3",A.b([],l),"pm4_ug_m3",A.b([],l),"pm10_ug_m3",A.b([],l)],k,t.gh))
 p.x=a
 p.y=!0
-o="wss://"+m.fN($.avS(),k)+"/"+A.n(p.x)
+o="wss://"+m.fN($.avS(),k)+"/ws/"+A.n(p.x)
 p.she(p.f.zO(null,!1,!0,!1))
 p.she(p.f.a_L())
 try{m=A.aKg(A.aw8(A.dO(o,0,null),null))
