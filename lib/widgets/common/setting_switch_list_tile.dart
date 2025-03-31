@@ -79,74 +79,77 @@ class CustomSwitchListTile extends ConsumerWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if (sharedPreferencesKey != null) {
-                          ///Save Setting
-                          boolReader.saveState(
-                              false, sharedPreferencesKey!, ref);
-                        } else {
-                          ///Update Setting
-                          boolReader.updateState(false);
-                        }
-                      },
-                      child: AnimatedContainer(
-                        height: double.infinity,
-                        width: !boolWatcher ? 38 : 30,
-                        decoration: BoxDecoration(
-                          color: boolWatcher ? Colors.red.withValues(alpha: 0.25) : Colors.red,
-                          borderRadius: const BorderRadius.horizontal(
-                            left: Radius.circular(6),
-                            right: Radius.circular(3),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (sharedPreferencesKey != null) {
+                            ///Save Setting
+                            boolReader.saveState(
+                                false, sharedPreferencesKey!, ref);
+                          } else {
+                            ///Update Setting
+                            boolReader.updateState(false);
+                          }
+                        },
+                        child: AnimatedContainer(
+                          height: double.infinity,
+                          width: !boolWatcher ? 38 : 30,
+                          decoration: BoxDecoration(
+                            color: boolWatcher ? Colors.red.withValues(alpha: 0.25) : Colors.red,
+                            borderRadius: const BorderRadius.horizontal(
+                              left: Radius.circular(6),
+                              right: Radius.circular(3),
+                            ),
                           ),
-                        ),
-                        duration: const Duration(milliseconds: 150),
-                        curve: Curves.fastOutSlowIn,
-                        child: Center(
-                          child: HugeIcon(
-                            icon: HugeIcons.strokeRoundedCancel01,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 3),
-                    GestureDetector(
-                      onTap: () {
-                        if (sharedPreferencesKey != null) {
-                          ///Save Setting
-                          boolReader.saveState(
-                              true, sharedPreferencesKey!, ref);
-                        } else {
-                          ///Update Setting
-                          boolReader.updateState(true);
-                        }
-                      },
-                      child: AnimatedContainer(
-                        height: double.infinity,
-                        width: boolWatcher ? 38 : 30,
-                        decoration: BoxDecoration(
-                          color: boolWatcher ? Colors.green : Colors.green.withValues(alpha: 0.25),
-                          borderRadius: const BorderRadius.horizontal(
-                            left: Radius.circular(3),
-                            right: Radius.circular(6),
-                          ),
-                        ),
-                        duration: const Duration(milliseconds: 150),
-                        curve: Curves.fastOutSlowIn,
-                        child: Center(
-                          child: HugeIcon(
-                            icon: HugeIcons.strokeRoundedTick02,
-                            color: Colors.white,
-                            size: 18,
+                          duration: const Duration(milliseconds: 150),
+                          curve: Curves.fastOutSlowIn,
+                          child: Center(
+                            child: HugeIcon(
+                              icon: HugeIcons.strokeRoundedCancel01,
+                              color: Colors.white,
+                              size: 18,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 3),
+                      GestureDetector(
+                        onTap: () {
+                          if (sharedPreferencesKey != null) {
+                            ///Save Setting
+                            boolReader.saveState(
+                                true, sharedPreferencesKey!, ref);
+                          } else {
+                            ///Update Setting
+                            boolReader.updateState(true);
+                          }
+                        },
+                        child: AnimatedContainer(
+                          height: double.infinity,
+                          width: boolWatcher ? 38 : 30,
+                          decoration: BoxDecoration(
+                            color: boolWatcher ? Colors.green : Colors.green.withValues(alpha: 0.25),
+                            borderRadius: const BorderRadius.horizontal(
+                              left: Radius.circular(3),
+                              right: Radius.circular(6),
+                            ),
+                          ),
+                          duration: const Duration(milliseconds: 150),
+                          curve: Curves.fastOutSlowIn,
+                          child: Center(
+                            child: HugeIcon(
+                              icon: HugeIcons.strokeRoundedTick02,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )
