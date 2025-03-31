@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spark/app_constants.dart';
@@ -8,12 +9,14 @@ class BaseDialog extends StatelessWidget {
   const BaseDialog({
     super.key,
     required this.dialogTitle,
+    this.dialogHeaderWidget,
     required this.dialogContent,
     this.closeButtonText = 'Close',
     this.onClosePressed,
   });
 
   final String dialogTitle;
+  final Widget? dialogHeaderWidget;
   final Widget dialogContent;
   final String closeButtonText;
   final VoidCallback? onClosePressed;
@@ -33,7 +36,7 @@ class BaseDialog extends StatelessWidget {
           color: themeDarkDeepBackground,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.15),
+            color: Colors.white.withValues(alpha: 0.05),
             width: 1.5,
           ),
         ),
@@ -41,13 +44,19 @@ class BaseDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              dialogTitle,
-              style: GoogleFonts.asap(
-                fontWeight: FontWeight.w900,
-                color: themeDarkPrimaryText,
-                fontSize: 24,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AutoSizeText(
+                  dialogTitle,
+                  style: GoogleFonts.asap(
+                    fontWeight: FontWeight.w900,
+                    color: themeDarkPrimaryText,
+                    fontSize: 24,
+                  ),
+                ),
+                if (dialogHeaderWidget != null) dialogHeaderWidget!,
+              ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
