@@ -45,7 +45,7 @@ class DeviceDetailsPanel extends ConsumerWidget {
   Widget? _buildWebSocketStatusWidget(WebSocketState wsState) {
     if (wsState.errorMessage != null) {
       return _templateStatusWidget(
-          HugeIcons.strokeRoundedAlert02, 'Error', 'description');
+          HugeIcons.strokeRoundedAlert02, 'Error', wsState.errorMessage.toString());
     } else if (wsState.isConnecting) {
       return _templateStatusWidget(
           null, 'Connecting', 'Establishing a connection to the device.');
