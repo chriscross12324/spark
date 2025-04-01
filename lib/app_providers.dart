@@ -15,7 +15,7 @@ final settingAPIEndpoint =
     StateNotifierProvider<TypedProvider<String>, String>((ref) {
   return TypedProvider<String>(ref
       .read(sharedPreferencesProvider)
-      .tryGetValue("settingAPIEndpoint", ""));
+      .tryGetValue("settingAPIEndpoint", "findthefrontier.ca/spark"));
 });
 
 final settingDisplayAverage =
