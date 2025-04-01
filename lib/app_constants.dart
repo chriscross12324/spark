@@ -45,3 +45,122 @@ const Map<String, Map<String, Map<String, String>>> crews = {
     'B5': {'lastName': "Sullivan", 'status': 'Offline'},
   },
 };
+
+const defaultDeviceGroups = '''
+[
+  {
+    "groupID": "0",
+    "groupName": "SE 410",
+    "groupDevices": [
+      {
+        "deviceID": "SE430A",
+        "deviceUserName": "Bennett",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "SE430B",
+        "deviceUserName": "Dalton",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "SE430C",
+        "deviceUserName": "Harper",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "SE430D",
+        "deviceUserName": "McNab",
+        "deviceStatus": "Online"
+      }
+    ]
+  },
+  {
+    "groupID": "1",
+    "groupName": "SE 430",
+    "groupDevices": [
+      {
+        "deviceID": "SE430A",
+        "deviceUserName": "Griffin",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "SE430B",
+        "deviceUserName": "Bishop",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "SE430C",
+        "deviceUserName": "Stevens",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "SE430D",
+        "deviceUserName": "Martens",
+        "deviceStatus": "Online"
+      }
+    ]
+  },
+  {
+    "groupID": "2",
+    "groupName": "Monashee A",
+    "groupDevices": [
+      {
+        "deviceID": "A1",
+        "deviceUserName": "Donovan",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "A2",
+        "deviceUserName": "Foster",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "A3",
+        "deviceUserName": "Reynolds",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "A4",
+        "deviceUserName": "Dixon",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "A5",
+        "deviceUserName": "Anderson",
+        "deviceStatus": "Online"
+      }
+    ]
+  },
+  {
+    "groupID": "3",
+    "groupName": "Val B",
+    "groupDevices": [
+      {
+        "deviceID": "B1",
+        "deviceUserName": "Caldwell",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "B2",
+        "deviceUserName": "Carson",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "B3",
+        "deviceUserName": "Quinn",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "B4",
+        "deviceUserName": "Harrington",
+        "deviceStatus": "Online"
+      },
+      {
+        "deviceID": "B5",
+        "deviceUserName": "Sullivan",
+        "deviceStatus": "Online"
+      }
+    ]
+  }
+]
+''';
