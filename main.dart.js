@@ -85377,7 +85377,7 @@ A.axy.prototype={
 $1(a){throw A.f(A.iw(null))},
 $S:522}
 A.axv.prototype={
-$1(a){return new A.fm(new A.e6(t.FP),A.avU(a.eq($.tf(),t.cZ),"settingAPIEndpoint","",t.N),t.m8)},
+$1(a){return new A.fm(new A.e6(t.FP),A.avU(a.eq($.tf(),t.cZ),"settingAPIEndpoint","findthefrontier.ca/spark",t.N),t.m8)},
 $S:523}
 A.axw.prototype={
 $1(a){return new A.fm(new A.e6(t.Fo),A.avU(a.eq($.tf(),t.cZ),"settingDisplayAverage",!1,t.y),t._M)},
