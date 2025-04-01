@@ -85396,7 +85396,7 @@ Kn(){var s=0,r=A.Q(t.uf),q,p=this,o,n,m,l,k
 var $async$Kn=A.M(function(a,b){if(a===1)return A.N(b,r)
 while(true)switch(s){case 0:k=p.a
 k===$&&A.a()
-o=A.avR(k.eq($.td(),t.cZ),"deviceGroups",'[\n  {\n    "groupID": "0",\n    "groupName": "SE 410",\n    "groupDevices": [\n      {\n        "deviceID": "SE430A",\n        "deviceUserName": "Bennett",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430B",\n        "deviceUserName": "Dalton",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430C",\n        "deviceUserName": "Harper",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430D",\n        "deviceUserName": "McNab",\n        "deviceStatus": "Online"\n      }\n    ]\n  },\n  {\n    "groupID": "1",\n    "groupName": "SE 430",\n    "groupDevices": [\n      {\n        "deviceID": "SE430A",\n        "deviceUserName": "Griffin",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430B",\n        "deviceUserName": "Bishop",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430C",\n        "deviceUserName": "Stevens",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430D",\n        "deviceUserName": "Martens",\n        "deviceStatus": "Online"\n      }\n    ]\n  },\n  {\n    "groupID": "2",\n    "groupName": "Monashee A",\n    "groupDevices": [\n      {\n        "deviceID": "A1",\n        "deviceUserName": "Donovan",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "A2",\n        "deviceUserName": "Foster",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "A3",\n        "deviceUserName": "Reynolds",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "A4",\n        "deviceUserName": "Dixon",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "A5",\n        "deviceUserName": "Anderson",\n        "deviceStatus": "Online"\n      }\n    ]\n  },\n  {\n    "groupID": "3",\n    "groupName": "Val B",\n    "groupDevices": [\n      {\n        "deviceID": "B1",\n        "deviceUserName": "Caldwell",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "B2",\n        "deviceUserName": "Carson",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "B3",\n        "deviceUserName": "Quinn",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "B4",\n        "deviceUserName": "Harrington",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "B5",\n        "deviceUserName": "Sullivan",\n        "deviceStatus": "Online"\n      }\n    ]\n  }\n]\n',t.N)
+o=A.avR(k.eq($.td(),t.cZ),"deviceGroups",'[\n  {\n    "groupID": "0",\n    "groupName": "SE 410",\n    "groupDevices": [\n      {\n        "deviceID": "SE410A",\n        "deviceUserName": "Bennett",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE410B",\n        "deviceUserName": "Dalton",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE410C",\n        "deviceUserName": "Harper",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE410D",\n        "deviceUserName": "McNab",\n        "deviceStatus": "Online"\n      }\n    ]\n  },\n  {\n    "groupID": "1",\n    "groupName": "SE 430",\n    "groupDevices": [\n      {\n        "deviceID": "SE430A",\n        "deviceUserName": "Griffin",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430B",\n        "deviceUserName": "Bishop",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430C",\n        "deviceUserName": "Stevens",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "SE430D",\n        "deviceUserName": "Martens",\n        "deviceStatus": "Online"\n      }\n    ]\n  },\n  {\n    "groupID": "2",\n    "groupName": "Monashee A",\n    "groupDevices": [\n      {\n        "deviceID": "A1",\n        "deviceUserName": "Donovan",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "A2",\n        "deviceUserName": "Foster",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "A3",\n        "deviceUserName": "Reynolds",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "A4",\n        "deviceUserName": "Dixon",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "A5",\n        "deviceUserName": "Anderson",\n        "deviceStatus": "Online"\n      }\n    ]\n  },\n  {\n    "groupID": "3",\n    "groupName": "Val B",\n    "groupDevices": [\n      {\n        "deviceID": "B1",\n        "deviceUserName": "Caldwell",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "B2",\n        "deviceUserName": "Carson",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "B3",\n        "deviceUserName": "Quinn",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "B4",\n        "deviceUserName": "Harrington",\n        "deviceStatus": "Online"\n      },\n      {\n        "deviceID": "B5",\n        "deviceUserName": "Sullivan",\n        "deviceStatus": "Online"\n      }\n    ]\n  }\n]\n',t.N)
 A.dF("Stored Data: "+A.m(o))
 try{n=B.bg.IG(o,null)
 A.dF("Decoded: "+A.m(n))
@@ -85839,7 +85839,7 @@ n.toString
 n=A.a_(n,!0,r)
 n.push(p)
 l.m(0,o,n)}this.shk(l)},
-axx(a){var s,r,q,p,o="carbon_monoxide_ppm",n="temperature_celcius",m="pm1_ug_m3",l="pm2_5_ug_m3",k="pm4_ug_m3",j="pm10_ug_m3",i=A.b([],t.oP)
+axx(a){var s,r,q,p,o="carbon_monoxide_ppm",n="temperature_celsius",m="pm1_ug_m3",l="pm2_5_ug_m3",k="pm4_ug_m3",j="pm10_ug_m3",i=A.b([],t.oP)
 for(s=J.bh(a.h(0,"data"));s.t();){r=s.gM()
 q=J.aG(r)
 p=A.aO1(q.h(r,"recorded_at"))
@@ -85851,7 +85851,7 @@ i.push(new A.de(k,A.dD(q.h(r,k)),p))
 i.push(new A.de(j,A.dD(q.h(r,j)),p))}return i}}
 A.axo.prototype={
 $1(a){var s=t.oP
-return new A.lW(new A.eE(t.pQ),A.am(["carbon_monoxide_ppm",A.b([],s),"temperature_celcius",A.b([],s),"pm1_ug_m3",A.b([],s),"pm2_5_ug_m3",A.b([],s),"pm4_ug_m3",A.b([],s),"pm10_ug_m3",A.b([],s)],t.N,t.gh))},
+return new A.lW(new A.eE(t.pQ),A.am(["carbon_monoxide_ppm",A.b([],s),"temperature_celsius",A.b([],s),"pm1_ug_m3",A.b([],s),"pm2_5_ug_m3",A.b([],s),"pm4_ug_m3",A.b([],s),"pm10_ug_m3",A.b([],s)],t.N,t.gh))},
 $S:553}
 A.kw.prototype={
 Ae(a){return this.aqQ(a)},
@@ -85862,7 +85862,7 @@ break}p.IZ()
 m=p.r
 l=t.oP
 k=t.N
-m.jc($.axS().gjX(),t.SB).shk(A.am(["carbon_monoxide_ppm",A.b([],l),"temperature_celcius",A.b([],l),"pm1_ug_m3",A.b([],l),"pm2_5_ug_m3",A.b([],l),"pm4_ug_m3",A.b([],l),"pm10_ug_m3",A.b([],l)],k,t.gh))
+m.jc($.axS().gjX(),t.SB).shk(A.am(["carbon_monoxide_ppm",A.b([],l),"temperature_celsius",A.b([],l),"pm1_ug_m3",A.b([],l),"pm2_5_ug_m3",A.b([],l),"pm4_ug_m3",A.b([],l),"pm10_ug_m3",A.b([],l)],k,t.gh))
 p.x=a
 p.y=!0
 o="wss://"+m.eq($.axT(),k)+"/ws/"+A.m(p.x)
@@ -99280,7 +99280,7 @@ B.iD=new A.of(0,"up")
 B.Fx=new A.n6(B.iD)
 B.LS=new A.cH([B.fc,B.Fy,B.fb,B.Fx],t.Fp)
 B.MJ={"Temperature (\xb0C)":0,"Carbon Monoxide (ppm)":1,"PM1 (\xb5g/m\xb3)":2,"PM2.5 (\xb5g/m\xb3)":3,"PM4 (\xb5g/m\xb3)":4,"PM10 (\xb5g/m\xb3)":5}
-B.uK=new A.bP(B.MJ,["temperature_celcius","carbon_monoxide_ppm","pm1_ug_m3","pm2_5_ug_m3","pm4_ug_m3","pm10_ug_m3"],t.li)
+B.uK=new A.bP(B.MJ,["temperature_celsius","carbon_monoxide_ppm","pm1_ug_m3","pm2_5_ug_m3","pm4_ug_m3","pm10_ug_m3"],t.li)
 B.Qe=new A.a9(B.kh,!1,!1,!1,!1,B.n)
 B.zK=new A.a9(B.eG,!1,!1,!1,!1,B.n)
 B.zL=new A.a9(B.hM,!1,!1,!1,!1,B.n)
