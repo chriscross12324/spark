@@ -45,11 +45,8 @@ class WebSocketManager extends StateNotifier<WebSocketState> {
         }
 
         final decodedData = jsonDecode(message) as Map<String, dynamic>;
-        //print(decodedData);
 
         ref.read(sensorDataProvider.notifier).updateData(decodedData);
-
-        //if (kDebugMode) print("Received: $message");
       }, onError: (error, stacktrace) {
         state = state.copyWith(
           isConnected: false,

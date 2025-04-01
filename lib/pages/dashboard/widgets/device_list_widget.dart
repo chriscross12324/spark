@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spark/app_constants.dart';
 import 'package:spark/app_providers.dart';
-import 'package:spark/models/crew.dart';
-import 'package:spark/providers/dashboard_provider.dart';
 import 'package:spark/utils/web_socket_manager.dart';
 import 'package:spark/widgets/common/mouse_effects.dart';
 
@@ -103,8 +101,6 @@ class MemberItem extends ConsumerWidget {
     final displayDeviceStatus = ref.watch(settingDisplayDeviceStatus);
 
     final isLastMember = crew.groupDevices.last == member;
-
-    print("Selected Device: $selectedDeviceWatcher");
 
     return Column(
       children: [

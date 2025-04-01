@@ -64,10 +64,8 @@ class GroupNotifier extends AsyncNotifier<List<Group>> {
     final sharedPreferences = ref.read(sharedPreferencesProvider);
     final storedData =
         sharedPreferences.tryGetValue<String>('deviceGroups', defaultDeviceGroups);
-    print("Stored Data: $storedData");
     try {
       final List<dynamic> decoded = jsonDecode(storedData);
-      print("Decoded: $decoded");
       return decoded.map((group) => Group.fromJson(group)).toList();
     } catch (e) {
       print("Error parsing stored groups: $e");
@@ -84,7 +82,6 @@ class GroupNotifier extends AsyncNotifier<List<Group>> {
   }
 
   void addGroup(String groupName) {
-    print("Adding Group...");
     final updatedGroups = [
       ...state.value ?? [],
       Group(
@@ -94,7 +91,6 @@ class GroupNotifier extends AsyncNotifier<List<Group>> {
       ),
     ];
     saveGroups(updatedGroups.cast<Group>());
-    print("Added Group");
   }
 
   void removeGroup(String groupID) {
@@ -226,10 +222,6 @@ extension on SharedPreferences {
           "\t-> Line: ${stackTraceLines[2]}\n\n"
           "Returning 'defaultValue': ${defaultValue.toString()}");
     }
-
-    print(value);
-    print(defaultValue);
-    print(result);
 
     return result ?? defaultValue;
   }
