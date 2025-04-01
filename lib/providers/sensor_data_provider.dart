@@ -5,7 +5,7 @@ class SensorDataNotifier extends StateNotifier<Map<String, List<SensorData>>> {
   SensorDataNotifier()
       : super({
           'carbon_monoxide_ppm': [],
-          'temperature_celcius': [],
+          'temperature_celsius': [],
           'pm1_ug_m3': [],
           'pm2_5_ug_m3': [],
           'pm4_ug_m3': [],
@@ -22,19 +22,12 @@ class SensorDataNotifier extends StateNotifier<Map<String, List<SensorData>>> {
     }
 
     state = updatedState;
-    /*final parsedData = SensorData.fromMap(newData);
-
-    state = {
-      for (var key in state.keys)
-        key:
-            key == parsedData.type ? [...state[key]!, parsedData] : state[key]!,
-    };*/
   }
 
   void purgeData() {
     state = {
       'carbon_monoxide_ppm': [],
-      'temperature_celcius': [],
+      'temperature_celsius': [],
       'pm1_ug_m3': [],
       'pm2_5_ug_m3': [],
       'pm4_ug_m3': [],
@@ -48,7 +41,7 @@ class SensorDataNotifier extends StateNotifier<Map<String, List<SensorData>>> {
     for (var entry in data['data']) {
       DateTime timestamp = DateTime.parse(entry['recorded_at']);
       result.add(SensorData(type: 'carbon_monoxide_ppm', value: (entry['carbon_monoxide_ppm'] as num).toDouble(), timestamp: timestamp));
-      result.add(SensorData(type: 'temperature_celcius', value: (entry['temperature_celcius'] as num).toDouble(), timestamp: timestamp));
+      result.add(SensorData(type: 'temperature_celsius', value: (entry['temperature_celsius'] as num).toDouble(), timestamp: timestamp));
       result.add(SensorData(type: 'pm1_ug_m3', value: (entry['pm1_ug_m3'] as num).toDouble(), timestamp: timestamp));
       result.add(SensorData(type: 'pm2_5_ug_m3', value: (entry['pm2_5_ug_m3'] as num).toDouble(), timestamp: timestamp));
       result.add(SensorData(type: 'pm4_ug_m3', value: (entry['pm4_ug_m3'] as num).toDouble(), timestamp: timestamp));

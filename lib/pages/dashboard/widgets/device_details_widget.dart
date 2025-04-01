@@ -11,7 +11,7 @@ class DeviceDetailsPanel extends ConsumerWidget {
   const DeviceDetailsPanel({super.key});
 
   static const Map<String, String> metricsMap = {
-    'Temperature (°C)': 'temperature_celcius',
+    'Temperature (°C)': 'temperature_celsius',
     'Carbon Monoxide (ppm)': 'carbon_monoxide_ppm',
     'PM1 (µg/m³)': 'pm1_ug_m3',
     'PM2.5 (µg/m³)': 'pm2_5_ug_m3',
