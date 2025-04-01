@@ -160,7 +160,7 @@ class _MetricModuleState extends ConsumerState<MetricModule>
                           ],
                         ),
                         color: Colors.white,
-                        borderColor: Colors.transparent,
+                        borderColor: Colors.white.withValues(alpha: 0.2),
                         markerSettings: const MarkerSettings(
                           height: 4,
                           width: 4,
