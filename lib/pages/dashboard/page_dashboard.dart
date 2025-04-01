@@ -6,10 +6,10 @@ import 'package:spark/app_constants.dart';
 import 'package:spark/dialogs/dialog_preferences.dart';
 import 'package:spark/pages/dashboard/widgets/device_details_widget.dart';
 import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
-import 'package:spark/providers/dashboard_provider.dart';
 import 'package:spark/utils/web_socket_manager.dart';
 import 'package:spark/widgets/metric_modules/metric_history_module.dart';
 
+import '../../app_providers.dart';
 import '../../widgets/common/filter_node.dart';
 import '../../widgets/common/icon_button_widget.dart';
 
@@ -40,7 +40,7 @@ class DashboardBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final listState = ref.watch(dashboardProvider);
+    final selectedDeviceWatcher = ref.watch(selectedDeviceProvider);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -51,7 +51,7 @@ class DashboardBody extends ConsumerWidget {
         color: themeDarkDeepBackground,
         child: LayoutBuilder(builder: (context, constraints) {
           if (constraints.maxWidth < 700) {
-            if (listState.selectedMember != null) {
+            if (selectedDeviceWatcher != null) {
               return const DeviceDetailsPanel();
             }
             return const DeviceList(
@@ -82,8 +82,8 @@ class DashboardAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final listState = ref.watch(dashboardProvider);
-    final stateNotifier = ref.read(dashboardProvider.notifier);
+    final selectedDeviceWatcher = ref.watch(selectedDeviceProvider);
+    final selectedDeviceReader = ref.read(selectedDeviceProvider.notifier);
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -94,12 +94,12 @@ class DashboardAppBar extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
-              (isSmallWidth && listState.selectedMember != null)
+              (isSmallWidth && selectedDeviceWatcher != null)
                   ? IconButtonWidget(
                       width: 50,
                       icon: HugeIcons.strokeRoundedArrowLeft01,
                       onPressed: () {
-                        stateNotifier.selectItem(null);
+                        selectedDeviceReader.clearSelection();
                       },
                     )
                   : LogoSection(showText: !isSmallWidth),
