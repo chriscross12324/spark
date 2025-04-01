@@ -53,22 +53,22 @@ const defaultDeviceGroups = '''
     "groupName": "SE 410",
     "groupDevices": [
       {
-        "deviceID": "SE430A",
+        "deviceID": "SE410A",
         "deviceUserName": "Bennett",
         "deviceStatus": "Online"
       },
       {
-        "deviceID": "SE430B",
+        "deviceID": "SE410B",
         "deviceUserName": "Dalton",
         "deviceStatus": "Online"
       },
       {
-        "deviceID": "SE430C",
+        "deviceID": "SE410C",
         "deviceUserName": "Harper",
         "deviceStatus": "Online"
       },
       {
-        "deviceID": "SE430D",
+        "deviceID": "SE410D",
         "deviceUserName": "McNab",
         "deviceStatus": "Online"
       }
