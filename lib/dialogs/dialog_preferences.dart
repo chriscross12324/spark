@@ -37,70 +37,110 @@ class _DialogPreferencesState extends ConsumerState<DialogPreferences> {
           });
         },
       ),
-      actionButtonText: 'Test API',
+      actionButtonText: selectedTab == Tabs.general ? 'Test API' : 'Add Group',
       onActionPressed: () {
-        testApiAccessibility(ref.read(settingAPIEndpoint)).then((isAccessible) {
-          if (isAccessible) {
-            showGeneralDialog(
-              context: context,
-              barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
-              barrierDismissible: false,
-              transitionDuration: const Duration(milliseconds: 150),
-              pageBuilder: (BuildContext context, Animation<double> animation,
-                  Animation<double> secondaryAnimation) {
-                return const BaseDialog(dialogTitle: 'Connection Successful', dialogContent: SizedBox());
-              },
-              transitionBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                final curvedAnimation = CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.fastOutSlowIn,
-                );
+        if (selectedTab == Tabs.general) {
+          testApiAccessibility(ref.read(settingAPIEndpoint))
+              .then((isAccessible) {
+            if (isAccessible) {
+              showGeneralDialog(
+                context: context,
+                barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
+                barrierDismissible: false,
+                transitionDuration: const Duration(milliseconds: 150),
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return const BaseDialog(
+                      dialogTitle: 'Connection Successful',
+                      dialogContent: SizedBox());
+                },
+                transitionBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  final curvedAnimation = CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.fastOutSlowIn,
+                  );
 
-                return FadeTransition(
-                  opacity: curvedAnimation,
-                  child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.95, end: 1.0)
-                        .animate(curvedAnimation),
-                    child: child,
-                  ),
-                );
-              },
-            );
-          } else {
-            showGeneralDialog(
-              context: context,
-              barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
-              barrierDismissible: false,
-              transitionDuration: const Duration(milliseconds: 150),
-              pageBuilder: (BuildContext context, Animation<double> animation,
-                  Animation<double> secondaryAnimation) {
-                return const BaseDialog(dialogTitle: 'Connection Failed', dialogContent: SizedBox());
-              },
-              transitionBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                final curvedAnimation = CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.fastOutSlowIn,
-                );
+                  return FadeTransition(
+                    opacity: curvedAnimation,
+                    child: ScaleTransition(
+                      scale: Tween<double>(begin: 0.95, end: 1.0)
+                          .animate(curvedAnimation),
+                      child: child,
+                    ),
+                  );
+                },
+              );
+            } else {
+              showGeneralDialog(
+                context: context,
+                barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
+                barrierDismissible: false,
+                transitionDuration: const Duration(milliseconds: 150),
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return const BaseDialog(
+                      dialogTitle: 'Connection Failed',
+                      dialogContent: SizedBox());
+                },
+                transitionBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  final curvedAnimation = CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.fastOutSlowIn,
+                  );
 
-                return FadeTransition(
-                  opacity: curvedAnimation,
-                  child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.95, end: 1.0)
-                        .animate(curvedAnimation),
-                    child: child,
+                  return FadeTransition(
+                    opacity: curvedAnimation,
+                    child: ScaleTransition(
+                      scale: Tween<double>(begin: 0.95, end: 1.0)
+                          .animate(curvedAnimation),
+                      child: child,
+                    ),
+                  );
+                },
+              );
+            }
+          });
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) {
+              final textEditingController = TextEditingController();
+              return AlertDialog(
+                title: Text('Add Group'),
+                content: TextField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    labelText: 'Group Name',
                   ),
-                );
-              },
-            );
-          }
-        });
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      if (textEditingController.text.isNotEmpty) {
+                        ref
+                            .read(groupProvider.notifier)
+                            .addGroup(textEditingController.text);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text('Add'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       },
       dialogContent: Column(
         children: [
           if (selectedTab == Tabs.general) ...sectionGeneral(),
-          if (selectedTab == Tabs.devices) const SectionDevices(),
+          if (selectedTab == Tabs.devices) SectionDevices(),
         ],
       ),
     );
@@ -111,7 +151,8 @@ List<Widget> sectionGeneral() {
   return [
     SettingTextFieldListTile(
       title: 'API Base',
-      description: 'Enter the base URL of the SPARK API (e.g., findthefrontier.ca). Don\'t include http:// or https://; just the domain. We’ll take care of the rest.',
+      description:
+          'Enter the base URL of the SPARK API (e.g., findthefrontier.ca). Don\'t include http:// or https://; just the domain. We’ll take care of the rest.',
       stringProvider: settingAPIEndpoint,
       sharedPreferencesKey: 'settingAPIEndpoint',
     ),
@@ -126,22 +167,122 @@ List<Widget> sectionGeneral() {
     const ListSeparator(),
     CustomSwitchListTile(
       title: 'Display Device Status',
-      description:
-      'Displays device status for each device in the device list.',
+      description: 'Displays device status for each device in the device list.',
       boolProvider: settingDisplayDeviceStatus,
       sharedPreferencesKey: 'settingDisplayDeviceStatus',
     ),
   ];
 }
 
-
-
-class SectionDevices extends StatelessWidget {
+class SectionDevices extends ConsumerWidget {
   const SectionDevices({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncDeviceGroups = ref.watch(groupProvider);
+
+    return asyncDeviceGroups.when(
+      data: (deviceGroups) => ListView.builder(
+        shrinkWrap: true,
+        itemCount: deviceGroups.length,
+        itemBuilder: (context, index) {
+          final deviceGroup = deviceGroups[index];
+
+          return Card(
+            child: ExpansionTile(
+              title: Text(deviceGroup.groupName),
+              subtitle: Text('${deviceGroup.groupDevices.length} devices'),
+              trailing: IconButton(
+                onPressed: () => ref
+                    .read(groupProvider.notifier)
+                    .removeGroup(deviceGroup.groupID),
+                icon: Icon(Icons.delete),
+              ),
+              children: [
+                ...deviceGroup.groupDevices.map(
+                  (device) => ListTile(
+                    title: Text(device.deviceUserName),
+                    trailing: IconButton(
+                      onPressed: () => ref
+                          .read(groupProvider.notifier)
+                          .removeDevice(deviceGroup.groupID, device.deviceID),
+                      icon: Icon(Icons.delete),
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        final deviceIdEditingController =
+                            TextEditingController();
+                        final deviceUserNameEditingController =
+                            TextEditingController();
+                        return AlertDialog(
+                          title: Text('Add Device'),
+                          content: Column(
+                            children: [
+                              TextField(
+                                controller: deviceIdEditingController,
+                                decoration: InputDecoration(
+                                  labelText: 'Device ID',
+                                ),
+                              ),
+                              TextField(
+                                controller: deviceUserNameEditingController,
+                                decoration: InputDecoration(
+                                  labelText: 'Device Name',
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                if (deviceUserNameEditingController
+                                        .text.isNotEmpty &&
+                                    deviceIdEditingController.text.isNotEmpty) {
+                                  ref.read(groupProvider.notifier).addDevice(
+                                      deviceGroup.groupID,
+                                      deviceIdEditingController.text,
+                                      deviceUserNameEditingController.text);
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: Text('Add'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Text('Add Device'),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+      error: (e, _) => Container(
+        height: 200,
+        width: double.infinity,
+        child: Center(
+          child: Text('Error'),
+        ),
+      ),
+      loading: () => Container(
+        height: 200,
+        width: double.infinity,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
   }
 }
 
