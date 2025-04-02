@@ -73,7 +73,7 @@ class CustomSwitchListTile extends ConsumerWidget {
                 color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: Colors.white.withValues(alpha: 0.05),
                   width: 1.5,
                 ),
               ),

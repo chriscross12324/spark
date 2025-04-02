@@ -88,7 +88,7 @@ class _MouseEffectsContainerState extends State<MouseEffectsContainer> {
             width: widget.width,
             duration: widget.duration,
             decoration: BoxDecoration(
-              color: widget.color.withOpacity(
+              color: widget.color.withValues(alpha:
                 _isPressed
                     ? (widget.opacity - widget.opacitySubtract)
                     : _isHovered
@@ -142,8 +142,8 @@ class SpotlightPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final gradient = RadialGradient(colors: [
-      colour.withOpacity(opacity),
-      colour.withOpacity(0.0),
+      colour.withValues(alpha: opacity),
+      colour.withValues(alpha: 0.0),
     ], stops: const [
       0.15,
       1.0

@@ -81,6 +81,7 @@ class BaseDialog extends StatelessWidget {
                 child: dialogContent,
               ),
             ),
+            const SizedBox(height: 15),
             Row(
               children: [
                 if (actionButtonText != null)

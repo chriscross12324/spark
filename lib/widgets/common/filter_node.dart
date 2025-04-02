@@ -157,7 +157,7 @@ class _FilterModuleState extends State<FilterModule> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white
-            .withOpacity(widget.availableFilterTypes.length <= 1 ? 0 : 0.15),
+            .withValues(alpha: widget.availableFilterTypes.length <= 1 ? 0 : 0.15),
       ),
       child: Padding(
         padding:
@@ -208,7 +208,7 @@ class _FilterModuleState extends State<FilterModule> {
                                 bottomLeft: Radius.circular(10),
                                 bottomRight: Radius.circular(5),
                               ),
-                              color: Colors.white.withOpacity(0.15),
+                              color: Colors.white.withValues(alpha: 0.15),
                             ),
                             child: Padding(
                               padding:
@@ -295,7 +295,7 @@ class _FilterModuleState extends State<FilterModule> {
                               bottomLeft: Radius.circular(5),
                               bottomRight: Radius.circular(10),
                             ),
-                            color: Colors.white.withOpacity(0.15),
+                            color: Colors.white.withValues(alpha: 0.15),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(2.5),
@@ -321,7 +321,7 @@ class _FilterModuleState extends State<FilterModule> {
                                           borderRadius:
                                               BorderRadius.circular(2),
                                           color:
-                                              Colors.white.withOpacity(0.15)),
+                                              Colors.white.withValues(alpha: 0.15)),
                                     ),
                                   )
                                 ],

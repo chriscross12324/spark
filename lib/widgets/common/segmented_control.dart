@@ -60,7 +60,7 @@ class SegmentedControl<T> extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       width: 2,
-                      color: isSelected ? themeDarkDimText : Colors.transparent,
+                      color: isSelected ? Colors.white.withValues(alpha: 0.15) : Colors.transparent,
                     ),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 12),

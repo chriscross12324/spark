@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_constants.dart';
+import 'package:spark/dialogs/custom_dialog.dart';
 import 'package:spark/dialogs/dialog_preferences.dart';
 import 'package:spark/pages/dashboard/widgets/device_details_widget.dart';
 import 'package:spark/pages/dashboard/widgets/device_list_widget.dart';
@@ -162,7 +163,7 @@ class SearchBar extends StatelessWidget {
         color: themeDarkForeground,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.15),
+          color: Colors.white.withValues(alpha: 0.05),
           width: 1.5,
         ),
       ),
@@ -189,30 +190,10 @@ class SearchBar extends StatelessWidget {
             iconSize: 20,
             isIdleClear: true,
             onPressed: () {
-              showGeneralDialog(
+              showCustomDialog(
                 context: context,
-                barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
-                barrierDismissible: false,
-                transitionDuration: const Duration(milliseconds: 150),
-                pageBuilder: (BuildContext context, Animation<double> animation,
-                    Animation<double> secondaryAnimation) {
+                pageBuilder: (_, __, ___) {
                   return const FilterManager();
-                },
-                transitionBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  final curvedAnimation = CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.fastOutSlowIn,
-                  );
-
-                  return FadeTransition(
-                    opacity: curvedAnimation,
-                    child: ScaleTransition(
-                      scale: Tween<double>(begin: 0.95, end: 1.0)
-                          .animate(curvedAnimation),
-                      child: child,
-                    ),
-                  );
                 },
               );
             },
@@ -233,30 +214,10 @@ class AppBarActions extends StatelessWidget {
         IconButtonWidget(
           icon: HugeIcons.strokeRoundedSettings01,
           onPressed: () {
-            showGeneralDialog(
+            showCustomDialog(
               context: context,
-              barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
-              barrierDismissible: false,
-              transitionDuration: const Duration(milliseconds: 150),
-              pageBuilder: (BuildContext context, Animation<double> animation,
-                  Animation<double> secondaryAnimation) {
+              pageBuilder: (_, __, ___) {
                 return const DialogPreferences();
-              },
-              transitionBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                final curvedAnimation = CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.fastOutSlowIn,
-                );
-
-                return FadeTransition(
-                  opacity: curvedAnimation,
-                  child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.95, end: 1.0)
-                        .animate(curvedAnimation),
-                    child: child,
-                  ),
-                );
               },
             );
           },
@@ -284,7 +245,7 @@ class DeviceList extends StatelessWidget {
         borderRadius: BorderRadius.circular(isFullscreen ? 0 : 15),
         border: Border.all(
           width: 1.5,
-          color: Colors.white.withValues(alpha: isFullscreen ? 0 : 0.15),
+          color: Colors.white.withValues(alpha: isFullscreen ? 0 : 0.1),
         ),
         boxShadow: [
           BoxShadow(

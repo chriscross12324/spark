@@ -93,6 +93,20 @@ class GroupNotifier extends AsyncNotifier<List<Group>> {
     saveGroups(updatedGroups.cast<Group>());
   }
 
+  void updateGroup(String groupID, String valueKey, String newValue) {
+    final updatedGroups = (state.value ?? []).map((group) {
+      if (group.groupID == groupID) {
+        return Group(
+          groupID: valueKey == 'groupID' ? newValue : group.groupID,
+          groupName: valueKey == 'groupName' ? newValue : group.groupName,
+          groupDevices: group.groupDevices,
+        );
+      }
+      return group;
+    }).toList();
+    saveGroups(updatedGroups);
+  }
+
   void removeGroup(String groupID) {
     final updatedGroups =
         (state.value ?? []).where((group) => group.groupID != groupID).toList();
@@ -119,6 +133,29 @@ class GroupNotifier extends AsyncNotifier<List<Group>> {
     saveGroups(updatedGroups);
   }
 
+  void updateDevice(String groupID, String deviceID, String valueKey, String newValue) {
+    final updatedGroups = (state.value ?? []).map((group) {
+      if (group.groupID == groupID) {
+        return Group(
+          groupID: group.groupID,
+          groupName: group.groupName,
+          groupDevices: group.groupDevices.map((device) {
+            if (device.deviceID == deviceID) {
+              return Device(
+                deviceID: valueKey == 'deviceID' ? newValue : device.deviceID,
+                deviceUserName: valueKey == 'deviceUserName' ? newValue : device.deviceUserName,
+                deviceStatus: valueKey == 'deviceStatus' ? newValue : device.deviceStatus,
+              );
+            }
+            return device;
+          }).toList(),
+        );
+      }
+      return group;
+    }).toList();
+    saveGroups(updatedGroups);
+  }
+
   void removeDevice(String groupID, String deviceID) {
     final updatedGroups = (state.value ?? []).map((group) {
       if (group.groupID == groupID) {
@@ -128,29 +165,6 @@ class GroupNotifier extends AsyncNotifier<List<Group>> {
           groupDevices: group.groupDevices
               .where((device) => device.deviceID != deviceID)
               .toList(),
-        );
-      }
-      return group;
-    }).toList();
-    saveGroups(updatedGroups);
-  }
-
-  void updateDevice(String groupID, String deviceID) {
-    final updatedGroups = (state.value ?? []).map((group) {
-      if (group.groupID == groupID) {
-        return Group(
-          groupID: group.groupID,
-          groupName: group.groupName,
-          groupDevices: group.groupDevices.map((device) {
-            if (device.deviceID == deviceID) {
-              return Device(
-                deviceID: device.deviceID,
-                deviceUserName: device.deviceUserName,
-                deviceStatus: 'Online',
-              );
-            }
-            return device;
-          }).toList(),
         );
       }
       return group;

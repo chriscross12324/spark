@@ -2,37 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spark/app_constants.dart';
-import 'package:spark/app_provider_classes.dart';
 
-class SettingTextFieldListTile extends ConsumerStatefulWidget {
-  const SettingTextFieldListTile({
+class CustomTextField extends ConsumerStatefulWidget {
+  const CustomTextField({
     super.key,
     required this.title,
     required this.description,
-    required this.stringProvider,
-    this.sharedPreferencesKey,
+    required this.hintText,
+    required this.textEditingController,
   });
 
   final String title;
   final String description;
-  final StateNotifierProvider<TypedProvider<String>, String> stringProvider;
-  final String? sharedPreferencesKey;
+  final String hintText;
+  final TextEditingController textEditingController;
 
   @override
-  ConsumerState<SettingTextFieldListTile> createState() =>
-      _SettingTextFieldListTileState();
+  ConsumerState<CustomTextField> createState() =>
+      _CustomTextFieldState();
 }
 
-class _SettingTextFieldListTileState
-    extends ConsumerState<SettingTextFieldListTile> {
-  TextEditingController textEditingController = TextEditingController();
-  bool hasBeenEdited = false;
-
-  @override
-  void initState() {
-    super.initState();
-    textEditingController.text = ref.read(widget.stringProvider);
-  }
+class _CustomTextFieldState
+    extends ConsumerState<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +32,7 @@ class _SettingTextFieldListTileState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.title + (hasBeenEdited ? "*" : ""),
+          widget.title,
           style: GoogleFonts.asap(
             color: themeDarkSecondaryText,
             fontSize: 16,
@@ -72,12 +63,12 @@ class _SettingTextFieldListTileState
             color: Colors.white.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.05),
+              color: Colors.white.withValues(alpha: 0.15),
               width: 1.5,
             ),
           ),
           child: TextField(
-            controller: textEditingController,
+            controller: widget.textEditingController,
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.url,
             autocorrect: false,
@@ -92,31 +83,12 @@ class _SettingTextFieldListTileState
             ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(vertical: 15),
-              hintText: 'findthefrontier.ca/spark/ws',
+              hintText: widget.hintText,
               hintStyle: GoogleFonts.asap(
                 color: themeDarkDimText,
               ),
               border: InputBorder.none,
             ),
-            onChanged: (_) {
-              if (hasBeenEdited) return;
-              setState(() {
-                hasBeenEdited = true;
-              });
-            },
-            onSubmitted: (String newValue) {
-              if (widget.sharedPreferencesKey != null) {
-                ref
-                    .read(widget.stringProvider.notifier)
-                    .saveState(newValue, widget.sharedPreferencesKey!, ref);
-              } else {
-                ref.read(widget.stringProvider.notifier).updateState(newValue);
-              }
-
-              setState(() {
-                hasBeenEdited = false;
-              });
-            },
           ),
         ),
       ],

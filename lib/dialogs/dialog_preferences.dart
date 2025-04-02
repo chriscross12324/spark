@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:hugeicons/hugeicons.dart';
 import 'package:spark/app_providers.dart';
 import 'package:spark/dialogs/base_dialog.dart';
+import 'package:spark/dialogs/custom_dialog.dart';
+import 'package:spark/dialogs/dialog_add_device.dart';
+import 'package:spark/dialogs/dialog_add_group.dart';
+import 'package:spark/dialogs/dialog_confirm.dart';
+import 'package:spark/dialogs/dialog_modify_value.dart';
 import 'package:spark/widgets/common/list_separator.dart';
 import 'package:spark/widgets/common/segmented_control.dart';
 import 'package:spark/widgets/common/setting_switch_list_tile.dart';
+import 'package:spark/widgets/common/text_button_widget.dart';
 
 import '../app_constants.dart';
+import '../pages/dashboard/widgets/device_list_widget.dart';
+import '../widgets/common/icon_button_widget.dart';
 import '../widgets/common/setting_textfield_list_tile.dart';
 
 class DialogPreferences extends ConsumerStatefulWidget {
@@ -43,96 +53,30 @@ class _DialogPreferencesState extends ConsumerState<DialogPreferences> {
           testApiAccessibility(ref.read(settingAPIEndpoint))
               .then((isAccessible) {
             if (isAccessible) {
-              showGeneralDialog(
+              showCustomDialog(
                 context: context,
-                barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
-                barrierDismissible: false,
-                transitionDuration: const Duration(milliseconds: 150),
-                pageBuilder: (BuildContext context, Animation<double> animation,
-                    Animation<double> secondaryAnimation) {
+                pageBuilder: (_, __, ___) {
                   return const BaseDialog(
                       dialogTitle: 'Connection Successful',
                       dialogContent: SizedBox());
                 },
-                transitionBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  final curvedAnimation = CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.fastOutSlowIn,
-                  );
-
-                  return FadeTransition(
-                    opacity: curvedAnimation,
-                    child: ScaleTransition(
-                      scale: Tween<double>(begin: 0.95, end: 1.0)
-                          .animate(curvedAnimation),
-                      child: child,
-                    ),
-                  );
-                },
               );
             } else {
-              showGeneralDialog(
+              showCustomDialog(
                 context: context,
-                barrierColor: themeDarkDeepBackground.withValues(alpha: 0.35),
-                barrierDismissible: false,
-                transitionDuration: const Duration(milliseconds: 150),
-                pageBuilder: (BuildContext context, Animation<double> animation,
-                    Animation<double> secondaryAnimation) {
+                pageBuilder: (_, __, ___) {
                   return const BaseDialog(
                       dialogTitle: 'Connection Failed',
                       dialogContent: SizedBox());
-                },
-                transitionBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  final curvedAnimation = CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.fastOutSlowIn,
-                  );
-
-                  return FadeTransition(
-                    opacity: curvedAnimation,
-                    child: ScaleTransition(
-                      scale: Tween<double>(begin: 0.95, end: 1.0)
-                          .animate(curvedAnimation),
-                      child: child,
-                    ),
-                  );
                 },
               );
             }
           });
         } else {
-          showDialog(
+          showCustomDialog(
             context: context,
-            builder: (context) {
-              final textEditingController = TextEditingController();
-              return AlertDialog(
-                title: Text('Add Group'),
-                content: TextField(
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                    labelText: 'Group Name',
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (textEditingController.text.isNotEmpty) {
-                        ref
-                            .read(groupProvider.notifier)
-                            .addGroup(textEditingController.text);
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text('Add'),
-                  ),
-                ],
-              );
+            pageBuilder: (_, __, ___) {
+              return const DialogAddGroup();
             },
           );
         }
@@ -140,7 +84,7 @@ class _DialogPreferencesState extends ConsumerState<DialogPreferences> {
       dialogContent: Column(
         children: [
           if (selectedTab == Tabs.general) ...sectionGeneral(),
-          if (selectedTab == Tabs.devices) SectionDevices(),
+          if (selectedTab == Tabs.devices) const SectionDevices(),
         ],
       ),
     );
@@ -182,90 +126,327 @@ class SectionDevices extends ConsumerWidget {
     final asyncDeviceGroups = ref.watch(groupProvider);
 
     return asyncDeviceGroups.when(
-      data: (deviceGroups) => ListView.builder(
+      data: (deviceGroups) => ListView.separated(
         shrinkWrap: true,
         itemCount: deviceGroups.length,
         itemBuilder: (context, index) {
           final deviceGroup = deviceGroups[index];
 
-          return Card(
-            child: ExpansionTile(
-              title: Text(deviceGroup.groupName),
-              subtitle: Text('${deviceGroup.groupDevices.length} devices'),
-              trailing: IconButton(
-                onPressed: () => ref
-                    .read(groupProvider.notifier)
-                    .removeGroup(deviceGroup.groupID),
-                icon: Icon(Icons.delete),
-              ),
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                    width: 1.5, color: Colors.white.withValues(alpha: 0.05))),
+            padding: EdgeInsets.all(5),
+            child: Column(
+              spacing: 5,
               children: [
-                ...deviceGroup.groupDevices.map(
-                  (device) => ListTile(
-                    title: Text(device.deviceUserName),
-                    trailing: IconButton(
-                      onPressed: () => ref
-                          .read(groupProvider.notifier)
-                          .removeDevice(deviceGroup.groupID, device.deviceID),
-                      icon: Icon(Icons.delete),
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        final deviceIdEditingController =
-                            TextEditingController();
-                        final deviceUserNameEditingController =
-                            TextEditingController();
-                        return AlertDialog(
-                          title: Text('Add Device'),
-                          content: Column(
+                Row(
+                  spacing: 5,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1.5,
+                            color: Colors.white.withValues(alpha: 0.05),
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(5),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(5),
+                          ),
+                          color: Colors.white.withValues(alpha: 0.15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Row(
                             children: [
-                              TextField(
-                                controller: deviceIdEditingController,
-                                decoration: InputDecoration(
-                                  labelText: 'Device ID',
+                              Text(
+                                "Group Name: ",
+                                style: GoogleFonts.asap(
+                                  fontWeight: FontWeight.w900,
+                                  color: themeDarkPrimaryText,
+                                  fontSize: 14,
                                 ),
                               ),
-                              TextField(
-                                controller: deviceUserNameEditingController,
-                                decoration: InputDecoration(
-                                  labelText: 'Device Name',
+                              Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: TextButtonWidget(
+                                  text: deviceGroup.groupName,
+                                  containsPadding: false,
+                                  smallBorderRadius: true,
+                                  onPressed: () {
+                                    showCustomDialog(
+                                      context: context,
+                                      pageBuilder: (_, __, ___) {
+                                        return DialogModifyValue(
+                                          currentValue: deviceGroup.groupName,
+                                          valueName: 'Group Name',
+                                          onValueChanged: (String newValue) {
+                                            ref
+                                                .read(groupProvider.notifier)
+                                                .updateGroup(
+                                                    deviceGroup.groupID,
+                                                    'groupName',
+                                                    newValue);
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ),
                             ],
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('Cancel'),
-                            ),
-                            TextButton(
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1.5,
+                          color: Colors.white.withValues(alpha: 0.05),
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        color: Colors.white.withValues(alpha: 0.15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.5),
+                        child: Row(
+                          children: [
+                            IconButtonWidget(
+                              height: 35,
+                              width: 35,
+                              icon: HugeIcons.strokeRoundedAdd01,
+                              iconSize: 18,
+                              isIdleClear: true,
+                              borderRadius: BorderRadius.circular(3),
                               onPressed: () {
-                                if (deviceUserNameEditingController
-                                        .text.isNotEmpty &&
-                                    deviceIdEditingController.text.isNotEmpty) {
-                                  ref.read(groupProvider.notifier).addDevice(
-                                      deviceGroup.groupID,
-                                      deviceIdEditingController.text,
-                                      deviceUserNameEditingController.text);
-                                  Navigator.pop(context);
-                                }
+                                showCustomDialog(
+                                  context: context,
+                                  pageBuilder: (_, __, ___) {
+                                    return DialogAddDevice(
+                                        groupID: deviceGroup.groupID);
+                                  },
+                                );
                               },
-                              child: Text('Add'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(2),
+                              child: Container(
+                                height: 20,
+                                width: 2,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(2),
+                                    color:
+                                        Colors.white.withValues(alpha: 0.15)),
+                              ),
+                            ),
+                            IconButtonWidget(
+                              height: 35,
+                              width: 35,
+                              icon: HugeIcons.strokeRoundedDelete02,
+                              iconSize: 18,
+                              iconColour: Colors.red,
+                              colour: Colors.red,
+                              isIdleClear: true,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(2.5),
+                                topRight: Radius.circular(7.5),
+                                bottomLeft: Radius.circular(2.5),
+                                bottomRight: Radius.circular(7.5),
+                              ),
+                              onPressed: () {
+                                showCustomDialog(
+                                  context: context,
+                                  pageBuilder: (_, __, ___) {
+                                    return DialogConfirm(
+                                      onConfirm: () {
+                                        ref
+                                            .read(groupProvider.notifier)
+                                            .removeGroup(deviceGroup.groupID);
+                                      },
+                                    );
+                                  },
+                                );
+                              },
                             ),
                           ],
-                        );
-                      },
-                    );
-                  },
-                  child: Text('Add Device'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                ...deviceGroup.groupDevices.map(
+                  (device) => Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Row(
+                      spacing: 5,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 40,
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.15),
+                              border: Border.all(
+                                width: 1.5,
+                                color: Colors.white.withValues(alpha: 0.05),
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(5),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(5),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Call Sign: ",
+                                  style: GoogleFonts.asap(
+                                    fontWeight: FontWeight.w900,
+                                    color: themeDarkPrimaryText,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: TextButtonWidget(
+                                    text: device.deviceID,
+                                    containsPadding: false,
+                                    smallBorderRadius: false,
+                                    onPressed: () {
+                                      showCustomDialog(
+                                        context: context,
+                                        pageBuilder: (_, __, ___) {
+                                          return DialogModifyValue(
+                                            currentValue: device.deviceID,
+                                            valueName: 'Call Sign',
+                                            onValueChanged: (String newValue) {
+                                              ref
+                                                  .read(groupProvider.notifier)
+                                                  .updateDevice(
+                                                      deviceGroup.groupID,
+                                                      device.deviceID,
+                                                      'deviceID',
+                                                      newValue);
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                                Text(
+                                  "Name: ",
+                                  style: GoogleFonts.asap(
+                                    fontWeight: FontWeight.w900,
+                                    color: themeDarkPrimaryText,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: TextButtonWidget(
+                                    text: device.deviceUserName,
+                                    containsPadding: false,
+                                    smallBorderRadius: true,
+                                    onPressed: () {
+                                      showCustomDialog(
+                                        context: context,
+                                        pageBuilder: (_, __, ___) {
+                                          return DialogModifyValue(
+                                            currentValue: device.deviceUserName,
+                                            valueName: 'User\'s Name',
+                                            onValueChanged: (String newValue) {
+                                              ref
+                                                  .read(groupProvider.notifier)
+                                                  .updateDevice(
+                                                      deviceGroup.groupID,
+                                                      device.deviceID,
+                                                      'deviceUserName',
+                                                      newValue);
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 1.5,
+                              color: Colors.white.withValues(alpha: 0.05),
+                            ),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(5),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(5),
+                              bottomRight: Radius.circular(10),
+                            ),
+                            color: Colors.white.withValues(alpha: 0.15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.5),
+                            child: IconButtonWidget(
+                              height: 35,
+                              width: 35,
+                              icon: HugeIcons.strokeRoundedDelete02,
+                              iconSize: 18,
+                              iconColour: Colors.red,
+                              colour: Colors.red,
+                              isIdleClear: true,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(2.5),
+                                topRight: Radius.circular(7.5),
+                                bottomLeft: Radius.circular(2.5),
+                                bottomRight: Radius.circular(7.5),
+                              ),
+                              onPressed: () {
+                                showCustomDialog(
+                                  context: context,
+                                  pageBuilder: (_, __, ___) {
+                                    return DialogConfirm(
+                                      onConfirm: () {
+                                        ref
+                                            .read(groupProvider.notifier)
+                                            .removeDevice(deviceGroup.groupID,
+                                                device.deviceID);
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
           );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const SectionDividerItem();
         },
       ),
       error: (e, _) => Container(

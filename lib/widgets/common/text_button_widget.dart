@@ -44,6 +44,7 @@ class TextButtonWidget extends StatelessWidget {
                 ? 0.15
                 : 0.05,
         color: isPrimary ? const Color(0xFF0080FF) : Colors.white,
+        border: Border.all(width: 1.5, color: Colors.white.withValues(alpha: 0.05)),
         borderRadius: BorderRadius.circular(smallBorderRadius ? 8 : 10),
         onPressed: onPressed,
         spotlightColor: isPrimary ? const Color(0xFF0080FF) : Colors.white,

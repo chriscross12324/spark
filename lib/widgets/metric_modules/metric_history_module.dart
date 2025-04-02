@@ -53,7 +53,7 @@ class _MetricHistoryModuleState extends State<MetricHistoryModule>
       color: themeDarkSecondaryText,
     );
     final gridLineStyle =
-        MajorGridLines(color: themeDarkAccentColourFaded.withOpacity(0.35));
+        MajorGridLines(color: themeDarkAccentColourFaded.withValues(alpha: 0.35));
 
     // Calculate Y-axis range
     final double yMin =
@@ -133,8 +133,8 @@ class _MetricHistoryModuleState extends State<MetricHistoryModule>
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      themeDarkAccentColourMain.withOpacity(0.15),
-                      themeDarkAccentColourMain.withOpacity(0.0),
+                      themeDarkAccentColourMain.withValues(alpha: 0.15),
+                      themeDarkAccentColourMain.withValues(alpha: 0.0),
                     ],
                   ),
                   color: Colors.white,
